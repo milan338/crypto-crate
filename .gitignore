@@ -3,6 +3,7 @@
 
 # models
 *.gltf
+*.blend1
 
 # dependencies
 /node_modules
