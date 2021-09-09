@@ -1,0 +1,11 @@
+{
+    "**/*.ts?(x)": "npm run check-type",
+    "**/*.(js|ts)?(x)": [
+        "npm run lint",
+        "npm run format"
+    ],
+    "**/*.(css|scss)": [
+        "npm run stylelint",
+        "npm run format"
+    ]
+}

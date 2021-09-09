@@ -1,0 +1,31 @@
+{
+    "extends": "next/core-web-vitals",
+    "rules": {
+        "indent": ["error", 4],
+        "jsx-quotes": ["error", "prefer-double"],
+        "arrow-parens": ["error", "always"],
+        "arrow-spacing": [
+            "error",
+            {
+                "before": true,
+                "after": true
+            }
+        ],
+        "comma-dangle": ["error", "always-multiline"],
+        "comma-spacing": [
+            "error",
+            {
+                "before": false,
+                "after": true
+            }
+        ],
+        "prefer-const": [
+            "error",
+            { "destructuring": "any", "ignoreReadBeforeAssign": false }
+        ],
+        "eqeqeq": ["error", "always"],
+        "react/no-danger": "error",
+        "react/no-unsafe": "error",
+        "react/no-deprecated": "error"
+    }
+}
