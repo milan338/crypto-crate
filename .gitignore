@@ -1,8 +1,11 @@
 # vscode
 .vscode
 
+# misc
+tmp
+
 # models
-*.gltf
+*.glb
 *.blend1
 
 # dependencies
@@ -23,6 +26,10 @@
 # misc
 .DS_Store
 *.pem
+*.bkup
+
+# cache
+.eslintcache
 
 # debug
 npm-debug.log*

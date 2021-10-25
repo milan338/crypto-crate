@@ -1,7 +1,7 @@
 {
     "extends": "next/core-web-vitals",
     "rules": {
-        "indent": ["error", 4],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "jsx-quotes": ["error", "prefer-double"],
         "arrow-parens": ["error", "always"],
         "arrow-spacing": [
@@ -19,10 +19,7 @@
                 "after": true
             }
         ],
-        "prefer-const": [
-            "error",
-            { "destructuring": "any", "ignoreReadBeforeAssign": false }
-        ],
+        "prefer-const": ["error", { "destructuring": "any", "ignoreReadBeforeAssign": false }],
         "eqeqeq": ["error", "always"],
         "react/no-danger": "error",
         "react/no-unsafe": "error",
