@@ -4,7 +4,7 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const ThreeMinifierPlugin = require('@yushijinhun/three-minifier-webpack');
 const transformShaderChunk = require('three-minify-shaderchunk');
-const shadersToInclude = require('./src/util/three_shaders');
+const shadersToInclude = require('./src/util/three/three_shaders');
 const withTM = require('next-transpile-modules')([]);
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
@@ -13,7 +13,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const SRC = path.join(__dirname, 'src');
 const STYLES = path.join(SRC, 'styles');
 const UTIL = path.join(SRC, 'util');
-const THREE_EXPORTS = path.join(UTIL, 'three_exports.ts');
+const THREE_EXPORTS = path.join(UTIL, 'three', 'three_exports.ts');
 // Ensure aliased, relative imported files exist
 const ALIASED_FILES = [
     'node_modules/three/src/renderers/WebGLRenderer.js',
@@ -124,3 +124,5 @@ module.exports = withBundleAnalyzer(
 // ? https://darrenwhite.dev/blog/nextjs-replace-react-with-preact
 // ? https://github.com/preactjs/next-plugin-preact
 // ? https://daily.dev/blog/preact-a-lightweight-alternative-to-react
+
+// https://github.com/mrdoob/three.js/issues/11003
