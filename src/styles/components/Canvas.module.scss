@@ -1,0 +1,7 @@
+@use './abstracts/' as *;
+
+.canvas {
+    @include flex-center;
+    width: 1900px;
+    height: 900px;
+}

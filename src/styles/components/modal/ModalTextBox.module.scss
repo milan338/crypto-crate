@@ -1,0 +1,24 @@
+@use '../../abstracts/' as *;
+
+.modal-textbox {
+    @include flex-center;
+    z-index: 101;
+    position: relative;
+    width: clamp(50%, 700px, 90%);
+    height: min(50%, 300px);
+    margin: auto;
+    padding: 0 2rem;
+    border-radius: 12px; // TODO themed border radius
+    background-color: white; // TODO themed color
+    font-weight: bold;
+    flex-direction: column;
+
+    span {
+        &[r-glow] {
+            // animation: textglow 1s ease-in-out infinite alternate;
+            // // will-change: transform;
+            // transform: rotateZ(360deg);
+            text-shadow: 0 0 2px;
+        }
+    }
+}

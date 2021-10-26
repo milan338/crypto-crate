@@ -1,0 +1,12 @@
+@use '../../abstracts/' as *;
+
+.modal-background {
+    @include flex-center;
+    z-index: 100;
+    background: rgba(#04040f, 0.4);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}

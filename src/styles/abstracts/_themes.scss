@@ -1,0 +1,23 @@
+// Dimensions
+$height-header: 70px;
+$height-footer: 50px;
+// Animations
+$ease-time: 0.3s;
+$ease-type: ease-out;
+// Themes
+$themes: (
+    light: (
+        col-bg: rgb(0, 0, 0),
+        col-fg: rgb(0, 0, 0),
+        col-txt: rgb(0, 0, 0),
+        col-txt-hover: rgb(0, 0, 0),
+        col-accent: rgb(35, 158, 196),
+    ),
+    dark: (
+        col-bg: rgb(0, 0, 0),
+        col-fg: rgb(0, 0, 0),
+        col-txt: rgb(0, 0, 0),
+        col-txt-hover: rgb(0, 0, 0),
+        col-accent: rgb(38, 199, 78),
+    ),
+);
