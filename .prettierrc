@@ -1,9 +1,9 @@
 {
     "trailingComma": "es5",
     "bracketSpacing": true,
+    "bracketSameLine": false,
     "singleQuote": true,
     "jsxSingleQuote": false,
-    "jsxBracketSameLine": false,
     "arrowParens": "always",
     "useTabs": false,
     "tabWidth": 4,
