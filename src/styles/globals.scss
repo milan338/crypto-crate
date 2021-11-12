@@ -21,12 +21,14 @@ a {
 }
 
 :root {
-    --col-accent: #{getThemeValue(col-accent, light)};
-    --col-bg: hsl(0 0% 100%);
-    --col-fg: hsl(0 0% 0%);
+    &[data-theme='light'] {
+        --col-accent: #{getThemeValue(col-accent, 'light')};
+        --col-bg: hsl(0 0% 100%);
+        --col-fg: hsl(0 0% 0%);
+    }
 
-    @media (prefers-color-scheme: dark) {
-        --col-accent: #{getThemeValue(col-accent, dark)};
+    &[data-theme='dark'] {
+        --col-accent: #{getThemeValue(col-accent, 'dark')};
         --col-bg: hsl(0 0% 0%);
         --col-fg: hsl(0 0% 100%);
     }

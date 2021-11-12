@@ -10,9 +10,5 @@ module.exports = {
                 'custom-properties': false,
             },
         },
-        'postcss-dark-theme-class': {
-            darkSelector: '[data-theme="dark"]',
-            lightSelector: '[data-theme="light"]',
-        },
     },
 };
