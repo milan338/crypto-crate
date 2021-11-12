@@ -1,0 +1,16 @@
+@keyframes key-hover {
+    from {
+        transform: translateY(0) translateX(2px) rotate(4deg);
+    }
+
+    to {
+        transform: translateY(2px) translateX(-2px) rotate(-4deg);
+    }
+}
+
+.svg-key {
+    transform-origin: top right;
+    filter: drop-shadow(0 3px 5px);
+    animation: key-hover 3s ease-in-out alternate infinite;
+    will-change: transform;
+}
