@@ -39,8 +39,28 @@ for (const file of ALIASED_FILES) {
 module.exports = withBundleAnalyzer(
     withTM({
         reactStrictMode: true,
+        images: {
+            formats: ['image/avif', 'image/webp'],
+        },
         sassOptions: {
             includePaths: [STYLES],
+        },
+        async headers() {
+            return [
+                {
+                    source: '/(.*)',
+                    headers: [
+                        {
+                            key: 'cross-origin-opener-policy',
+                            value: 'same-origin',
+                        },
+                        {
+                            key: 'cross-origin-embedder-policy',
+                            value: 'require-corp',
+                        },
+                    ],
+                },
+            ];
         },
         webpack: (config, { isServer, dev }) => {
             config.performance.hints = 'warning';
