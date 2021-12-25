@@ -1,13 +1,7 @@
 import styles from '@/styles/svg/Key.module.scss';
-import type { SvgProperties } from 'csstype';
+import type { SVGProps } from '../svg_props';
 
-interface KeyProps {
-    color: SvgProperties['fill'];
-    width?: number;
-    height?: number;
-}
-
-export default function KeySVG(props: KeyProps) {
+export default function KeySVG(props: SVGProps) {
     const { color, width, height } = props;
     return (
         <svg

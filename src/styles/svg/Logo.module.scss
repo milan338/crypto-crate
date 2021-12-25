@@ -1,0 +1,22 @@
+.logo-dynamic {
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+
+    svg {
+        z-index: 100;
+        transition: transform 0.2s ease-out, opacity 0.8s ease;
+
+        &.small {
+            transform: scale(0.73);
+
+            &.top-logo {
+                opacity: 0;
+            }
+        }
+    }
+}
+
+.logo-dynamic-inner {
+    position: absolute;
+}
