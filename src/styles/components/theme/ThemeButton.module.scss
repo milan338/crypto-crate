@@ -1,0 +1,57 @@
+$theme-toggle-anim-time: 0.22s;
+$theme-toggle-anim-type: ease;
+
+@keyframes theme-rotate-in {
+    0% {
+        transform: rotate(-90deg);
+    }
+
+    65% {
+        transform: rotate(10deg);
+    }
+
+    100% {
+        transform: rotate(0);
+    }
+}
+
+@keyframes theme-rotate-out {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(90deg);
+    }
+}
+
+.theme-toggle {
+    display: grid;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 15px;
+    background-color: white; // TODO
+    cursor: pointer;
+    overflow: hidden;
+
+    svg {
+        grid-row: 1;
+        grid-column: 1;
+        transform-origin: 50% 200%;
+        transition: opacity (0.5 * $theme-toggle-anim-time) ease, transform 0.1s ease;
+
+        &.theme-visible {
+            opacity: 100%;
+            animation: theme-rotate-in $theme-toggle-anim-time $theme-toggle-anim-type;
+        }
+
+        &.theme-hidden {
+            opacity: 0;
+            animation: theme-rotate-out $theme-toggle-anim-time $theme-toggle-anim-type;
+        }
+    }
+
+    &.rotate-on-hover:hover svg {
+        transform: rotate(3deg);
+    }
+}
