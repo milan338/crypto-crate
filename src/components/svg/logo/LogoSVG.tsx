@@ -1,13 +1,13 @@
+import styles from '@/styles/svg/Logo.module.scss';
 import type { SVGProps } from '../svg_props';
 
 export interface LogoSVGProps extends SVGProps {
-    navbarLogo?: boolean;
     monochrome?: boolean;
     className?: string;
 }
 
 export default function LogoSVG(props: LogoSVGProps) {
-    const { color, width, height, navbarLogo, monochrome, className } = props;
+    const { color, width, height, monochrome, className } = props;
     return (
         <svg
             className={className}
@@ -21,32 +21,29 @@ export default function LogoSVG(props: LogoSVGProps) {
             <defs>
                 <linearGradient
                     gradientTransform="translate(-.001)"
+                    gradientUnits="userSpaceOnUse"
                     xlinkHref="#a"
                     id="b"
                     x1="38.634"
                     y1="381.497"
                     x2="473.368"
                     y2="130.505"
-                    gradientUnits="userSpaceOnUse"
                 />
                 <linearGradient id="a">
                     <stop style={{ stopColor: '#b20080', stopOpacity: 1 }} offset="0" />
                     <stop style={{ stopColor: '#2165ff', stopOpacity: 1 }} offset="1" />
                 </linearGradient>
             </defs>
-            {
-                /* Box */
-                !monochrome && (
-                    <path
-                        style={{
-                            fill: 'url(#b)',
-                            opacity: navbarLogo ? 'var(--nav-logo-bg-opacity)' : 1,
-                            strokeWidth: 1.65052593,
-                        }}
-                        d="M473.366 381.497 255.999 506.993 38.633 381.497V130.503L255.999 5.007l217.367 125.496Z"
-                    />
-                )
-            }
+            {/* Box */}
+            <path
+                className={styles['logo-bg']}
+                style={{
+                    fill: 'url(#b)',
+                    opacity: monochrome ? 0 : 1,
+                    strokeWidth: 1.65052593,
+                }}
+                d="M473.366 381.497 255.999 506.993 38.633 381.497V130.503L255.999 5.007l217.367 125.496Z"
+            />
             <g fill={color}>
                 {/* Top C */}
                 <path
