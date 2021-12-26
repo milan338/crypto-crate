@@ -3,7 +3,6 @@ import type { SVGProps } from '../svg_props';
 
 export interface LogoSVGProps extends SVGProps {
     monochrome?: boolean;
-    className?: string;
 }
 
 export default function LogoSVG(props: LogoSVGProps) {
