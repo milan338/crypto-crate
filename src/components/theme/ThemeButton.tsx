@@ -3,6 +3,7 @@ import { useState } from 'react';
 import DarkModeSVG from '@/components/svg/material/DarkModeSVG';
 import LightModeSVG from '@/components/svg/material/LightModeSVG';
 import BrightnessAutoSVG from '@/components/svg/material/BrightnessAutoSVG';
+import { getSysColorScheme } from './ThemeLoader';
 import type { SVGProps } from '@/components/svg/svg_props';
 
 const svgProps: SVGProps = {
@@ -32,9 +33,13 @@ export default function ThemeButton() {
                 if (theme === undefined) return;
                 const i = themes.indexOf(theme);
                 const newTheme = themes[i === themes.length - 1 ? 0 : i + 1];
-                dataset.theme = newTheme;
-                if (newTheme === 'auto') localStorage.removeItem('theme');
-                else localStorage.setItem('theme', newTheme);
+                if (newTheme === 'auto') {
+                    localStorage.removeItem('theme');
+                    dataset.theme = getSysColorScheme();
+                } else {
+                    localStorage.setItem('theme', newTheme);
+                    dataset.theme = newTheme;
+                }
                 setTheme(newTheme);
                 setRotateOnHover(false);
             }}

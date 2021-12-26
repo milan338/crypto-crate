@@ -1,5 +1,9 @@
+export function getSysColorScheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
 export default function ThemeLoader() {
-    const sysTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const sysTheme = getSysColorScheme();
     const themePreference = localStorage.getItem('theme');
     let theme = themePreference;
     if (!theme) theme = sysTheme;
