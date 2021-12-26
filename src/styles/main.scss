@@ -24,6 +24,8 @@ body {
 // }
 
 :root {
+    --nav-logo-bg-opacity: 1;
+
     &[data-theme='light'] {
         --col-accent: #{getThemeValue(col-accent, 'light')};
         --col-bg: hsl(0 0% 100%);

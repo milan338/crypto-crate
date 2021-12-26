@@ -1,12 +1,13 @@
 import type { SVGProps } from '../svg_props';
 
 export interface LogoSVGProps extends SVGProps {
+    navbarLogo?: boolean;
     monochrome?: boolean;
     className?: string;
 }
 
 export default function LogoSVG(props: LogoSVGProps) {
-    const { color, width, height, monochrome, className } = props;
+    const { color, width, height, navbarLogo, monochrome, className } = props;
     return (
         <svg
             className={className}
@@ -37,7 +38,11 @@ export default function LogoSVG(props: LogoSVGProps) {
                 /* Box */
                 !monochrome && (
                     <path
-                        style={{ fill: 'url(#b)', fillOpacity: 1, strokeWidth: 1.65052593 }}
+                        style={{
+                            fill: 'url(#b)',
+                            opacity: navbarLogo ? 'var(--nav-logo-bg-opacity)' : 1,
+                            strokeWidth: 1.65052593,
+                        }}
                         d="M473.366 381.497 255.999 506.993 38.633 381.497V130.503L255.999 5.007l217.367 125.496Z"
                     />
                 )
