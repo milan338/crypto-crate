@@ -5,7 +5,6 @@ const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const ThreeMinifierPlugin = require('@yushijinhun/three-minifier-webpack');
 const transformShaderChunk = require('three-minify-shaderchunk');
 const shadersToInclude = require('./src/util/three/three_shaders');
-const withTM = require('next-transpile-modules')([]);
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
 });
@@ -35,102 +34,102 @@ for (const file of ALIASED_FILES) {
     }
 }
 
+// TODO index files for components instead of importing them from the file directly
+
 /** @type {import('next').NextConfig} */
-module.exports = withBundleAnalyzer(
-    withTM({
-        reactStrictMode: true,
-        images: {
-            formats: ['image/avif', 'image/webp'],
-        },
-        sassOptions: {
-            includePaths: [STYLES],
-        },
-        async headers() {
-            return [
-                {
-                    source: '/(.*)',
-                    headers: [
-                        {
-                            key: 'cross-origin-opener-policy',
-                            value: 'same-origin',
-                        },
-                        {
-                            key: 'cross-origin-embedder-policy',
-                            value: 'require-corp',
-                        },
-                    ],
-                },
-            ];
-        },
-        webpack: (config, { isServer, dev }) => {
-            config.performance.hints = 'warning';
+module.exports = withBundleAnalyzer({
+    reactStrictMode: true,
+    images: {
+        formats: ['image/avif', 'image/webp'],
+    },
+    sassOptions: {
+        includePaths: [STYLES],
+    },
+    async headers() {
+        return [
+            {
+                source: '/(.*)',
+                headers: [
+                    {
+                        key: 'cross-origin-opener-policy',
+                        value: 'same-origin',
+                    },
+                    {
+                        key: 'cross-origin-embedder-policy',
+                        value: 'require-corp',
+                    },
+                ],
+            },
+        ];
+    },
+    webpack: (config, { isServer, dev }) => {
+        config.performance.hints = 'warning';
+        config.plugins.push(
+            new StyleLintPlugin({
+                configFile: '.stylelintrc',
+                context: STYLES,
+                emitError: true,
+                emitWarning: true,
+            })
+        );
+        if (process.env.ANALYZE === 'true') {
+            config.profile = true;
             config.plugins.push(
-                new StyleLintPlugin({
-                    configFile: '.stylelintrc',
-                    context: STYLES,
-                    emitError: true,
-                    emitWarning: true,
+                new StatsWriterPlugin({
+                    filename: 'stats.json',
+                    stats: {
+                        context: './src',
+                        assets: true,
+                        entrypoints: true,
+                        chunks: true,
+                        chunkModules: true,
+                        modules: true,
+                        children: true,
+                        cached: true,
+                        reasons: true,
+                    },
                 })
             );
-            if (process.env.ANALYZE === 'true') {
-                config.profile = true;
-                config.plugins.push(
-                    new StatsWriterPlugin({
-                        filename: 'stats.json',
-                        stats: {
-                            context: './src',
-                            assets: true,
-                            entrypoints: true,
-                            chunks: true,
-                            chunkModules: true,
-                            modules: true,
-                            children: true,
-                            cached: true,
-                            reasons: true,
-                        },
-                    })
-                );
-            }
-            config.module.rules.push(
-                {
-                    test: /\.(glsl|vs|fs|vert|frag)$/,
-                    exclude: /node_modules/,
-                    type: 'asset/source',
-                    use: 'glslify-loader',
+        }
+        config.module.rules.push(
+            {
+                test: /\.(glsl|vs|fs|vert|frag)$/,
+                exclude: /node_modules/,
+                type: 'asset/source',
+                use: 'glslify-loader',
+            },
+            {
+                test: /ShaderChunk.js$/,
+                loader: 'string-replace-loader',
+                include: path.resolve('./node_modules/three/src/renderers/shaders'),
+                options: {
+                    search: /[\s\S]*/,
+                    replace: transformShaderChunk(shadersToInclude),
+                    strict: true,
                 },
-                {
-                    test: /ShaderChunk.js$/,
-                    loader: 'string-replace-loader',
-                    include: path.resolve('./node_modules/three/src/renderers/shaders'),
-                    options: {
-                        search: /[\s\S]*/,
-                        replace: transformShaderChunk(shadersToInclude),
-                        strict: true,
-                    },
-                }
-            );
-            if (!isServer) {
-                if (!dev) {
-                    config.cache = false;
-                    const threeMinifier = new ThreeMinifierPlugin();
-                    config.plugins.unshift(threeMinifier);
-                    config.resolve.plugins.unshift(threeMinifier.resolver);
-                }
-                config.resolve.alias = {
-                    ...config.resolve.alias,
-                    three$: THREE_EXPORTS,
-                    './webxr/WebXRManager.js': THREE_EXPORTS,
-                    './webgl/WebGLCubeMaps.js': THREE_EXPORTS,
-                    './webgl/WebGLCubeUVMaps.js': THREE_EXPORTS,
-                    './webgl/WebGLMorphtargets.js': THREE_EXPORTS,
-                    './webgl/WebGLAnimation.js': THREE_EXPORTS,
-                    './webgl/WebGLShadowMap.js': THREE_EXPORTS,
-                };
             }
-            return config;
-        },
-    })
-);
+        );
+        if (!isServer) {
+            if (!dev) {
+                config.cache = false;
+                const threeMinifier = new ThreeMinifierPlugin();
+                config.plugins.unshift(threeMinifier);
+                config.resolve.plugins.unshift(threeMinifier.resolver);
+            }
+            config.resolve.alias = {
+                ...config.resolve.alias,
+                three$: THREE_EXPORTS,
+                './webxr/WebXRManager.js': THREE_EXPORTS,
+                './webgl/WebGLCubeMaps.js': THREE_EXPORTS,
+                './webgl/WebGLCubeUVMaps.js': THREE_EXPORTS,
+                './webgl/WebGLMorphtargets.js': THREE_EXPORTS,
+                './webgl/WebGLAnimation.js': THREE_EXPORTS,
+                './webgl/WebGLShadowMap.js': THREE_EXPORTS,
+            };
+        }
+        return config;
+    },
+});
 
 // * https://discourse.threejs.org/t/stripping-out-shaders-from-three-js-to-reduce-size/1359
 
