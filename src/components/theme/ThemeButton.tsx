@@ -1,9 +1,9 @@
 import styles from '@/styles/components/theme/ThemeButton.module.scss';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import DarkModeSVG from '@/components/svg/material/DarkModeSVG';
 import LightModeSVG from '@/components/svg/material/LightModeSVG';
 import BrightnessAutoSVG from '@/components/svg/material/BrightnessAutoSVG';
-import { getSysColorScheme } from './ThemeLoader';
+import { getSysColorScheme, updateDomTheme } from './ThemeLoader';
 import type { SVGProps } from '@/components/svg/svg_props';
 
 const svgProps: SVGProps = {
@@ -17,6 +17,7 @@ const hidden = styles['theme-hidden'];
 const visible = styles['theme-visible'];
 
 export default function ThemeButton() {
+    useMemo(updateDomTheme, []);
     const dataset = document.documentElement.dataset;
     const [theme, setTheme] = useState(dataset.theme);
     const [rotateOnHover, setRotateOnHover] = useState(true);
