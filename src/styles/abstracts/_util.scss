@@ -10,12 +10,6 @@
     @return map-get(map-get($themes, $theme), $key);
 }
 
-// Apply an easing transition
-@mixin ease-transition($time: $ease-time, $property: null) {
-    transition: $property $time;
-    transition-timing-function: $ease-type;
-}
-
 // Centered flex
 @mixin flex-center {
     display: flex;

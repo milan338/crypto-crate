@@ -1,7 +1,16 @@
 @use './abstracts/' as *;
-@use './components/' as *;
 @use './svg/' as *;
 @use './canvas' as *;
 
-// .page {
-// }
+.page {
+    section:not(#home) {
+        // Scroll padding for persistent navbar
+        padding-top: 50px;
+        margin-top: -50px;
+    }
+}
+
+.fullscreen-canvas3d {
+    width: 100%;
+    height: 100vh;
+}

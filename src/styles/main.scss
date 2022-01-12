@@ -1,6 +1,9 @@
 @use './abstracts/' as *;
 @use './fonts/' as *;
 
+// TODO eventually remove unused imports from all scss files
+// TODO and remove index.scss and import of those directories that only contain modules
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -8,6 +11,10 @@
     // TODO better transition for colours only? only should be global for theme changing
     // transition: all $ease-time;
     // transition-timing-function: $ease-type;
+}
+
+html {
+    scroll-padding-top: 20px;
 }
 
 html,
@@ -18,6 +25,11 @@ body {
     scroll-behavior: smooth;
 }
 
+button {
+    font-family: inherit;
+    font-size: 1em;
+}
+
 // a {
 //     color: inherit;
 //     text-decoration: none;
@@ -25,14 +37,12 @@ body {
 
 :root {
     &[data-theme='light'] {
-        --col-accent: #{getThemeValue(col-accent, 'light')};
-        --col-bg: hsl(0 0% 100%);
-        --col-fg: hsl(0 0% 0%);
+        --col-bg: #{getThemeValue(col-bg, 'light')};
+        --col-fg: #{getThemeValue(col-fg, 'light')};
     }
 
     &[data-theme='dark'] {
-        --col-accent: #{getThemeValue(col-accent, 'dark')};
-        --col-bg: hsl(0 0% 0%);
-        --col-fg: hsl(0 0% 100%);
+        --col-bg: #{getThemeValue(col-bg, 'dark')};
+        --col-fg: #{getThemeValue(col-fg, 'dark')};
     }
 }

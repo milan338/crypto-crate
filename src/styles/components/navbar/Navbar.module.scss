@@ -1,0 +1,136 @@
+@use '../../abstracts/' as *;
+@use '../../mixins/gradient-button' as *;
+
+$navbar-padding: 0.6rem;
+$navbar-height-full: 100px;
+$navbar-height-small: 70px;
+
+@keyframes main-button-show {
+    0% {
+        transform: scale(0%);
+    }
+
+    70% {
+        transform: scale(110%);
+    }
+
+    100% {
+        transform: scale(100%);
+    }
+}
+
+.navbar {
+    border: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px 7vw;
+    z-index: 99;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    height: $navbar-height-full;
+    background-color: transparent; // TODO
+    // background-color: rgba(0, 0, 0, 0.8);
+    transition: height 0.2s ease, background-color 0.2s ease;
+
+    &.small {
+        height: $navbar-height-small;
+        background-color: black;
+    }
+
+    nav {
+        position: relative;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+.navbar-title {
+    @include flex-center;
+    margin-right: auto;
+    overflow: hidden;
+
+    h1 {
+        color: white; // TODO
+        padding-left: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.35s ease, visibility 0.2s ease, opacity 0.2s ease;
+
+        &.visible {
+            opacity: 100%;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        &.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-30%);
+        }
+    }
+
+    svg {
+        z-index: 100;
+        transition: transform 0.2s ease-out, opacity 0.8s ease;
+
+        &.small {
+            transform: scale(0.73);
+        }
+    }
+}
+
+.navbar-links {
+    list-style: none;
+    padding-right: $navbar-padding;
+
+    li {
+        display: inline-block;
+        padding: 0 $navbar-padding;
+
+        a {
+            position: relative;
+            font-weight: 500;
+            font-size: 1.2rem;
+            color: white; // TODO
+            text-decoration: none;
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: grey; // TODO
+            }
+        }
+    }
+}
+
+.navbar-indicator {
+    position: absolute;
+    left: 0;
+    bottom: -0.5rem;
+    height: 0.3rem;
+    border-radius: 2rem;
+    background-color: $col-accent;
+    will-change: width;
+    transition: transform 0.3s ease, width 0.32s ease;
+}
+
+.main-button {
+    @include gradient-button;
+    margin-left: 2 * $navbar-padding;
+    padding: 0.7em 1.6em;
+    font-weight: 500;
+    font-size: 1rem;
+    color: white;
+    border-radius: 25px;
+    transition: transform 0.15s ease;
+
+    &.visible {
+        animation: main-button-show 0.25s ease;
+    }
+
+    &.hidden {
+        transform: scale(0%);
+    }
+}

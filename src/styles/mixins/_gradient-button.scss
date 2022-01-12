@@ -1,0 +1,50 @@
+@use '../abstracts/' as *;
+
+@mixin gradient-button {
+    position: relative;
+    z-index: 100;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: rgba($col-accent, 0.45);
+    transition: background-color 1s ease;
+
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        background-color: $col-accent;
+        background-image: $gradient-accent;
+    }
+
+    // When applying transformations to the button, the button is put into a new stacking context,
+    // Causing the ::before pseudo-element to appear above the translucent button background,
+    // But adding a z-index to the button will cause the ::before to appear above the button,
+    // So the ::after pseudo-element acts as the button's new background instead.
+    // See https://stackoverflow.com/a/46091254
+    &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-color: rgba($col-accent, 0.3);
+        transition: background-color 1s ease;
+    }
+
+    &:hover {
+        background-color: transparent;
+
+        &::after {
+            background-color: transparent;
+        }
+    }
+}

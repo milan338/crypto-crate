@@ -1,23 +1,24 @@
-// Dimensions
-$height-header: 70px;
-$height-footer: 50px;
-// Animations
-$ease-time: 0.3s;
-$ease-type: ease-out;
-// Themes
+// $col-accent: hsl(317, 100%, 35%);
+// $col-accent: hsl(300, 83%, 31%);
+// $col-accent: rgb(140, 26, 160);
+$col-accent: rgb(147, 21, 155);
+// $col-accent: purple;
+$col-accent-secondary: hsl(222, 100%, 56%);
+// $col-accent-secondary: rgb(27, 27, 218);
+
+$gradient-accent: linear-gradient(to top right, $col-accent, 65%, $col-accent-secondary);
+
 $themes: (
     light: (
-        col-bg: rgb(0, 0, 0),
-        col-fg: rgb(0, 0, 0),
-        col-txt: rgb(0, 0, 0),
-        col-txt-hover: rgb(0, 0, 0),
-        col-accent: rgb(35, 158, 196),
+        col-bg: hsl(0 0% 100%),
+        col-fg: hsl(0 0% 0%),
+        col-txt: hsl(0, 0%, 0%),
+        col-txt-hover: hsl(0, 0%, 0%),
     ),
     dark: (
-        col-bg: rgb(0, 0, 0),
-        col-fg: rgb(0, 0, 0),
-        col-txt: rgb(0, 0, 0),
-        col-txt-hover: rgb(0, 0, 0),
-        col-accent: rgb(38, 199, 78),
+        col-bg: hsl(0, 0%, 0%),
+        col-fg: hsl(0, 0%, 100%),
+        col-txt: hsl(0, 0%, 0%),
+        col-txt-hover: hsl(0, 0%, 0%),
     ),
 );
