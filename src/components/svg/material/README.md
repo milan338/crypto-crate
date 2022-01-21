@@ -1,6 +1,6 @@
 This directory contains React components using SVG icons from [Google's Material Design Icons](https://fonts.google.com/icons).
 
-While the React components themselves are not from Google's Material Design Icons, the SVG information contained within them has been extracted from Google's Material Design Icons.
+While the React components themselves are not from Google's Material Design Icons, the SVG information contained within them has been adapted from Google's Material Design Icons.
 
 The icons are used in accordance with [their license](https://github.com/google/material-design-icons/blob/master/LICENSE):
 

@@ -9,6 +9,7 @@
     background-color: rgba($col-accent, 0.45);
     transition: background-color 1s ease;
 
+    // Gradient background
     &::before {
         content: '';
         display: block;

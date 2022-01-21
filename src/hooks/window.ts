@@ -27,3 +27,15 @@ export function useScrollPosition() {
     }, []);
     return scrollY;
 }
+
+export function useScrollBehavior(behavior: 'auto' | 'smooth') {
+    useEffect(() => {
+        document.documentElement.style.scrollBehavior = behavior;
+    }, [behavior]);
+}
+
+export function usePreventScroll(prevent: boolean) {
+    useEffect(() => {
+        document.documentElement.style.overflow = prevent ? 'hidden' : 'auto';
+    }, [prevent]);
+}

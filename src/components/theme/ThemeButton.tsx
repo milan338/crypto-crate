@@ -26,7 +26,9 @@ export default function ThemeButton() {
     };
     return (
         <button
-            className={`${styles['theme-toggle']} ${rotateOnHover && styles['rotate-on-hover']}`}
+            className={`${styles['theme-toggle']} ${
+                rotateOnHover ? styles['rotate-on-hover'] : ''
+            }`}
             title={theme === 'auto' ? 'auto (system theme)' : `${theme} mode`}
             type="button"
             onClick={(event) => {

@@ -1,11 +1,10 @@
 import styles from '@/styles/components/nav/Navbar.module.scss';
 import { forwardRef } from 'react';
+import { useScrollBehavior } from '@/hooks/window';
 import ThemeButton from '@/components/theme/ThemeButton';
 import NavbarLink from '../parts/NavbarLink';
 import NavbarTitle from '../parts/NavbarTitle';
 import type { RefObject } from 'react';
-
-// TODO will need to change color based on scroll as well with themes
 
 export type AnchorData = { href: string; offsetWidth: number; offsetLeft: number };
 
@@ -15,13 +14,10 @@ interface DesktopNavbarProps {
     scrollY: number;
 }
 
-// TODO maybe slight gradient on top of page
-
-// TODO scroll to top button in bottom right as well with little animation
-
 // TODO only show navbar button when main button is scrolled out of view
 
 const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, ref) => {
+    useScrollBehavior('smooth');
     return (
         <header className={`${styles.navbar} ${props.scrollY ? styles.small : ''}`}>
             <NavbarTitle scrollY={props.scrollY} />

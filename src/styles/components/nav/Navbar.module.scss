@@ -32,7 +32,6 @@ $navbar-height-small: 70px;
     overflow: hidden;
     height: $navbar-height-full;
     background-color: transparent; // TODO
-    // background-color: rgba(0, 0, 0, 0.8);
     transition: height 0.2s ease, background-color 0.2s ease;
 
     &.small {
@@ -40,45 +39,19 @@ $navbar-height-small: 70px;
         background-color: black;
     }
 
+    &.mobile {
+        padding: 15px 4vw;
+
+        h1 {
+            font-size: 1.8rem;
+            padding-left: 0;
+        }
+    }
+
     nav {
         position: relative;
         padding: 0;
         margin: 0;
-    }
-}
-
-.navbar-title {
-    @include flex-center;
-    margin-right: auto;
-    overflow: hidden;
-
-    h1 {
-        color: white; // TODO
-        padding-left: 10px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: transform 0.35s ease, visibility 0.2s ease, opacity 0.2s ease;
-
-        &.visible {
-            opacity: 100%;
-            visibility: visible;
-            transform: translateX(0);
-        }
-
-        &.hidden {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateX(-30%);
-        }
-    }
-
-    svg {
-        z-index: 100;
-        transition: transform 0.2s ease-out, opacity 0.8s ease;
-
-        &.small {
-            transform: scale(0.73);
-        }
     }
 }
 

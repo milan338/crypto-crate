@@ -1,0 +1,30 @@
+.hamburger {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transform: translateX(15px);
+
+    svg {
+        transition: transform 0.2s ease; // TODO
+
+        .line {
+            transition: stroke-dasharray 0.18s ease, stroke-dashoffset 0.18s ease; // TODO
+        }
+
+        .top,
+        .bottom {
+            stroke-dasharray: 40 121;
+        }
+
+        &.active {
+            transform: rotate(45deg);
+
+            .top,
+            .bottom {
+                stroke-dashoffset: -68px;
+            }
+        }
+    }
+}

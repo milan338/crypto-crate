@@ -5,6 +5,9 @@
 // TODO and remove index.scss and import of those directories that only contain modules
 
 * {
+    font-family: Ubuntu, sans-serif;
+    text-rendering: optimizeLegibility;
+    list-style-type: none;
     box-sizing: border-box;
     padding: 0;
     margin: 0;
@@ -13,27 +16,11 @@
     // transition-timing-function: $ease-type;
 }
 
+// TODO remove the index page random padding hack thing and remove the styles reference with the id
+// TODO i.e. just have the id of the main content to be 'home' and not 'styles.home'
 html {
-    scroll-padding-top: 20px;
+    scroll-padding-top: 30px;
 }
-
-html,
-body {
-    // font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-    //     Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    font-family: Ubuntu, sans-serif;
-    scroll-behavior: smooth;
-}
-
-button {
-    font-family: inherit;
-    font-size: 1em;
-}
-
-// a {
-//     color: inherit;
-//     text-decoration: none;
-// }
 
 :root {
     &[data-theme='light'] {

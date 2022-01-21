@@ -1,4 +1,4 @@
-// SVG content sourced from https://github.com/google/material-design-icons/blob/master/src/device/light_mode/materialicons/24px.svg
+// SVG content adapted from https://github.com/google/material-design-icons/blob/master/src/device/light_mode/materialicons/24px.svg
 // In accordance with its license: https://github.com/google/material-design-icons/blob/master/LICENSE
 
 import type { SVGProps } from '../svg_props';

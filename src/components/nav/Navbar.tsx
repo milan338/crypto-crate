@@ -65,7 +65,7 @@ export default function Navbar() {
                     scrollY={scrollY}
                 />
             ) : (
-                <MobileNavbar />
+                <MobileNavbar ref={navListRef} currentSection={currentSection} scrollY={scrollY} />
             )}
         </>
     );
