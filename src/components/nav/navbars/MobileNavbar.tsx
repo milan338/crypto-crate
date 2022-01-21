@@ -1,5 +1,5 @@
 import styles from '@/styles/components/nav/Navbar.module.scss';
-import { useState, forwardRef } from 'react';
+import { useState } from 'react';
 import { useScrollBehavior, usePreventScroll } from '@/hooks/window';
 import NavbarTitle from '../parts/NavbarTitle';
 import NavMenu from '../menu/NavMenu';
@@ -10,7 +10,7 @@ interface MobileNavbarProps {
     scrollY: number;
 }
 
-const MobileNavbar = forwardRef<HTMLUListElement, MobileNavbarProps>((props, ref) => {
+export default function MobileNavbar(props: MobileNavbarProps) {
     const [showMenu, setShowMenu] = useState(false);
     useScrollBehavior('auto');
     usePreventScroll(showMenu);
@@ -25,14 +25,10 @@ const MobileNavbar = forwardRef<HTMLUListElement, MobileNavbarProps>((props, ref
                 <Hamburger active={showMenu} setActive={setShowMenu} />
             </header>
             <NavMenu
-                ref={ref}
                 currentSection={props.currentSection}
                 visible={showMenu}
                 setVisible={setShowMenu}
             />
         </>
     );
-});
-MobileNavbar.displayName = 'MobileNavbar';
-
-export default MobileNavbar;
+}

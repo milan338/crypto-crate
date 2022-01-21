@@ -1,5 +1,5 @@
 import styles from '@/styles/components/nav/NavMenu.module.scss';
-import { forwardRef, useCallback } from 'react';
+import { useCallback } from 'react';
 import ThemeButton from '@/components/theme/ThemeButton';
 import NavbarLink from '../parts/NavbarLink';
 import type { Dispatch, SetStateAction } from 'react';
@@ -13,7 +13,7 @@ interface NavMenuProps {
 
 // TODO add the gradient button
 
-const NavMenu = forwardRef<HTMLUListElement, NavMenuProps>((props, ref) => {
+export default function NavMenu(props: NavMenuProps) {
     const { setVisible, currentSection } = props;
     const linkProps = useCallback(
         (i: number): NavbarLinkProps => {
@@ -30,8 +30,7 @@ const NavMenu = forwardRef<HTMLUListElement, NavMenuProps>((props, ref) => {
     );
     return (
         <nav className={`${styles['nav-menu']} ${props.visible ? styles.visible : styles.hidden}`}>
-            {/* ONLY use NavbarLink components in this list */}
-            <ul ref={ref}>
+            <ul>
                 <NavbarLink {...linkProps(1)} href="#about">
                     About
                 </NavbarLink>
@@ -45,7 +44,4 @@ const NavMenu = forwardRef<HTMLUListElement, NavMenuProps>((props, ref) => {
             <ThemeButton />
         </nav>
     );
-});
-NavMenu.displayName = 'NavMenu';
-
-export default NavMenu;
+}
