@@ -47,7 +47,7 @@ export default function Navbar() {
     // Update current section based on scroll
     let activeSection = 0;
     for (const section of sections) {
-        if (scrollY > section.offsetTop - 40) activeSection++;
+        if (scrollY > section.offsetTop - 100) activeSection++;
     }
     if (activeSection !== currentSection) {
         if (anchorData[activeSection]) history.pushState({}, '', anchorData[activeSection].href);

@@ -1,14 +1,7 @@
 @use './abstracts/' as *;
 @use './svg/' as *;
-@use './canvas' as *;
 
-.page {
-    section:not(#home) {
-        // Scroll padding for persistent navbar
-        padding-top: 50px;
-        margin-top: -50px;
-    }
-}
+// TODO move pages into components directory
 
 .fullscreen-canvas3d {
     width: 100%;

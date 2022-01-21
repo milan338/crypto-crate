@@ -16,10 +16,8 @@
     // transition-timing-function: $ease-type;
 }
 
-// TODO remove the index page random padding hack thing and remove the styles reference with the id
-// TODO i.e. just have the id of the main content to be 'home' and not 'styles.home'
 html {
-    scroll-padding-top: 30px;
+    scroll-padding-top: 70px;
 }
 
 :root {
