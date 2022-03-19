@@ -2,6 +2,7 @@
 
 .home {
     @include stack-elements;
+    position: relative;
     overflow: hidden;
     background-color: black;
     color: black;
@@ -13,6 +14,7 @@
         color: white;
         z-index: 80;
         text-shadow: white 0 0 3px;
+        position: absolute;
     }
 
     h1 {
@@ -28,6 +30,7 @@
 
     .button {
         padding: 740px 7.3vw;
+        position: absolute;
 
         button {
             padding: 1.96rem 4.48rem;
