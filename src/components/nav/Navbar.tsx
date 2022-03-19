@@ -4,8 +4,6 @@ import DesktopNavbar from './navbars/DesktopNavbar';
 import MobileNavbar from './navbars/MobileNavbar';
 import type { AnchorData } from './navbars/DesktopNavbar';
 
-const DESKTOP_MIN_WIDTH = 850;
-
 export default function Navbar() {
     const navListRef = useRef<HTMLUListElement>(null);
     const windowSize = useWindowSize();
@@ -57,7 +55,7 @@ export default function Navbar() {
     const currentAnchorData = anchorData[currentSection] || { offsetLeft: 0, offsetWidth: 0 };
     return (
         <>
-            {windowW >= DESKTOP_MIN_WIDTH ? (
+            {windowW >= parseInt(process.env.NEXT_PUBLIC_DESKTOP_MIN_WIDTH || '') ? (
                 <DesktopNavbar
                     ref={navListRef}
                     navListRef={navListRef}
