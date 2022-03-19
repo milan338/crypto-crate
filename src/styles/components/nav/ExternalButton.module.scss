@@ -1,13 +1,16 @@
-@use '../abstracts/' as *;
+@use '../../abstracts/' as *;
 
-@mixin gradient-button {
+.button {
+    @include flex-center;
     position: relative;
-    z-index: 100;
+    z-index: 80;
     border: none;
     cursor: pointer;
     overflow: hidden;
     background-color: rgba($col-accent, 0.45);
+    color: white;
     transition: background-color 1s ease;
+    text-align: left;
 
     // Gradient background
     &::before {

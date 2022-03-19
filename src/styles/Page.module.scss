@@ -1,9 +1,0 @@
-@use './abstracts/' as *;
-@use './svg/' as *;
-
-// TODO move pages into components directory
-
-.fullscreen-canvas3d {
-    width: 100%;
-    height: 100vh;
-}

@@ -1,7 +1,9 @@
 import styles from '@/styles/components/nav/Navbar.module.scss';
-import { forwardRef } from 'react';
+import { useState, forwardRef } from 'react';
 import { useScrollBehavior } from '@/hooks/window';
+import { useIntersectionObserver } from '@/hooks/observer';
 import ThemeButton from '@/components/theme/ThemeButton';
+import ExternalButton from '../ExternalButton';
 import NavbarLink from '../parts/NavbarLink';
 import NavbarTitle from '../parts/NavbarTitle';
 import type { RefObject } from 'react';
@@ -17,7 +19,13 @@ interface DesktopNavbarProps {
 // TODO only show navbar button when main button is scrolled out of view
 
 const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, ref) => {
+    const [btnVisible, setBtnVisible] = useState(false);
     useScrollBehavior('smooth');
+    useIntersectionObserver(
+        (entry) => setBtnVisible(!entry.isIntersecting),
+        document.getElementById('external-button') ?? undefined,
+        { rootMargin: '-210px' }
+    );
     return (
         <header className={`${styles.navbar} ${props.scrollY ? styles.small : ''}`}>
             <NavbarTitle scrollY={props.scrollY} />
@@ -39,7 +47,13 @@ const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, r
                 )}
             </nav>
             <ThemeButton />
-            <button className={`${styles['main-button']} ${styles['visible']}`}>Button</button>
+            <ExternalButton
+                className={`${styles['external-button']} ${
+                    btnVisible ? styles.visible : styles.hidden
+                }`}
+            >
+                Button
+            </ExternalButton>
         </header>
     );
 });

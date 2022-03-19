@@ -1,0 +1,49 @@
+@use '../../abstracts/' as *;
+
+.home {
+    @include stack-elements;
+    overflow: hidden;
+    background-color: black;
+    color: black;
+    width: 100%;
+    height: 100vh;
+
+    h1,
+    p {
+        color: white;
+        z-index: 80;
+        text-shadow: white 0 0 3px;
+    }
+
+    h1 {
+        font-size: 8rem;
+        padding: 230px 7vw;
+    }
+
+    p {
+        font-size: 6rem;
+        font-weight: 300;
+        padding: 430px 7vw;
+    }
+
+    .button {
+        padding: 740px 7.3vw;
+
+        button {
+            padding: 1.96rem 4.48rem;
+            border-radius: 2em;
+            font-weight: 500;
+            font-size: 3rem;
+        }
+    }
+
+    // button {
+    //     @include gradient-button;
+    //     // margin: 700px 7vw;
+    //     padding: 0.7em 1.6em;
+    //     width: 20rem;
+    //     height: 1.6em;
+    // }
+
+    // TODO mobile media queries for better font sizing
+}

@@ -16,3 +16,13 @@
     justify-content: center;
     align-items: center;
 }
+
+// Stacked elements on top of each other
+@mixin stack-elements {
+    display: grid;
+
+    & > * {
+        grid-row: 1;
+        grid-column: 1;
+    }
+}
