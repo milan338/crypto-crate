@@ -5,6 +5,8 @@ import NavbarLink from '../parts/NavbarLink';
 import type { Dispatch, SetStateAction } from 'react';
 import type { NavbarLinkProps } from '../parts/NavbarLink';
 
+// TODO fix buttons clickable even when menu is hidden
+
 interface NavMenuProps {
     currentSection: number;
     visible: boolean;

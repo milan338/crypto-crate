@@ -22,7 +22,6 @@ export default function ExternalButton(props: ExternalButtonProps) {
         <div id={props.id} className={props.className}>
             <button
                 className={styles.button}
-                style={props.showArrow ? { width: '11em', height: 140 } : {}}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
@@ -33,7 +32,7 @@ export default function ExternalButton(props: ExternalButtonProps) {
                         width={200}
                         height={200}
                         style={{
-                            transform: hovered ? 'translateX(25px) scaleX(110%)' : '',
+                            transform: hovered ? 'translateX(26px) scaleX(111%)' : '',
                         }}
                     />
                 )}

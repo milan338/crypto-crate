@@ -15,10 +15,7 @@
 
     span {
         &[r-glow] {
-            // animation: textglow 1s ease-in-out infinite alternate;
-            // // will-change: transform;
-            // transform: rotateZ(360deg);
-            text-shadow: 0 0 2px;
+            text-shadow: 0 0 3px;
         }
     }
 }

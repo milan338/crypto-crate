@@ -12,4 +12,6 @@
     border-radius: 0 0 12px 12px; // TODO only bottom borders // TODO themed border radius
     background-color: white; // TODO themed color
     font-weight: bold;
+    flex-direction: row;
+    gap: 1em;
 }
