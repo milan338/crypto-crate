@@ -10,11 +10,6 @@ interface ExternalButtonProps {
     children?: ReactNode;
 }
 
-// TODO optional arrow on hover that animates
-
-// TODO maybe change display from 'inline-block' to something else on all the components
-// TODO to fix the weird main canvas issues
-
 export default function ExternalButton(props: ExternalButtonProps) {
     // TODO optional arrow on hover
     const [hovered, setHovered] = useState(false);

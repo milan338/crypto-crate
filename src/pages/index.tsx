@@ -62,7 +62,7 @@ const Home: NextPage = () => {
                     </ExternalButton>
                     <ContextCanvas mode="concurrent" camera={{ position: [0, 0, 0], fov: FOV }}>
                         <CrateScene
-                            center={[-7, 0, -14]}
+                            center={[-1.2, 0, -12.5]}
                             rotation={new Euler(0, -0.5, 0)}
                             responsiveX={3.5}
                             rarity="epic"

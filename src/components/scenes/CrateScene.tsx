@@ -7,14 +7,12 @@ import Crate from '@/components/crate/Crate';
 import type { Mesh } from 'three';
 import type { CrateRarity } from '@/handlers/crate/crate_handler';
 
-// TODO add option to show extra crates or whatever
+// TODO Add option to show extra crates
 
-// https://github.com/pmndrs/react-postprocessing
+// TODO Add a strong depth of field effect
+// TODO Or instead add a fog effect for background crates
 
-// TODO add a strong depth of field effect
-// TODO or instead add a fog effect for background crates
-
-// TODO add a suspense like loading animation or something
+// TODO Add a suspense-like loading animation
 
 const CrateEffects = lazyImport(() => import('@/components/crate/CrateEffects'));
 
@@ -50,13 +48,17 @@ export default function CrateScene(props: CrateSceneProps) {
                             ? /* eslint-disable indent */
                               // Responsive screen positioning along the x-axis
                               props.responsiveX
-                                ? [(windowW / windowH) * props.responsiveX, center[1], center[2]]
+                                ? [
+                                      (windowW / windowH) * props.responsiveX + center[0],
+                                      center[1],
+                                      center[2],
+                                  ]
                                 : center
                             : props.responsiveX
                             ? [
                                   (windowW / windowH) * props.responsiveX * 0.25,
                                   center[1] - 1.68,
-                                  center[2] * 1.2,
+                                  center[2] * 1.3,
                               ]
                             : center
                         /* eslint-enable indent */
