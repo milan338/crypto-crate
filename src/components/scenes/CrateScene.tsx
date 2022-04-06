@@ -57,7 +57,7 @@ export default function CrateScene(props: CrateSceneProps) {
                             : props.responsiveX
                             ? [
                                   (windowW / windowH) * props.responsiveX * 0.25,
-                                  center[1] - 1.68,
+                                  center[1] - 1.45,
                                   center[2] * 1.3,
                               ]
                             : center

@@ -29,6 +29,8 @@ import { Suspense } from 'react';
 
 import ExternalButton from '@/components/nav/ExternalButton';
 
+import TextCycle from '@/components/text/TextCycle';
+
 // TODO footer with credits for the google fonts and material icons etc...
 
 const FOV = 45;
@@ -52,11 +54,15 @@ const Home: NextPage = () => {
             </Suspense>
             <main id="main-content">
                 <section id="home" className={styles.home}>
-                    {/* //TODO have the better thing cycle between better / fairer / ... */}
                     <h1>CryptoCrate</h1>
-                    <p>
-                        The better NFT <br /> platform
-                    </p>
+                    <TextCycle
+                        defaultText="The better NFT"
+                        wordToCycle="better"
+                        altWords={['better', 'fairer', 'more fun', 'innovative']}
+                        period={2200}
+                    >
+                        <br /> platform
+                    </TextCycle>
                     <ExternalButton id="external-button" className={styles.button} showArrow>
                         Join the Crowdfund
                     </ExternalButton>

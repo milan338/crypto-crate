@@ -16,8 +16,6 @@ interface DesktopNavbarProps {
     scrollY: number;
 }
 
-// TODO only show navbar button when main button is scrolled out of view
-
 const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, ref) => {
     const [btnVisible, setBtnVisible] = useState(false);
     useScrollBehavior('smooth');
