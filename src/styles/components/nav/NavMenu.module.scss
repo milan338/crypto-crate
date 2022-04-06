@@ -30,6 +30,7 @@ $nav-menu-indicator-translateY: translateY(0.15rem);
 
     &.hidden * {
         opacity: 0;
+        display: none;
 
         button {
             transition: opacity 0.2s ease;
