@@ -33,5 +33,5 @@ void main() {
         col += 1.5 * (1.0 - z) * c * w;
         pos += stp;
     }
-    gl_FragColor = vec4(col / 2.5, 1.0);
+    gl_FragColor = vec4(col / 4.5, 1.0);
 }
