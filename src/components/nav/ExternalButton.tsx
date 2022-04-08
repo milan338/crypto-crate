@@ -24,10 +24,12 @@ export default function ExternalButton(props: ExternalButtonProps) {
                 {props.showArrow && (
                     <ArrowSVG
                         color="white"
-                        width={200}
+                        width={210}
                         height={200}
                         style={{
-                            transform: hovered ? 'translateX(26px) scaleX(111%)' : '',
+                            transform: hovered
+                                ? 'translateX(45px) scaleX(106%)'
+                                : 'translateX(35px)',
                         }}
                     />
                 )}
