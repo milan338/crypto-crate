@@ -13,13 +13,19 @@ export function useIntersectionObserver(
         [callback]
     );
     const observer = useMemo(() => {
-        if (observer) observer.disconnect();
+        try {
+            if (observer) observer.disconnect();
+        } catch (err) {
+            if (!(err instanceof ReferenceError)) throw err;
+        }
+        // Prevent calling serverside
+        if (typeof window === 'undefined') return undefined;
         return new IntersectionObserver(cb, options);
     }, [cb, options]);
     useEffect(() => {
-        if (target) observer.observe(target);
+        if (target && observer) observer.observe(target);
         return () => {
-            observer.disconnect();
+            if (observer) observer.disconnect();
         };
     }, [target, observer]);
 }
