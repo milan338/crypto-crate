@@ -14,17 +14,18 @@ export function useWindowSize() {
     return size;
 }
 
-export function useScrollPosition() {
-    const [scrollY, setScrollY] = useState(window.scrollY);
+export function useScrollPosition(root?: HTMLElement) {
+    const [scrollY, setScrollY] = useState(root ? root.scrollTop : window.scrollY);
     useEffect(() => {
         const updateScrollY = () => {
-            setScrollY(window.scrollY);
+            setScrollY(root ? root.scrollTop : window.scrollY);
         };
-        window.addEventListener('scroll', updateScrollY);
+        if (root) root.addEventListener('scroll', updateScrollY);
+        else window.addEventListener('scroll', updateScrollY);
         return () => {
             window.removeEventListener('scroll', updateScrollY);
         };
-    }, []);
+    }, [root]);
     return scrollY;
 }
 
