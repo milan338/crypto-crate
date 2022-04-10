@@ -16,35 +16,30 @@ export function useWindowSize() {
     return size;
 }
 
-// Get live scroll positions from window
-// Set bool to true to only get updates when element changes from 0 scroll to > 0 scroll
-export function useScrollPosition(debounceDelay: number, bool = false) {
+export function useScrollPosition(debounceDelay: number) {
     const [scrollY, setScrollY] = useState(isServer() ? 0 : window.scrollY);
     const _scrollY = useRef(scrollY);
     const wait = useRef(false);
     useEffect(() => {
         const updateScrollY = () => {
-            // Don't rerender component if scrolled state hasn't changed
             const oldScroll = _scrollY.current;
             _scrollY.current = window.scrollY;
-            if (bool && !!oldScroll === !!_scrollY.current) return;
-            // Debounce delay - don't delay if scrolled to top, prevent missing scroll state changes
-            if (wait.current && _scrollY.current) return;
-            // Not waiting - wait next times
+            // If scrolled to or from top, don't delay
+            if (!!oldScroll === !!_scrollY.current) setScrollY(_scrollY.current);
+            // Debounce delay
+            if (wait.current) return;
+            wait.current = true;
+            // Update in future after wait period
             setTimeout(() => {
                 wait.current = false;
-                // Update with new position to avoid missing updates
                 setScrollY(_scrollY.current);
             }, debounceDelay);
-            wait.current = true;
-            // Update scroll state and rerender component
-            setScrollY(_scrollY.current);
         };
         window.addEventListener('scroll', updateScrollY);
         return () => {
             window.removeEventListener('scroll', updateScrollY);
         };
-    }, [debounceDelay, bool]);
+    }, [debounceDelay]);
     return scrollY;
 }
 
