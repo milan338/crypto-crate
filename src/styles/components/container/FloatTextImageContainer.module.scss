@@ -1,0 +1,29 @@
+@use '../../abstracts/' as *;
+
+// TODO have everything in <b> tag have the gradient
+
+.container {
+    @include flex-center;
+}
+
+.img-container {
+    transition: transform 0.3s linear;
+}
+
+.stacked-img {
+    @include stack-elements;
+    width: 18vw;
+    margin-right: 0;
+    margin-left: auto;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+    .fg {
+        z-index: 2;
+    }
+
+    .bg {
+        transform: scale(0.85);
+        filter: blur(1.5px);
+        opacity: 0.9;
+    }
+}
