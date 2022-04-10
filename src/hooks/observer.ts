@@ -1,4 +1,5 @@
 import { useMemo, useCallback, useEffect } from 'react';
+import { isServer } from './ssr';
 
 export function useIntersectionObserver(
     callback: (entry: IntersectionObserverEntry) => void,
@@ -19,7 +20,7 @@ export function useIntersectionObserver(
             if (!(err instanceof ReferenceError)) throw err;
         }
         // Prevent calling serverside
-        if (typeof window === 'undefined') return undefined;
+        if (isServer()) return undefined;
         return new IntersectionObserver(cb, options);
     }, [cb, options]);
     useEffect(() => {
