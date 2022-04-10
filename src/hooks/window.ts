@@ -1,9 +1,10 @@
-import { useEffect, useLayoutEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useIsomorphicLayoutEffect } from './helper';
 import { isServer } from './ssr';
 
 export function useWindowSize() {
-    const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
-    useLayoutEffect(() => {
+    const [size, setSize] = useState(isServer() ? [1, 1] : [window.innerWidth, window.innerHeight]);
+    useIsomorphicLayoutEffect(() => {
         const resizeListener = () => {
             setSize([window.innerWidth, window.innerHeight]);
         };
