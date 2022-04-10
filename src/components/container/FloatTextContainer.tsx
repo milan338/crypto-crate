@@ -31,12 +31,18 @@ export default function FloatTextContainer(props: FloatTextContainerProps) {
         <div
             ref={ref}
             className={styles.container}
-            style={{
-                marginLeft: rightAlign ? 'auto' : 0,
-                marginRight: rightAlign ? 0 : 'auto',
-                opacity: hasMounted ? intRatio : 1,
-                transform: hasMounted ? `translateY(${50 * (1 - intRatio)}px)` : '',
-            }}
+            style={
+                hasMounted
+                    ? /* eslint-disable indent */
+                      {
+                          marginLeft: rightAlign ? 'auto' : 0,
+                          marginRight: rightAlign ? 0 : 'auto',
+                          opacity: intRatio,
+                          transform: `translateY(${50 * (1 - intRatio)}px)`,
+                      }
+                    : {}
+                /* eslint-enable indent */
+            }
         >
             <h2>{subheading}</h2>
             <h1>{heading}</h1>
