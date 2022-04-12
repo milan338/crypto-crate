@@ -6,7 +6,7 @@ export function useContextBridge(...contexts: Array<Context<any>>) {
     const cRef = useRef<Array<Context<any>>>([]);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     cRef.current = contexts.map((context) => useContext(context));
-    return useMemo(
+    const bridge = useMemo(
         () =>
             ({ children }: { children: React.ReactNode }): JSX.Element =>
                 contexts.reduceRight(
@@ -26,4 +26,5 @@ export function useContextBridge(...contexts: Array<Context<any>>) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
+    return bridge;
 }

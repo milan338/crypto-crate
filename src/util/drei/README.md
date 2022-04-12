@@ -1,8 +1,8 @@
-This folder contains select modules from [@react-three/drei](https://github.com/pmndrs/drei).
+This directory contains select modules from [@react-three/drei](https://github.com/pmndrs/drei).
 
 Why? Drei relies on [three-stdlib](https://github.com/pmndrs/three-stdlib) as a standalone alternative to [three/examples/jsm](https://github.com/mrdoob/three.js/tree/dev/examples/jsm), however this library seems to have some treeshaking issues, as even a single import causes the entire library to be bundled, notably increasing the overall bundle size. As such, modules in this directory serve to provide the same functionality of Drei but using three/examples/jsm instead.
 
-Code from @react-three/drei is used in accordance to the library's license:
+Code from @react-three/drei is used in accordance with the library's license:
 
 ```
 MIT License
