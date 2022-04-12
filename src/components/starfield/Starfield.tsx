@@ -1,18 +1,29 @@
-import vert from '@/shaders/components/starfield/starfield.vert';
 import frag from '@/shaders/components/starfield/starfield.frag';
-import { useMemo, useRef, Suspense } from 'react';
+import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Vector2, RepeatWrapping, RGBFormat, TextureLoader, ShaderMaterial } from 'three';
+import { Vector2, RepeatWrapping, RGBFormat, TextureLoader, ShaderMaterial, Mesh } from 'three';
 import { deg2rad } from '@/util/math';
 import { useWindowSize } from '@/hooks/window';
+import { isServer } from '@/hooks/ssr';
 
 interface StarfieldProps {
     fov: number;
     position: [x: number, y: number, z: number];
 }
 
+const noiseTexture = isServer() ? undefined : new TextureLoader().load('/noise.png');
+if (noiseTexture) {
+    noiseTexture.wrapS = RepeatWrapping;
+    noiseTexture.wrapT = RepeatWrapping;
+    noiseTexture.format = RGBFormat;
+}
+
+const resolution = new Vector2(0, 0);
+
 export default function Starfield(props: StarfieldProps) {
-    const ref = useRef<ShaderMaterial>();
+    const ref = useRef<Mesh>();
+    const updateMatrix = useRef(true);
+    const shaderRef = useRef<ShaderMaterial>();
     const [windowW, windowH] = useWindowSize();
     // Dimensions of the plane such that it fills the canvas
     const { planeW, planeH } = useMemo(() => {
@@ -21,42 +32,35 @@ export default function Starfield(props: StarfieldProps) {
         const w = h * (windowW / windowH);
         return { planeW: w, planeH: h };
     }, [props.fov, props.position, windowH, windowW]);
-    // Noise texture used in starfield shader
-    const noiseTexture = useMemo(() => {
-        const texture = new TextureLoader().load('/noise.png');
-        texture.wrapS = RepeatWrapping;
-        texture.wrapT = RepeatWrapping;
-        texture.format = RGBFormat;
-        return texture;
-    }, []);
     const starfieldShaderMaterial = useMemo(() => {
-        // TODO add uniforms to props?
-        const shaderMaterial = {
+        resolution.set(windowW, windowH);
+        return {
             uniforms: {
                 u_time: { value: 3.2 },
                 u_shift: { value: 0.15 },
                 u_speed: { value: 0.05 },
                 u_translatex: { value: 1.55 },
-                u_resolution: { value: new Vector2(windowW, windowH) },
                 u_noise: { value: noiseTexture },
+                u_resolution: { value: resolution },
             },
-            vertexShader: vert,
             fragmentShader: frag,
         };
-        return shaderMaterial;
-    }, [windowW, windowH, noiseTexture]);
+    }, [windowW, windowH]);
     useFrame((state) => {
-        if (!ref.current) return;
+        if (!ref.current || !shaderRef.current) return;
         const time = state.clock.getElapsedTime();
         // Update shader uniforms to progress animation
-        ref.current.uniforms.u_time.value = time;
+        shaderRef.current.uniforms.u_time.value = time;
+        // Update matrix a single time so the material displays properly
+        if (updateMatrix.current) {
+            ref.current.updateMatrix();
+            updateMatrix.current = false;
+        }
     });
     return (
-        <Suspense fallback={null}>
-            <mesh position={props.position}>
-                <planeGeometry args={[planeW, planeH]} />
-                <shaderMaterial ref={ref} attach="material" args={[starfieldShaderMaterial]} />
-            </mesh>
-        </Suspense>
+        <mesh ref={ref} position={props.position} matrixAutoUpdate={false}>
+            <planeBufferGeometry args={[planeW, planeH]} />
+            <shaderMaterial ref={shaderRef} attach="material" args={[starfieldShaderMaterial]} />
+        </mesh>
     );
 }
