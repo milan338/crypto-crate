@@ -1,13 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import PreloadFont from '@/components/text/PreloadFont';
 import type { DocumentContext } from 'next/document';
-
-interface PreloadFontProps {
-    href: string;
-}
-
-function PreloadFont(props: PreloadFontProps) {
-    return <link rel="preload" as="font" crossOrigin="" href={props.href} />;
-}
 
 class CustomDocument extends Document {
     static async getInitialProps(ctx: DocumentContext) {
@@ -19,9 +12,10 @@ class CustomDocument extends Document {
         return (
             <Html>
                 <Head>
-                    <PreloadFont href="/fonts/Ubuntu/Ubuntu-Regular.ttf" />
+                    <PreloadFont href="/fonts/Ubuntu/Ubuntu-Light.ttf" />
                     <PreloadFont href="/fonts/Ubuntu/Ubuntu-Medium.ttf" />
                     <PreloadFont href="/fonts/Ubuntu/Ubuntu-Bold.ttf" />
+                    <PreloadFont href="/fonts/Ubuntu/Ubuntu-BoldItalic.ttf" />
                 </Head>
                 <body>
                     <Main />
