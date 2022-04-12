@@ -1,41 +1,43 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { Canvas, invalidate, useFrame } from '@react-three/fiber';
 import { useIntersectionObserver } from '@/hooks/observer';
 import { useHasMounted } from '@/hooks/ssr';
-import type { RefAttributes, ReactNode } from 'react';
+import type { RefObject, RefAttributes, ReactNode } from 'react';
 import type { Props } from '@react-three/fiber';
 
-export interface SmartCanvasProps extends Props, RefAttributes<HTMLCanvasElement> {
-    frameloopOnDemand?: boolean;
-}
+export interface SmartCanvasProps extends Props, RefAttributes<HTMLCanvasElement> {}
 
 interface SmartCanvasHelperProps {
-    active: boolean;
+    canvasRef: RefObject<HTMLCanvasElement>;
     children?: ReactNode;
 }
 
 function SmartCanvasHelper(props: SmartCanvasHelperProps) {
-    const { active, children } = props;
-    invalidate();
+    const { canvasRef, children } = props;
+    const active = useRef(false);
+    useIntersectionObserver((event) => {
+        if (event.isIntersecting) {
+            active.current = true;
+            // Resume frameloop when canvas comes back into view
+            invalidate();
+        } else active.current = false;
+    }, canvasRef.current ?? undefined);
     useFrame(() => {
-        if (active) invalidate();
+        // Request new frame to be rendered only if in canavs view
+        if (active.current) invalidate();
     });
     return <>{children}</>;
 }
 
+// R3f canvas that will pause frameloops when out of view
 export default function SmartCanvas(props: SmartCanvasProps) {
-    const { children, frameloopOnDemand, ...canvasProps } = props;
-    const [active, setActive] = useState(false);
+    const { children, ...canvasProps } = props;
     const ref = useRef<HTMLCanvasElement>(null);
     // Re-render when component mounts and ref exists
     useHasMounted();
-    useIntersectionObserver((event) => {
-        if (event.isIntersecting) setActive(true);
-        else setActive(false);
-    }, ref.current ?? undefined);
     return (
         <Canvas ref={ref} frameloop="demand" {...canvasProps}>
-            <SmartCanvasHelper active={active}>{children}</SmartCanvasHelper>
+            <SmartCanvasHelper canvasRef={ref}>{children}</SmartCanvasHelper>
         </Canvas>
     );
 }
