@@ -15,6 +15,8 @@ export default function ModalBg(props: ModalBgProps) {
             className={`${styles['modal-background']} ${modal.visible ? '' : styles.hidden}`}
             onClick={(event) => {
                 event.stopPropagation();
+                // Run click callback
+                if (modal.onBgClick) modal.onBgClick();
                 // Hide modal on clicking background
                 if (dismissOnBg) dispatchModal({ visible: false });
             }}
