@@ -1,6 +1,6 @@
 import { useContextBridge } from '@/util/drei/useContextBridge';
-import { UserContext } from '@/contexts/UserProvider';
-import { ModalContext } from '@/contexts/ModalProvider';
+import { UserContext } from '@/contexts/user/UserProvider';
+import { ModalContext } from '@/contexts/modal/ModalProvider';
 import SmartCanvas from './SmartCanvas';
 import type { SmartCanvasProps } from './SmartCanvas';
 

@@ -1,11 +1,12 @@
 import { createContext, useReducer } from 'react';
+import modalReducer from './modalReducer';
 import type { ReactNode } from 'react';
 
 interface ModalProviderProps {
     children: ReactNode;
 }
 
-type ModalData = {
+export type ModalData = {
     visible: boolean;
     content?: {
         title: string;
@@ -15,25 +16,20 @@ type ModalData = {
         hudActive: boolean;
         hudBody: ReactNode;
     };
+    onBgClick?: () => void;
 };
-type ModalState = {
+export type ModalState = {
     visible: boolean;
     title: string;
     body: ReactNode;
     hudActive: boolean;
     hudBody: ReactNode;
+    onBgClick?: () => void;
 };
-type ModalDispatch = (action: ModalData) => void;
+export type ModalDispatch = (action: ModalData) => void;
 export type ModalContextT = { modal: ModalState; dispatchModal: ModalDispatch };
 
 export const ModalContext = createContext<ModalContextT | undefined>(undefined);
-
-function modalReducer(state: ModalState, data: ModalData): ModalState {
-    if (data.visible && data.content === undefined) {
-        throw new Error('Modal data must be provided when modal set to visible');
-    }
-    return { ...state, ...data.content, ...data.hudContent, visible: data.visible };
-}
 
 export default function ModalProvider(props: ModalProviderProps) {
     const [modal, dispatchModal] = useReducer(modalReducer, {
@@ -43,6 +39,6 @@ export default function ModalProvider(props: ModalProviderProps) {
         hudActive: false,
         hudBody: '',
     });
-    const value = { modal: modal, dispatchModal };
+    const value = { modal, dispatchModal };
     return <ModalContext.Provider value={value}>{props.children}</ModalContext.Provider>;
 }

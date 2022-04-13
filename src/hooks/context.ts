@@ -1,8 +1,8 @@
 import { Context, useContext } from 'react';
-import { ModalContext } from '@/contexts/ModalProvider';
-import { UserContext } from '@/contexts/UserProvider';
-import type { ModalContextT } from '@/contexts/ModalProvider';
-import type { UserContextT } from '@/contexts/UserProvider';
+import { ModalContext } from '@/contexts/modal/ModalProvider';
+import { UserContext } from '@/contexts/user/UserProvider';
+import type { ModalContextT } from '@/contexts/modal/ModalProvider';
+import type { UserContextT } from '@/contexts/user/UserProvider';
 
 function useContextBase(baseContext: Context<any>) {
     const context = useContext(baseContext);
