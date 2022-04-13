@@ -2,6 +2,9 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useIsomorphicLayoutEffect } from './helper';
 import { isServer } from './ssr';
 
+export type EnableReloadCb = () => void;
+export type DisableReloadCb = () => void;
+
 export function useWindowSize() {
     const [size, setSize] = useState(isServer() ? [1, 1] : [window.innerWidth, window.innerHeight]);
     useIsomorphicLayoutEffect(() => {
@@ -43,7 +46,7 @@ export function useScrollPosition(debounceDelay: number) {
     return scrollY;
 }
 
-export function useBeforeUnload(message: string) {
+export function useBeforeUnload(message: string): [DisableReloadCb, EnableReloadCb] {
     const handleWindowClose = useCallback(
         (event: BeforeUnloadEvent) => {
             event.preventDefault();
@@ -52,10 +55,10 @@ export function useBeforeUnload(message: string) {
         },
         [message]
     );
-    const disableReload = useCallback(() => {
+    const disableReload: DisableReloadCb = useCallback(() => {
         window.addEventListener('beforeunload', handleWindowClose);
     }, [handleWindowClose]);
-    const enableReload = useCallback(() => {
+    const enableReload: EnableReloadCb = useCallback(() => {
         window.removeEventListener('beforeunload', handleWindowClose);
     }, [handleWindowClose]);
     useEffect(() => {
