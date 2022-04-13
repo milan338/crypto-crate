@@ -10,7 +10,10 @@ export default function ModalHud(props: ModalHudProps) {
     const { modal } = useModal();
     const { visible, hudActive, hudBody } = modal;
     return (
-        <div className={`${styles['modal-hud']} ${hudActive && visible ? '' : styles.hidden}`}>
+        <div
+            className={`${styles['modal-hud']} ${hudActive && visible ? '' : styles.hidden}`}
+            onClick={(event) => event.stopPropagation()}
+        >
             {hudBody}
             {props.children}
         </div>
