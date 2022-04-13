@@ -1,4 +1,5 @@
 @use '../../abstracts/' as *;
+@use '_modal' as *;
 
 .modal-textbox {
     @include flex-center;
@@ -12,10 +13,18 @@
     background-color: white; // TODO themed color
     font-weight: bold;
     flex-direction: column;
+    transition: transform $transition-duration $transition-function,
+        opacity $transition-duration $transition-function, visibility $transition-duration;
 
     span {
         &[r-glow] {
             text-shadow: 0 0 3px;
         }
     }
+}
+
+.hidden {
+    transform: scale(1.2);
+    opacity: 0;
+    visibility: hidden;
 }

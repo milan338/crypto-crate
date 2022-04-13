@@ -1,4 +1,5 @@
 @use '../../abstracts/' as *;
+@use '_modal' as *;
 
 .modal-hud {
     @include flex-center;
@@ -14,4 +15,9 @@
     font-weight: bold;
     flex-direction: row;
     gap: 1em;
+    transition: transform $transition-duration $transition-function;
+}
+
+.hidden {
+    transform: translateY(-100%);
 }
