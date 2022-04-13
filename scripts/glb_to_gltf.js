@@ -3,6 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const gltfp = require('gltf-pipeline');
+const jsonminify = require('jsonminify');
 
 const MODELS_IN = path.join(__dirname, '..', 'models');
 const MODELS_OUT = path.join(__dirname, '..', 'public', 'models');
@@ -20,10 +21,7 @@ async function convert() {
     const files = fs
         .readdirSync(MODELS_IN)
         .filter((file) => {
-            if (file.split('.')[1] !== 'glb') {
-                return false;
-            }
-            return true;
+            return file.split('.')[1] === 'glb';
         })
         .map((file) => {
             return file.split('.')[0];
@@ -42,9 +40,11 @@ async function convert() {
             // Convert glb file to glTF
             const gltf = await gltfp.glbToGltf(glb);
             // Compress glTF
-            const out = await gltfp.processGltf(gltf.gltf, options);
+            const compressed = await gltfp.processGltf(gltf.gltf, options);
+            // Minify output json
+            const out = jsonminify(JSON.stringify(compressed.gltf, null, 4));
             // Write result to file
-            fs.writeFileSync(gltfFile, JSON.stringify(out.gltf, null, 4));
+            fs.writeFileSync(gltfFile, out);
         }
     } catch (err) {
         console.error(err);

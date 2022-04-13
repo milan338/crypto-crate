@@ -46,8 +46,8 @@ const LERP_TIME = 0.08;
 const CRATE_HOVER_TARGET = new Vector3(0, 0, 0);
 const CRATE_TOP_OFFSET = new Vector3(0, 0.1, 0);
 const CRATE_BOTTOM_OFFSET = CRATE_TOP_OFFSET.clone().multiplyScalar(-1);
-const TOP_PART_ROT = new Euler(0, 0, 0);
-const BOTTOM_PART_ROT = new Euler(0, 0, Math.PI);
+// const TOP_PART_ROT = new Euler(0, 0, 0);
+// const BOTTOM_PART_ROT = new Euler(0, 0, Math.PI);
 const SPHERE1_ROT = new Euler(0, 0, 0);
 const SPHERE2_ROT = new Euler(0, Math.PI / 2, 0);
 const SPHERE3_ROT = new Euler(0, Math.PI, 0);
@@ -75,13 +75,11 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
             // Ensure higher order components using useWindowSize have had their window event listeners already called
             setTimeout(() => {
                 if (!ref.current || !initState.current) return;
-                const newState = initState.current.clone();
-                newState.position.set(
+                initState.current.position.set(
                     ref.current.position.x,
                     initState.current.position.y,
                     initState.current.position.z
                 );
-                initState.current = newState.clone();
             }, 100);
         };
         window.addEventListener('resize', resizeCrateListener);
@@ -134,17 +132,17 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
         }
     });
     // Universal children properties
-    const crateProps: CratePartProps = useMemo(
+    const crateProps: Omit<CratePartProps, 'part'> = useMemo(
         () => ({
             bodyMesh: nodes.BodyHalf,
             bodyMaterial: materials.BodyMaterial,
-            cornersMesh: nodes.Corners,
-            cornersMaterial: materials.CornerMaterial,
+            cornerMesh: nodes.Corner,
+            cornerMaterial: materials.CornerMaterial,
             hovered: hovered,
             hoverTarget: CRATE_HOVER_TARGET,
             lerpTime: LERP_TIME,
         }),
-        [hovered, materials.BodyMaterial, materials.CornerMaterial, nodes.BodyHalf, nodes.Corners]
+        [hovered, materials.BodyMaterial, materials.CornerMaterial, nodes.BodyHalf, nodes.Corner]
     );
     const sphereProps: SpherePartProps = useMemo(
         () => ({
@@ -186,9 +184,9 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
             }}
         >
             {/* Crate top half */}
-            <CratePart {...crateProps} hoverTarget={CRATE_TOP_OFFSET} rotation={BOTTOM_PART_ROT} />
+            <CratePart {...crateProps} hoverTarget={CRATE_TOP_OFFSET} part="top" />
             {/* Crate bottom half */}
-            <CratePart {...crateProps} hoverTarget={CRATE_BOTTOM_OFFSET} rotation={TOP_PART_ROT} />
+            <CratePart {...crateProps} hoverTarget={CRATE_BOTTOM_OFFSET} part="bottom" />
             {/* Spheres */}
             <SpherePart {...sphereProps} rotation={SPHERE1_ROT} />
             <SpherePart {...sphereProps} rotation={SPHERE2_ROT} />
