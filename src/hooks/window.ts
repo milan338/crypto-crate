@@ -59,8 +59,10 @@ export function useBeforeUnload(message: string) {
         window.removeEventListener('beforeunload', handleWindowClose);
     }, [handleWindowClose]);
     useEffect(() => {
-        return () => enableReload();
-    });
+        return () => {
+            enableReload();
+        };
+    }, [enableReload]);
     return [disableReload, enableReload];
 }
 
