@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useIsomorphicLayoutEffect } from './helper';
 import { isServer } from './ssr';
 
@@ -41,6 +41,27 @@ export function useScrollPosition(debounceDelay: number) {
         };
     }, [debounceDelay]);
     return scrollY;
+}
+
+export function useBeforeUnload(message: string) {
+    const handleWindowClose = useCallback(
+        (event: BeforeUnloadEvent) => {
+            event.preventDefault();
+            event.returnValue = message;
+            return event;
+        },
+        [message]
+    );
+    const disableReload = useCallback(() => {
+        window.addEventListener('beforeunload', handleWindowClose);
+    }, [handleWindowClose]);
+    const enableReload = useCallback(() => {
+        window.removeEventListener('beforeunload', handleWindowClose);
+    }, [handleWindowClose]);
+    useEffect(() => {
+        return () => enableReload();
+    });
+    return [disableReload, enableReload];
 }
 
 export function useScrollBehavior(behavior: 'auto' | 'smooth') {
