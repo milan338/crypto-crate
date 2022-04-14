@@ -5,18 +5,17 @@ import { FlakesTexture } from 'three/examples/jsm/textures/FlakesTexture';
 import { useFrame } from '@react-three/fiber';
 import { meshBounds } from '@/util/drei/meshBounds';
 import { getCentroid, vectors3Average } from '@/util/math';
+import { mergeRepeatedMeshes } from '@/util/mesh';
 import SphereChunkMaterial from '@/components/crate/materials/SphereChunkMaterial';
 import type { MutableRefObject } from 'react';
-import type { BufferGeometry, Euler, Group } from 'three';
+import { BufferGeometry, Group } from 'three';
 import type { MeshPhysicalMaterialProps } from '@react-three/fiber';
 import type { SphereChunkMT } from '@/components/crate/materials/SphereChunkMaterial';
 
-// TODO remove all crates outside of frame
-
+// TODO remove unused props
 export interface SpherePartProps {
     mesh: Mesh;
     color: string;
-    rotation?: Euler;
     nodes: Record<string, Mesh>;
     exploding: boolean;
     setExploding: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,6 +27,7 @@ type SphereRef = Group & {
 
 const MAX_EXPLODE_COUNT = 50;
 const NORMAL_SCALE = new Vector2(0.15, 0.15);
+const ROTS = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
 
 const materialProps: MeshPhysicalMaterialProps = {
     clearcoat: 0.8,
@@ -37,24 +37,27 @@ const materialProps: MeshPhysicalMaterialProps = {
 };
 
 // Get array of sphere chunks for exploded sphere
-// function getSphereChunks(nodes: SpherePartProps) {
-function getSphereChunks(nodes: Record<string, Mesh>) {
-    // function getSphereChunks(nodes: Record<string, Mesh>)
+function mergeSphereChunks(nodes: Record<string, Mesh>) {
     const geometries: BufferGeometry[] = [];
     const positions: Vector3[] = [];
     const scales: Vector3[] = [];
     const directions: number[] = [];
+    const randVec = new Vector3().random();
     // Add all individual explosion chunks to geometry array
     for (const [meshName, mesh] of Object.entries(nodes)) {
         if (meshName.includes('SphereVoronoi_cell')) {
-            geometries.push(mesh.geometry.clone().applyMatrix4(mesh.matrixWorld));
-            positions.push(mesh.position);
-            scales.push(mesh.scale);
-            const dir = getCentroid(mesh.geometry).clone().multiply(new Vector3().random());
-            const nVerts = mesh.geometry.getAttribute('position').count;
-            // Push centroid as direction attribute for all vertices of geometry
-            for (let i = 0; i < nVerts; i++) {
-                directions.push(dir.x, dir.y, dir.z);
+            // Loop over the different rotated copies of the sphere
+            for (let i = 0; i < ROTS.length; i++) {
+                const geometry = mesh.geometry.applyMatrix4(mesh.matrixWorld).rotateY(ROTS[i]);
+                geometries.push(geometry);
+                positions.push(mesh.position);
+                scales.push(mesh.scale);
+                const dir = getCentroid(geometry).multiply(randVec.random());
+                const nVerts = mesh.geometry.getAttribute('position').count;
+                // Push centroid as direction attribute for all vertices of geometry
+                for (let j = 0; j < nVerts; j++) {
+                    directions.push(dir.x, dir.y, dir.z);
+                }
             }
         }
     }
@@ -63,12 +66,12 @@ function getSphereChunks(nodes: Record<string, Mesh>) {
     const scale = vectors3Average(scales);
     // Create new single mesh from geometries of individual explosion chunks
     const merged = mergeBufferGeometries(geometries);
-    if (merged === null) throw new Error('Sphere chunks mesh is null');
-    const dirs = Float32Array.from(directions);
-    merged.setAttribute('dir', new BufferAttribute(dirs, 3));
+    if (merged === null) throw new Error('Sphere chunks merged mesh is null');
     const mergedMesh = new Mesh(merged);
     mergedMesh.scale.copy(scale);
     mergedMesh.position.copy(pos);
+    const dirs = Float32Array.from(directions);
+    mergedMesh.geometry.setAttribute('dir', new BufferAttribute(dirs, 3));
     return mergedMesh;
 }
 
@@ -86,12 +89,17 @@ function updateProgress(
 }
 
 export default function SpherePart(props: SpherePartProps) {
-    const { mesh, color, rotation, nodes, exploding, setExploding } = props;
+    const { mesh, color, nodes, exploding, setExploding } = props;
     const ref = useRef<SphereRef>();
     const chunksRef = useRef<SphereChunkMT>();
     const [chunksVisible, setChunksVisible] = useState(false);
     // Sphere explosion chunks
-    const chunks = useMemo(() => getSphereChunks(nodes), [nodes]);
+    const chunks = useMemo(() => {
+        const _chunks = mergeSphereChunks(nodes);
+        return mergeRepeatedMeshes(_chunks, ROTS);
+    }, [nodes]);
+    // Sphere parts
+    const spheres = useMemo(() => mergeRepeatedMeshes(mesh, ROTS), [mesh]);
     const sphereTexture = useMemo(() => {
         const texture = new CanvasTexture(new FlakesTexture());
         texture.wrapS = RepeatWrapping;
@@ -108,7 +116,7 @@ export default function SpherePart(props: SpherePartProps) {
         [sphereTexture]
     );
     // Animations
-    useFrame((state) => {
+    useFrame(() => {
         if (!ref.current) return;
         if (Number.isNaN(ref.current.progress)) ref.current.progress = 0;
         if (exploding) {
@@ -128,19 +136,17 @@ export default function SpherePart(props: SpherePartProps) {
             {/* Main sphere */}
             <mesh
                 raycast={meshBounds}
-                geometry={mesh.geometry}
-                scale={mesh.scale}
-                rotation={rotation}
+                geometry={spheres.geometry}
+                scale={spheres.scale}
                 visible={!chunksVisible}
             >
                 <meshPhysicalMaterial {...materialProps} {...textureProps} color={color} />
             </mesh>
             {/* Sphere explosion chunks */}
             <mesh
-                raycast={meshBounds}
+                raycast={() => undefined}
                 geometry={chunks.geometry}
                 scale={chunks.scale}
-                rotation={rotation}
                 visible={chunksVisible}
             >
                 <SphereChunkMaterial

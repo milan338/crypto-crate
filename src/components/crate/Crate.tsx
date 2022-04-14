@@ -46,12 +46,6 @@ const LERP_TIME = 0.08;
 const CRATE_HOVER_TARGET = new Vector3(0, 0, 0);
 const CRATE_TOP_OFFSET = new Vector3(0, 0.1, 0);
 const CRATE_BOTTOM_OFFSET = CRATE_TOP_OFFSET.clone().multiplyScalar(-1);
-// const TOP_PART_ROT = new Euler(0, 0, 0);
-// const BOTTOM_PART_ROT = new Euler(0, 0, Math.PI);
-const SPHERE1_ROT = new Euler(0, 0, 0);
-const SPHERE2_ROT = new Euler(0, Math.PI / 2, 0);
-const SPHERE3_ROT = new Euler(0, Math.PI, 0);
-const SPHERE4_ROT = new Euler(0, (3 * Math.PI) / 2, 0);
 
 const rotation = new Quaternion();
 const rotationEuler = new Euler();
@@ -183,15 +177,11 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
                 }
             }}
         >
-            {/* Crate top half */}
+            {/* Crate body */}
             <CratePart {...crateProps} hoverTarget={CRATE_TOP_OFFSET} part="top" />
-            {/* Crate bottom half */}
             <CratePart {...crateProps} hoverTarget={CRATE_BOTTOM_OFFSET} part="bottom" />
-            {/* Spheres */}
-            <SpherePart {...sphereProps} rotation={SPHERE1_ROT} />
-            <SpherePart {...sphereProps} rotation={SPHERE2_ROT} />
-            <SpherePart {...sphereProps} rotation={SPHERE3_ROT} />
-            <SpherePart {...sphereProps} rotation={SPHERE4_ROT} />
+            {/* Crate spheres */}
+            <SpherePart {...sphereProps} />
             {/* Central glowing sphere */}
             <mesh ref={sunRef}>
                 <sphereGeometry args={[2.1, 20, 20]} />
