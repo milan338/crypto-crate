@@ -1,10 +1,9 @@
 import { useMemo, useRef } from 'react';
-import { Vector3, Euler } from 'three';
+import { Vector3, Euler, Mesh } from 'three';
+import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { useFrame } from '@react-three/fiber';
 import { meshBounds } from '@/util/drei/meshBounds';
-import type { Mesh, Material, Group } from 'three';
-
-// TODO cut the mesh down into a single corner and clone it
+import { Material, Group, BufferGeometry } from 'three';
 
 export interface CratePartProps {
     bodyMesh: Mesh;
@@ -18,11 +17,29 @@ export interface CratePartProps {
 }
 
 const REST_TARGET = new Vector3(0, 0, 0);
+const ROTS = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
+const TOP_ROT = new Euler(0, 0, Math.PI);
+const BOTTOM_ROT = new Euler(0, 0, 0);
+
+function mergeCornersMesh(mesh: Mesh) {
+    const geometries = new Array<BufferGeometry>(4);
+    for (let i = 0; i < 4; i++) {
+        geometries[i] = mesh.geometry.clone().applyMatrix4(mesh.matrixWorld).rotateY(ROTS[i]);
+    }
+    const merged = mergeBufferGeometries(geometries);
+    if (merged === null) throw new Error('Corners merged mesh is null');
+    const mergedMesh = new Mesh(merged);
+    mergedMesh.scale.copy(mesh.scale);
+    mergedMesh.position.copy(mesh.position);
+    return mergedMesh;
+}
 
 export default function CratePart(props: CratePartProps) {
     const { hoverTarget, lerpTime, bodyMesh, cornerMesh, bodyMaterial, cornerMaterial, part } =
         props;
     const ref = useRef<Group>();
+    const rotation = useMemo(() => (part === 'top' ? TOP_ROT : BOTTOM_ROT), [part]);
+    const corners = useMemo(() => mergeCornersMesh(cornerMesh), [cornerMesh]);
     // Animations
     useFrame(() => {
         if (props.hovered) {
@@ -33,15 +50,6 @@ export default function CratePart(props: CratePartProps) {
             ref.current?.position.lerp(REST_TARGET, lerpTime);
         }
     });
-    const [rot1, rot2, rot3, rot4] = useMemo(() => {
-        const z = part === 'bottom' ? 0 : Math.PI;
-        return [
-            new Euler(0, 0, z),
-            new Euler(0, Math.PI / 2, z),
-            new Euler(0, Math.PI, z),
-            new Euler(0, (3 * Math.PI) / 2, z),
-        ];
-    }, [part]);
     return (
         <group ref={ref}>
             {/* Main body */}
@@ -50,36 +58,15 @@ export default function CratePart(props: CratePartProps) {
                 geometry={bodyMesh.geometry}
                 scale={bodyMesh.scale}
                 material={bodyMaterial}
-                rotation={rot1}
+                rotation={rotation}
             />
             {/* Corners */}
             <mesh
-                raycast={meshBounds}
-                geometry={cornerMesh.geometry}
-                scale={cornerMesh.scale}
+                raycast={() => undefined}
+                geometry={corners.geometry}
+                scale={corners.scale}
+                rotation={rotation}
                 material={cornerMaterial}
-                rotation={rot1}
-            />
-            <mesh
-                raycast={meshBounds}
-                geometry={cornerMesh.geometry}
-                scale={cornerMesh.scale}
-                material={cornerMaterial}
-                rotation={rot2}
-            />
-            <mesh
-                raycast={meshBounds}
-                geometry={cornerMesh.geometry}
-                scale={cornerMesh.scale}
-                material={cornerMaterial}
-                rotation={rot3}
-            />
-            <mesh
-                raycast={meshBounds}
-                geometry={cornerMesh.geometry}
-                scale={cornerMesh.scale}
-                material={cornerMaterial}
-                rotation={rot4}
             />
         </group>
     );
