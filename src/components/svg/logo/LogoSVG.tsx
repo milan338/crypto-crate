@@ -1,4 +1,4 @@
-import styles from '@/styles/svg/Logo.module.scss';
+import styles from '@/styles/components/svg/Logo.module.scss';
 import type { SVGProps } from '../svg_props';
 
 export interface LogoSVGProps extends SVGProps {

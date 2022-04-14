@@ -1,4 +1,4 @@
-import styles from '@/styles/svg/DotsBackgroundSVG.module.scss';
+import styles from '@/styles/components/svg/DotsBackgroundSVG.module.scss';
 import { useMemo } from 'react';
 import { useWindowSize } from '@/hooks/window';
 import type { SVGProps } from '../svg_props';

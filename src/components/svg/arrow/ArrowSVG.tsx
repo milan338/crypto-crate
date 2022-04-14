@@ -1,4 +1,4 @@
-import styles from '@/styles/svg/Arrow.module.scss';
+import styles from '@/styles/components/svg/Arrow.module.scss';
 import type { CSSProperties } from 'react';
 import type { SVGProps } from '../svg_props';
 

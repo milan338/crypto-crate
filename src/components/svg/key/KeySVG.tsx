@@ -1,4 +1,4 @@
-import styles from '@/styles/svg/Key.module.scss';
+import styles from '@/styles/components/svg/Key.module.scss';
 import type { SVGProps } from '../svg_props';
 
 export default function KeySVG(props: SVGProps) {
