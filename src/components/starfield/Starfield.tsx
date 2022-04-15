@@ -1,4 +1,4 @@
-import frag from '@/shaders/components/starfield/starfield.frag';
+import frag from '@/shaders/starfield/starfield.frag';
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Vector2, RepeatWrapping, RGBFormat, TextureLoader, ShaderMaterial, Mesh } from 'three';

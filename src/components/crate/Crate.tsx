@@ -36,8 +36,6 @@ export const cratecolors: Record<CrateRarity, string> = {
     'one-of-a-kind': 'rgb',
 };
 
-// TODO error the open button
-
 const OPEN_TIME = 100;
 const OPEN_INTENT_TIME = 60;
 const ERR_TIME = 37;

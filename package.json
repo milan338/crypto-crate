@@ -18,8 +18,6 @@
     "dependencies": {
         "@react-three/fiber": "^7.0.6",
         "@react-three/postprocessing": "^2.0.5",
-        "component-material": "^1.0.7",
-        "framer-motion": "^4.1.17",
         "glslify-loader": "^2.0.0",
         "is-ci": "^3.0.0",
         "next": "^12.0.0",
@@ -32,7 +30,7 @@
         "stylelint": "^13.13.1",
         "stylelint-scss": "^3.20.1",
         "three": "^0.132.2",
-        "three-minify-shaderchunk": "^1.0.1"
+        "three-custom-shader-material": "^3.3.1"
     },
     "devDependencies": {
         "@next/bundle-analyzer": "^11.1.2",
@@ -41,16 +39,20 @@
         "@types/three": "^0.131.0",
         "@yushijinhun/three-minifier-webpack": "^0.3.0",
         "cross-env": "^7.0.3",
+        "css-modules-typescript-generator": "^1.0.0",
         "eslint": "7.32.0",
         "eslint-config-next": "11.1.2",
         "gltf-pipeline": "^3.0.4",
         "husky": "^7.0.0",
+        "jsonminify": "^0.4.2",
         "lint-staged": "^11.1.2",
         "stylelint-config-css-modules": "^2.3.0",
         "stylelint-config-standard": "^22.0.0",
         "stylelint-webpack-plugin": "^3.0.1",
+        "three-minify-shaderchunk": "^1.0.1",
         "typescript": "4.4.2",
-        "webpack-stats-plugin": "^1.0.3"
+        "webpack-stats-plugin": "^1.0.3",
+        "worker-loader": "^3.0.8"
     },
     "lint-staged": {
         "*.js": "eslint --cache --fix"
