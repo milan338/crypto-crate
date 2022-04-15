@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useScrollPosition, useWindowSize } from '@/hooks/window';
+import { DESKTOP_MIN_W } from '@/util/constants';
 import DesktopNavbar from './navbars/DesktopNavbar';
 import MobileNavbar from './navbars/MobileNavbar';
 import type { AnchorData } from './navbars/DesktopNavbar';
@@ -11,7 +12,7 @@ export default function Navbar() {
     const [anchorData, setAnchorData] = useState<AnchorData[]>([]);
     const [sections, setSections] = useState<HTMLElement[]>([]);
     const [windowW] = windowSize;
-    const scrollY = useScrollPosition();
+    const scrollY = useScrollPosition(100);
     // Setup navbar links
     useEffect(() => {
         if (navListRef.current) {
@@ -55,7 +56,7 @@ export default function Navbar() {
     const currentAnchorData = anchorData[currentSection] || { offsetLeft: 0, offsetWidth: 0 };
     return (
         <>
-            {windowW >= parseInt(process.env.NEXT_PUBLIC_DESKTOP_MIN_WIDTH || '') ? (
+            {windowW >= DESKTOP_MIN_W ? (
                 <DesktopNavbar
                     ref={navListRef}
                     navListRef={navListRef}
