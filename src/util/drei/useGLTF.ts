@@ -24,16 +24,13 @@ function extensions(
             dracoLoader.setDecoderPath(
                 typeof useDraco === 'string'
                     ? useDraco
-                    : 'https://www.gstatic.com/draco/versioned/decoders/1.5.0/'
+                    : 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
                 // https://github.com/google/draco/releases
             );
             (loader as GLTFLoader).setDRACOLoader(dracoLoader);
         }
         if (useMeshopt) {
-            // (loader as GLTFLoader).setMeshoptDecoder(
-            //     typeof MeshoptDecoder === 'function' ? MeshoptDecoder() : MeshoptDecoder
-            // );
-            throw new Error('Meshopt has been removed from useGLTF');
+            throw new Error('MeshoptDecoder has been removed from useGLTF');
         }
     };
 }
