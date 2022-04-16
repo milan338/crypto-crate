@@ -11,12 +11,3 @@ declare module 'three/examples/jsm/textures/FlakesTexture' {
         constructor(width = 512, height = 512);
     }
 }
-
-// Prevent errors caused by extend()
-declare global {
-    namespace JSX {
-        interface IntrinsicElements {
-            // sphereShaderMaterial: any;
-        }
-    }
-}
