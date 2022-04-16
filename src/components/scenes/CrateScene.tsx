@@ -1,81 +1,35 @@
-import { Suspense, useRef } from 'react';
-import { Euler } from 'three';
+import { Suspense } from 'react';
+import { Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
-import { useWindowSize } from '@/hooks/window';
 import lazyImport from '@/util/lazy_import';
-import Crate from '@/components/crate/Crate';
-import type { Mesh } from 'three';
-import type { CrateRarity } from '@/handlers/crate/crate_handler';
-
-// TODO Add option to show extra crates
-
-// TODO Add a strong depth of field effect
-// TODO Or instead add a fog effect for background crates
-
-// TODO Add a suspense-like loading animation
+import type { ReactNode } from 'react';
+import type { Suns, Keys } from '@/components/crate/CrateEffects';
 
 const CrateEffects = lazyImport(() => import('@/components/crate/CrateEffects'));
 
 interface CrateSceneProps {
-    // TODO multiple crates bool here
-    center?: [x: number, y: number, z: number];
-    lightPosition?: [x: number, y: number, z: number];
-    rotation?: Euler;
-    responsiveX?: number;
-    rarity: CrateRarity; // TODO better handling of rarity
+    suns?: Suns;
+    keys?: Keys;
+    lightPosition?: Vector3;
+    children: ReactNode;
 }
 
-// TODO Move suspense and responsive logic out of this component for reusability
+const DEFAULT_LIGHT_POS = new Vector3(0, 0, 0);
+
 export default function CrateScene(props: CrateSceneProps) {
-    const sunRef = useRef<Mesh>();
-    const [windowW, windowH] = useWindowSize();
+    const { suns, keys, children } = props;
+    const lightPosition = props.lightPosition ?? DEFAULT_LIGHT_POS;
     // Allows postprocessing to work on page load ¯\_(ツ)_/¯
     useThree();
-    // TODO https://github.com/pmndrs/drei#loading
-    const center = props.center ?? [0, 0, 0];
-    const lightPosition = props.lightPosition ?? [-2, 10, 4];
-    const rotation = props.rotation ?? new Euler(0, 0, 0);
     return (
         <group>
             <Suspense fallback={null}>
                 <ambientLight />
                 <pointLight position={lightPosition} />
-                {/* TODO add order functionality */}
-                <Crate
-                    position={
-                        // TODO fix position not updating when switching between mobile / desktop
-                        windowW >= parseInt(process.env.NEXT_PUBLIC_DESKTOP_MIN_WIDTH || '')
-                            ? /* eslint-disable indent */
-                              // Responsive screen positioning along the x-axis
-                              props.responsiveX
-                                ? [
-                                      (windowW / windowH) * props.responsiveX + center[0],
-                                      center[1],
-                                      center[2],
-                                  ]
-                                : center
-                            : props.responsiveX
-                            ? [
-                                  (windowW / windowH) * props.responsiveX * 0.25,
-                                  center[1] - 1.45,
-                                  center[2] * 1.3,
-                              ]
-                            : center
-                        /* eslint-enable indent */
-                    }
-                    rotation={
-                        // TODO fix rotation not updating when switching between mobile / desktop
-                        windowW >= parseInt(process.env.NEXT_PUBLIC_DESKTOP_MIN_WIDTH || '')
-                            ? rotation
-                            : new Euler(rotation.x - 0.1, rotation.y * 0.5, rotation.z)
-                    }
-                    rarity={props.rarity}
-                    order={0}
-                    sunRef={sunRef}
-                />
+                {children}
             </Suspense>
             <Suspense fallback={null}>
-                {sunRef.current && <CrateEffects sunRef={sunRef.current} />}
+                {suns && keys && <CrateEffects suns={suns} keys={keys} />}
             </Suspense>
         </group>
     );
