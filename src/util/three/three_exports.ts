@@ -36,6 +36,8 @@ export { Vector4 } from 'three/src/math/Vector4.js';
 export { Quaternion } from 'three/src/math/Quaternion.js';
 export { Color } from 'three/src/math/Color.js';
 export { ShaderMaterial } from 'three/src/materials/ShaderMaterial.js';
+export { CanvasTexture } from 'three/src/textures/CanvasTexture.js';
+export { PlaneGeometry, PlaneBufferGeometry } from 'three/src/geometries/PlaneGeometry.js';
 // * GLTFLoader
 export { Loader } from 'three/src/loaders/Loader.js';
 export { FileLoader } from 'three/src/loaders/FileLoader.js';
@@ -128,8 +130,6 @@ export class WebGLShadowMap {
 // export { UniformsUtils } from 'three/src/renderers/shaders/UniformsUtils.js';
 // export { ShaderChunk } from 'three/src/renderers/shaders/ShaderChunk.js';
 // export { CubeTexture } from 'three/src/textures/CubeTexture.js';
-// export { CanvasTexture } from 'three/src/textures/CanvasTexture.js';
-// export { PlaneGeometry, PlaneBufferGeometry } from 'three/src/geometries/PlaneGeometry.js';
 // export { BoxGeometry, BoxBufferGeometry } from 'three/src/geometries/BoxGeometry.js';
 // export { ConeGeometry, ConeBufferGeometry } from 'three/src/geometries/ConeGeometry.js';
 // export { CylinderGeometry, CylinderBufferGeometry } from 'three/src/geometries/CylinderGeometry.js';

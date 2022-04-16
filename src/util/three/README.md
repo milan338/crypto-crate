@@ -1,8 +1,8 @@
-This folder contains select modules from [three.js](https://github.com/mrdoob/three.js/).
+This directory contains select modules from [three.js](https://github.com/mrdoob/three.js/).
 
 In order to reduce three.js bundle sizes, some smaller parts of modules have been extracted to retain functionality whilst removing unused code from the library.
 
-Code from three.js is used in accordance to the library's license:
+Code from three.js is used in accordance with the library's license:
 
 ```
 The MIT License
