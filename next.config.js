@@ -46,7 +46,8 @@ for (const file of ALIASED_FILES) {
 // * Have to set 'unsafe-eval' to enable WASM
 const ContentSecurityPolicy = `
     default-src 'self';
-    base-uri 'self';
+    base-uri 'none';
+    object-src 'none';
     style-src 'self' 'unsafe-inline';
     img-src 'self' data:;
     worker-src 'self' blob:;
@@ -56,8 +57,6 @@ const ContentSecurityPolicy = `
     frame-ancestors 'self';
     form-action 'self';
 `;
-
-// TODO index files for components instead of importing them from the file directly
 
 // TODO update postcss config
 
@@ -202,18 +201,3 @@ module.exports = withBundleAnalyzer({
         ];
     },
 });
-
-// * https://discourse.threejs.org/t/stripping-out-shaders-from-three-js-to-reduce-size/1359
-
-// ? https://discourse.threejs.org/t/how-to-reduce-bundle-size-with-webpack/14607/5
-
-// TODO https://web.dev/measure/
-
-// TODO https://github.com/leosingleton/webpack-glsl-minify
-
-// TODO switch to preact once ssr suspense is supported
-// ? https://darrenwhite.dev/blog/nextjs-replace-react-with-preact
-// ? https://github.com/preactjs/next-plugin-preact
-// ? https://daily.dev/blog/preact-a-lightweight-alternative-to-react
-
-// https://github.com/mrdoob/three.js/issues/11003
