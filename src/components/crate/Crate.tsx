@@ -14,8 +14,9 @@ import type { SpherePartProps } from './parts/SpherePart';
 
 interface CrateProps {
     rarity: CrateRarity;
-    sunRef: MutableRefObject<Mesh | undefined>;
+    sunRef: MutableRefObject<Mesh | undefined> | ((instance: Mesh) => void);
     canOpen?: boolean;
+    noClick?: boolean;
 }
 
 type CrateRef = Group & {
@@ -50,7 +51,7 @@ const rotationEuler = new Euler();
 const position = new Vector3();
 
 export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps) {
-    const { rarity, sunRef, canOpen, ...groupProps } = props;
+    const { rarity, sunRef, canOpen, noClick, ...groupProps } = props;
     const ref = useRef<CrateRef>();
     const initState = useRef<Group | undefined>(undefined);
     const { dispatchModal } = useModal();
@@ -153,6 +154,7 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
             onPointerOver={() => setHovered(true)}
             onPointerOut={() => setHovered(false)}
             onClick={(event) => {
+                if (noClick) return;
                 // Prevent raycaster from triggering multiple click events
                 event.stopPropagation();
                 // if (opening || exploding || !canOpen || !ref.current) return;
@@ -189,4 +191,4 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
     );
 }
 
-// useGLTF.preload(crateModelPath);
+useGLTF.preload('/models/crate_basic.gltf');

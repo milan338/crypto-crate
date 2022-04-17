@@ -35,6 +35,7 @@ export default function HomeScene() {
                 rotation={windowW >= DESKTOP_MIN_W ? ROT_DESKTOP : ROT_MOBILE}
                 sunRef={onSunRefChange}
                 rarity="epic"
+                noClick
             />
         </CrateScene>
     );
