@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Canvas, invalidate, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useIntersectionObserver } from '@/hooks/observer';
 import { useHasMounted } from '@/hooks/ssr';
 import type { RefObject, RefAttributes, ReactNode } from 'react';
@@ -15,6 +15,7 @@ interface SmartCanvasHelperProps {
 function SmartCanvasHelper(props: SmartCanvasHelperProps) {
     const { canvasRef, children } = props;
     const active = useRef(false);
+    const { invalidate } = useThree();
     useIntersectionObserver((event) => {
         if (event.isIntersecting) {
             active.current = true;
