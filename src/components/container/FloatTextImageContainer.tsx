@@ -32,15 +32,13 @@ export default function FloatTextImageContainer(props: FloatTextImageContainerPr
                 ref={imgRef}
                 className={styles['stacked-img']}
                 style={
-                    hasMounted
+                    hasMounted && imgRef.current
                         ? /* eslint-disable indent */
                           {
-                              transform: imgRef.current
-                                  ? `translateY(${
-                                        (imgRef.current.offsetTop - scrollY) / 15 + scrollY / 100
-                                    }px)
-                               translateX(${rightAlign ? '-' : ''}50px)`
-                                  : '',
+                              transform: `translateY(${
+                                  (imgRef.current.offsetTop - scrollY) / 30 + scrollY / 100
+                              }px)
+                               translateX(${rightAlign ? '-' : ''}50px)`,
                           }
                         : {}
                     /* eslint-enable indent */
