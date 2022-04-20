@@ -19,8 +19,6 @@ const DEFAULT_LIGHT_POS = new Vector3(0, 0, 0);
 export default function CrateScene(props: CrateSceneProps) {
     const { suns, keys, children } = props;
     const lightPosition = props.lightPosition ?? DEFAULT_LIGHT_POS;
-    // Allows postprocessing to work on page load ¯\_(ツ)_/¯
-    useThree();
     return (
         <group>
             <Suspense fallback={null}>
