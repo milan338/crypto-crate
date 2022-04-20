@@ -1,4 +1,5 @@
 import styles from '@/styles/components/svg/Logo.module.scss';
+import LinearGradientSVG, { LINEAR_GRADIENT } from '../misc/LinearGradientSVG';
 import type { SVGProps } from '../svg_props';
 
 export interface LogoSVGProps extends SVGProps {
@@ -18,26 +19,13 @@ export default function LogoSVG(props: LogoSVGProps) {
             xmlnsXlink="http://www.w3.org/1999/xlink"
         >
             <defs>
-                <linearGradient
-                    gradientTransform="translate(-.001)"
-                    gradientUnits="userSpaceOnUse"
-                    xlinkHref="#a"
-                    id="b"
-                    x1="38.634"
-                    y1="381.497"
-                    x2="473.368"
-                    y2="130.505"
-                />
-                <linearGradient id="a">
-                    <stop style={{ stopColor: '#b20080', stopOpacity: 1 }} offset="0" />
-                    <stop style={{ stopColor: '#2165ff', stopOpacity: 1 }} offset="1" />
-                </linearGradient>
+                <LinearGradientSVG />
             </defs>
             {/* Box */}
             <path
                 className={styles['logo-bg']}
                 style={{
-                    fill: 'url(#b)',
+                    fill: LINEAR_GRADIENT,
                     opacity: monochrome ? 0 : 1,
                     strokeWidth: 1.65052593,
                 }}
