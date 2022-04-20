@@ -5,10 +5,8 @@
 }
 
 .img-container {
-    transition: transform 0.3s linear;
+    transition: transform 0.3s ease-out;
 }
-
-// TODO make the mouse hover movement end smoother
 
 .stacked-img {
     @include stack-elements;
