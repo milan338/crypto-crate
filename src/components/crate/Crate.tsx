@@ -15,8 +15,8 @@ import type { SpherePartProps } from './parts/SpherePart';
 interface CrateProps {
     rarity: CrateRarity;
     sunRef: MutableRefObject<Mesh | undefined> | ((instance: Mesh) => void);
-    canOpen?: boolean;
     noClick?: boolean;
+    manual?: boolean;
 }
 
 type CrateRef = Group & {
@@ -41,19 +41,15 @@ const OPEN_TIME = 100;
 const OPEN_INTENT_TIME = 60;
 const ERR_TIME = 37;
 const LERP_TIME = 0.08;
-
 const CRATE_HOVER_TARGET = new Vector3(0, 0, 0);
 const CRATE_TOP_OFFSET = new Vector3(0, 0.1, 0);
 const CRATE_BOTTOM_OFFSET = CRATE_TOP_OFFSET.clone().multiplyScalar(-1);
 
-const rotation = new Quaternion();
-const rotationEuler = new Euler();
-const position = new Vector3();
-
 export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps) {
-    const { rarity, sunRef, canOpen, noClick, ...groupProps } = props;
+    const { rarity, sunRef, noClick, manual, ...groupProps } = props;
     const ref = useRef<CrateRef>();
     const initState = useRef<Group | undefined>(undefined);
+    const tmpState = useRef({ rot: new Quaternion(), rotEuler: new Euler(), pos: new Vector3() });
     const { dispatchModal } = useModal();
     const { user } = useUser();
     const [disableReload, enableReload] = useBeforeUnload('');
@@ -61,6 +57,7 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
     const [hovered, setHovered] = useState(false);
     const [exploding, setExploding] = useState(false);
     const [opening, setOpening] = useState(false);
+    console.log('a');
     // Update 'initial' state whenever the window is resized to prevent crate drifting
     // * This might break with moving crates around in future
     useLayoutEffect(() => {
@@ -80,16 +77,20 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
             window.removeEventListener('resize', resizeCrateListener);
         };
     }, []);
+    const { rot: rotation, rotEuler: rotationEuler, pos: position } = tmpState.current;
     // Animations
     useFrame((state) => {
         const time = state.clock.getElapsedTime();
         if (!ref.current) return;
         if (initState.current === undefined) initState.current = ref.current.clone();
         // Hover-in-place animation
-        rotationEuler.x = initState.current.rotation.x + Math.cos(time) * 0.04;
-        rotationEuler.y = initState.current.rotation.y + Math.sin(time / 2) * 0.05;
-        rotation.setFromEuler(rotationEuler);
-        ref.current.position.y = initState.current.position.y + Math.sin(time) * 0.1;
+        if (!manual) {
+            rotationEuler.x = initState.current.rotation.x + Math.cos(time) * 0.04;
+            rotationEuler.y = initState.current.rotation.y + Math.sin(time / 2) * 0.05;
+            rotation.setFromEuler(rotationEuler);
+            ref.current.position.y = initState.current.position.y + Math.sin(time) * 0.1;
+        }
+        // Run whenever crate idling
         if (!opening) {
             // In error animation state
             if (ref.current.errCounter) {
@@ -106,7 +107,9 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
                 // Crate idle rotation animation - only play when not animating explosion
                 ref.current.quaternion.slerp(rotation, LERP_TIME * 0.8);
             }
-        } else {
+        }
+        // Run whenever crate opening
+        else {
             if (ref.current.openIntentCounter) {
                 // Pre-explosion animation
                 ref.current.position.x = initState.current.position.x + Math.sin(time * 37) * 0.01;
@@ -154,11 +157,9 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
             onPointerOver={() => setHovered(true)}
             onPointerOut={() => setHovered(false)}
             onClick={(event) => {
-                if (noClick) return;
                 // Prevent raycaster from triggering multiple click events
                 event.stopPropagation();
-                // if (opening || exploding || !canOpen || !ref.current) return;
-                if (opening || exploding || !ref.current) return;
+                if (noClick || opening || exploding || !ref.current) return;
                 // Disable page reloads
                 disableReload();
                 // Attempt opening the crate
