@@ -37,7 +37,7 @@ export default function SmartCanvas(props: SmartCanvasProps) {
     // Re-render when component mounts and ref exists
     useHasMounted();
     return (
-        <Canvas ref={ref} frameloop="demand" {...canvasProps}>
+        <Canvas ref={ref} frameloop="demand" resize={{ scroll: false }} {...canvasProps}>
             <SmartCanvasHelper canvasRef={ref}>{children}</SmartCanvasHelper>
         </Canvas>
     );
