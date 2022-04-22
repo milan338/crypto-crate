@@ -16,6 +16,8 @@ interface DesktopNavbarProps {
     scrollY: number;
 }
 
+// TODO looks like some jank with the showing of the external button on firefox
+
 const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, ref) => {
     const [btnVisible, setBtnVisible] = useState(false);
     useScrollBehavior('smooth');
@@ -25,14 +27,14 @@ const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, r
         { rootMargin: '-210px' }
     );
     return (
-        <header className={`${styles.navbar} ${props.scrollY ? styles.small : ''}`}>
+        <header id="navbar" className={`${styles.navbar} ${props.scrollY ? styles.small : ''}`}>
             <NavbarTitle scrollY={props.scrollY} />
             <nav>
                 {/* ONLY use NavbarLink components in this list */}
                 <ul className={styles['navbar-links']} ref={ref}>
                     <NavbarLink href="#about">About</NavbarLink>
-                    <NavbarLink href="#buyers">Buyers</NavbarLink>
-                    <NavbarLink href="#sellers">Sellers</NavbarLink>
+                    <NavbarLink href="#collectors">Collectors</NavbarLink>
+                    <NavbarLink href="#creators">Creators</NavbarLink>
                 </ul>
                 {props.navListRef.current && (
                     <span

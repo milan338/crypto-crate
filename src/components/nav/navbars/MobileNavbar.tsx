@@ -17,6 +17,7 @@ export default function MobileNavbar(props: MobileNavbarProps) {
     return (
         <>
             <header
+                id="navbar"
                 className={`${styles.navbar} ${styles.mobile} ${
                     props.scrollY || showMenu ? styles.small : ''
                 }`}
