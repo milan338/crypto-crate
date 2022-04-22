@@ -5,15 +5,18 @@ import { useHasMounted } from '@/hooks/ssr';
 import type { RefObject, RefAttributes, ReactNode } from 'react';
 import type { Props } from '@react-three/fiber';
 
-export interface SmartCanvasProps extends Props, RefAttributes<HTMLCanvasElement> {}
+export interface SmartCanvasProps extends Props, RefAttributes<HTMLCanvasElement> {
+    frameloop?: 'always' | 'demand';
+}
 
 interface SmartCanvasHelperProps {
     canvasRef: RefObject<HTMLCanvasElement>;
+    frameloop?: 'always' | 'demand';
     children?: ReactNode;
 }
 
 function SmartCanvasHelper(props: SmartCanvasHelperProps) {
-    const { canvasRef, children } = props;
+    const { canvasRef, frameloop, children } = props;
     const active = useRef(false);
     const { invalidate } = useThree();
     useIntersectionObserver((event) => {
@@ -25,20 +28,22 @@ function SmartCanvasHelper(props: SmartCanvasHelperProps) {
     }, canvasRef.current ?? undefined);
     useFrame(() => {
         // Request new frame to be rendered only if in canavs view
-        if (active.current) invalidate();
+        if (active.current && frameloop !== 'demand') invalidate();
     });
     return <>{children}</>;
 }
 
 // R3f canvas that will pause frameloops when out of view
 export default function SmartCanvas(props: SmartCanvasProps) {
-    const { children, ...canvasProps } = props;
+    const { children, frameloop, ...canvasProps } = props;
     const ref = useRef<HTMLCanvasElement>(null);
     // Re-render when component mounts and ref exists
     useHasMounted();
     return (
         <Canvas ref={ref} frameloop="demand" resize={{ scroll: false }} {...canvasProps}>
-            <SmartCanvasHelper canvasRef={ref}>{children}</SmartCanvasHelper>
+            <SmartCanvasHelper canvasRef={ref} frameloop={frameloop}>
+                {children}
+            </SmartCanvasHelper>
         </Canvas>
     );
 }
