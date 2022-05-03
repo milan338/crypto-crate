@@ -24,3 +24,11 @@ export function vectors3Average(vectors: Vector3[]) {
     const average = vectors.reduce((a, b) => a.add(b)).divideScalar(vectors.length);
     return average;
 }
+
+// Get dimensions for plane to cover entire canvas
+export function getFullScreenPlaneDim(fov: number, z: number, canvasW: number, canvasH: number) {
+    const _fov = deg2rad(fov);
+    const h = 2 * Math.tan(_fov / 2) * Math.abs(z);
+    const w = h * (canvasW / canvasH);
+    return [w, h];
+}

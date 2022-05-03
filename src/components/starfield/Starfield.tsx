@@ -2,7 +2,7 @@ import frag from '@/shaders/starfield/starfield.frag';
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Vector2, RepeatWrapping, RGBFormat, TextureLoader, ShaderMaterial, Mesh } from 'three';
-import { deg2rad } from '@/util/math';
+import { getFullScreenPlaneDim } from '@/util/math';
 import { useWindowSize } from '@/hooks/window';
 import { isServer } from '@/hooks/ssr';
 
@@ -21,17 +21,16 @@ if (noiseTexture) {
 const resolution = new Vector2(0, 0);
 
 export default function Starfield(props: StarfieldProps) {
+    const { fov, position } = props;
     const ref = useRef<Mesh>();
     const updateMatrix = useRef(true);
     const shaderRef = useRef<ShaderMaterial>();
     const [windowW, windowH] = useWindowSize();
     // Dimensions of the plane such that it fills the canvas
-    const { planeW, planeH } = useMemo(() => {
-        const fov = deg2rad(props.fov);
-        const h = 2 * Math.tan(fov / 2) * Math.abs(props.position[2]);
-        const w = h * (windowW / windowH);
-        return { planeW: w, planeH: h };
-    }, [props.fov, props.position, windowH, windowW]);
+    const [planeW, planeH] = useMemo(
+        () => getFullScreenPlaneDim(fov, position[2], windowW, windowH),
+        [fov, position, windowW, windowH]
+    );
     const starfieldShaderMaterial = useMemo(() => {
         resolution.set(windowW, windowH);
         return {
@@ -58,7 +57,7 @@ export default function Starfield(props: StarfieldProps) {
         }
     });
     return (
-        <mesh ref={ref} position={props.position} matrixAutoUpdate={false}>
+        <mesh ref={ref} position={position} matrixAutoUpdate={false}>
             <planeBufferGeometry args={[planeW, planeH]} />
             <shaderMaterial ref={shaderRef} attach="material" args={[starfieldShaderMaterial]} />
         </mesh>
