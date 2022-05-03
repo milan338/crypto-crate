@@ -10,13 +10,13 @@ import openCrate from './controller/openCrate';
 import type { MutableRefObject } from 'react';
 import type { Group, Mesh } from 'three';
 import type { CratePartProps } from './parts/CratePart';
-import type { SpherePartProps } from './parts/SpherePart';
+import type { SpherePartProps, SpherePartControls } from './parts/SpherePart';
 
 interface CrateProps {
     rarity: CrateRarity;
     sunRef: MutableRefObject<Mesh | undefined> | ((instance: Mesh) => void);
     noClick?: boolean;
-    manual?: boolean;
+    manualControls?: CrateControls;
 }
 
 type CrateRef = Group & {
@@ -28,6 +28,7 @@ type CrateRef = Group & {
 
 export const crateRarities = ['common', 'rare', 'epic', 'legendary', 'one-of-a-kind'] as const;
 export type CrateRarity = typeof crateRarities[number];
+export type CrateControls = { rotY: number; scale: number; sphereControls: SpherePartControls };
 
 export const cratecolors: Record<CrateRarity, string> = {
     common: 'grey',
@@ -46,7 +47,7 @@ const CRATE_TOP_OFFSET = new Vector3(0, 0.1, 0);
 const CRATE_BOTTOM_OFFSET = CRATE_TOP_OFFSET.clone().multiplyScalar(-1);
 
 export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps) {
-    const { rarity, sunRef, noClick, manual, ...groupProps } = props;
+    const { rarity, sunRef, noClick, manualControls, ...groupProps } = props;
     const ref = useRef<CrateRef>();
     const initState = useRef<Group | undefined>(undefined);
     const tmpState = useRef({ rot: new Quaternion(), rotEuler: new Euler(), pos: new Vector3() });
@@ -57,7 +58,6 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
     const [hovered, setHovered] = useState(false);
     const [exploding, setExploding] = useState(false);
     const [opening, setOpening] = useState(false);
-    console.log('a');
     // Update 'initial' state whenever the window is resized to prevent crate drifting
     // * This might break with moving crates around in future
     useLayoutEffect(() => {
@@ -84,11 +84,18 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
         if (!ref.current) return;
         if (initState.current === undefined) initState.current = ref.current.clone();
         // Hover-in-place animation
-        if (!manual) {
+        if (!manualControls) {
             rotationEuler.x = initState.current.rotation.x + Math.cos(time) * 0.04;
             rotationEuler.y = initState.current.rotation.y + Math.sin(time / 2) * 0.05;
             rotation.setFromEuler(rotationEuler);
             ref.current.position.y = initState.current.position.y + Math.sin(time) * 0.1;
+        }
+        // Update transforms to manual control inputs
+        else {
+            rotationEuler.y = manualControls.rotY;
+            rotation.setFromEuler(rotationEuler);
+            const s = manualControls.scale;
+            ref.current.scale.set(s, s, s);
         }
         // Run whenever crate idling
         if (!opening) {
@@ -147,15 +154,20 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
             nodes: nodes,
             exploding: exploding,
             setExploding: setExploding,
+            manualControls: manualControls?.sphereControls,
         }),
-        [exploding, nodes, rarity]
+        [exploding, nodes, rarity, manualControls]
     );
     return (
         <group
             {...groupProps}
             ref={ref}
-            onPointerOver={() => setHovered(true)}
-            onPointerOut={() => setHovered(false)}
+            onPointerOver={() => {
+                if (!manualControls) setHovered(true);
+            }}
+            onPointerOut={() => {
+                if (!manualControls) setHovered(false);
+            }}
             onClick={(event) => {
                 // Prevent raycaster from triggering multiple click events
                 event.stopPropagation();

@@ -16,7 +16,7 @@ import { useFrame } from '@react-three/fiber';
 import { meshBounds } from '@/util/drei/meshBounds';
 import { getCentroid, vectors3Average } from '@/util/math';
 import { mergeRepeatedMeshes } from '@/util/mesh';
-import type { MutableRefObject } from 'react';
+import type { MutableRefObject, Dispatch, SetStateAction } from 'react';
 import type { BufferGeometry, Group } from 'three';
 import type { MeshPhysicalMaterialProps } from '@react-three/fiber';
 import type CustomShaderMaterialType from 'three-custom-shader-material/vanilla';
@@ -26,9 +26,11 @@ export interface SpherePartProps {
     color: string;
     nodes: Record<string, Mesh>;
     exploding: boolean;
-    setExploding: React.Dispatch<React.SetStateAction<boolean>>;
+    setExploding: Dispatch<SetStateAction<boolean>>;
+    manualControls?: SpherePartControls;
 }
 
+export type SpherePartControls = { animIncrement: number };
 type SphereRef = Group & {
     progress: number;
 };
@@ -39,7 +41,6 @@ const materialProps: MeshPhysicalMaterialProps = {
     roughness: 0.3,
     metalness: 0.3,
 };
-
 const MAX_EXPLODE_COUNT = 50;
 const NORMAL_SCALE = new Vector2(0.15, 0.15);
 const ROTS = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
@@ -90,7 +91,7 @@ function updateProgress(
     material: MutableRefObject<CustomShaderMaterialType | undefined>,
     ref: MutableRefObject<SphereRef | undefined>
 ) {
-    if (!ref.current || !material.current) return;
+    if (!ref.current) return;
     if (increment === 0) ref.current.progress = 0;
     else ref.current.progress += increment;
     if (material.current) {
@@ -99,7 +100,7 @@ function updateProgress(
 }
 
 export default function SpherePart(props: SpherePartProps) {
-    const { mesh, color, nodes, exploding, setExploding } = props;
+    const { mesh, color, nodes, exploding, setExploding, manualControls } = props;
     const ref = useRef<SphereRef>();
     const shaderRef = useRef<CustomShaderMaterialType>();
     const [chunksVisible, setChunksVisible] = useState(false);
@@ -127,9 +128,9 @@ export default function SpherePart(props: SpherePartProps) {
     );
     // Animations
     useFrame(() => {
-        if (!ref.current) return;
+        if (!ref.current || !shaderRef.current) return;
         if (Number.isNaN(ref.current.progress)) ref.current.progress = 0;
-        if (exploding) {
+        if (exploding && !manualControls) {
             if (ref.current.progress >= MAX_EXPLODE_COUNT) {
                 updateProgress(0, shaderRef, ref);
                 setChunksVisible(false);
@@ -138,6 +139,13 @@ export default function SpherePart(props: SpherePartProps) {
             }
             updateProgress(0.1, shaderRef, ref);
             if (!chunksVisible) setChunksVisible(true);
+        } else if (manualControls) {
+            if (manualControls.animIncrement)
+                shaderRef.current.uniforms.u_progress.value = manualControls.animIncrement;
+            // Toggle visibility of chunks whenever manual animation increment toggles from 0
+            if (!!manualControls.animIncrement !== chunksVisible) {
+                setChunksVisible(!chunksVisible);
+            }
         }
     });
 
