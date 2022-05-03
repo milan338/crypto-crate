@@ -16,6 +16,7 @@ interface CrateProps {
     rarity: CrateRarity;
     sunRef: MutableRefObject<Mesh | undefined> | ((instance: Mesh) => void);
     noClick?: boolean;
+    clickExplode?: boolean;
     manualControls?: CrateControls;
 }
 
@@ -47,7 +48,9 @@ const CRATE_TOP_OFFSET = new Vector3(0, 0.1, 0);
 const CRATE_BOTTOM_OFFSET = CRATE_TOP_OFFSET.clone().multiplyScalar(-1);
 
 export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps) {
-    const { rarity, sunRef, noClick, manualControls, ...groupProps } = props;
+    const { rarity, sunRef, noClick, clickExplode, manualControls, ...groupProps } = props;
+    if (noClick && clickExplode)
+        throw new Error('Cannot use noClick and clickExplode props simultaneously');
     const ref = useRef<CrateRef>();
     const initState = useRef<Group | undefined>(undefined);
     const tmpState = useRef({ rot: new Quaternion(), rotEuler: new Euler(), pos: new Vector3() });
@@ -172,22 +175,18 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
                 // Prevent raycaster from triggering multiple click events
                 event.stopPropagation();
                 if (noClick || opening || exploding || !ref.current) return;
+                // One click explosion for demo effect
+                if (clickExplode) {
+                    setOpening(true);
+                    ref.current.openIntentCounter = OPEN_INTENT_TIME;
+                    return;
+                }
                 // Disable page reloads
                 disableReload();
                 // Attempt opening the crate
                 const err = openCrate(user, dispatchModal, rarity, ERR_TIME * 2, enableReload);
                 // Error animation
                 if (err) ref.current.errCounter = ERR_TIME;
-            }}
-            // TODO remove
-            onDoubleClick={(event) => {
-                event.stopPropagation();
-                if (opening || exploding) return;
-                setOpening(true);
-                // setExploding(true);
-                if (ref.current) {
-                    ref.current.openIntentCounter = OPEN_INTENT_TIME;
-                }
             }}
         >
             {/* Crate body */}
