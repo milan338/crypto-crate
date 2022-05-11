@@ -9,7 +9,6 @@ interface ModalTextBoxProps {
 export default function ModalTextBox(props: ModalTextBoxProps) {
     const { modal } = useModal();
     const { title, body, visible } = modal;
-    console.log(visible);
     return (
         <div
             className={`${styles['modal-textbox']} ${visible ? '' : styles.hidden}`}

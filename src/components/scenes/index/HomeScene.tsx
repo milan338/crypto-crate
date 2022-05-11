@@ -13,6 +13,8 @@ const LIGHT_POS = new Vector3(-2, 10, 4);
 const ROT_DESKTOP = new Euler(0, -0.5, 0);
 const ROT_MOBILE = new Euler(-0.1, -0.25, 0);
 
+// TODO move the canvas stuff into here
+
 export default function HomeScene() {
     const [windowW, windowH] = useWindowSize();
     const [sunRef, onSunRefChange] = useCurrentRef<Mesh>();
@@ -35,7 +37,7 @@ export default function HomeScene() {
                 rotation={windowW >= DESKTOP_MIN_W ? ROT_DESKTOP : ROT_MOBILE}
                 sunRef={onSunRefChange}
                 rarity="epic"
-                noClick
+                clickExplode
             />
         </CrateScene>
     );
