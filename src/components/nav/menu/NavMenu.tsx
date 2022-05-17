@@ -36,11 +36,11 @@ export default function NavMenu(props: NavMenuProps) {
                 <NavbarLink {...linkProps(1)} href="#about">
                     About
                 </NavbarLink>
-                <NavbarLink {...linkProps(2)} href="#buyers">
-                    Buyers
+                <NavbarLink {...linkProps(2)} href="#collectors">
+                    Collectors
                 </NavbarLink>
-                <NavbarLink {...linkProps(3)} href="#sellers">
-                    Sellers
+                <NavbarLink {...linkProps(3)} href="#creators">
+                    Creators
                 </NavbarLink>
             </ul>
             <ThemeButton />

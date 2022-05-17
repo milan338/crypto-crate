@@ -10,21 +10,23 @@ interface ExternalButtonProps {
     children?: ReactNode;
 }
 
+// TODO show modal on click
+
 export default function ExternalButton(props: ExternalButtonProps) {
-    // TODO optional arrow on hover
+    const { id, className, showArrow, children } = props;
     const [hovered, setHovered] = useState(false);
     return (
-        <div id={props.id} className={props.className}>
+        <div id={id} className={className}>
             <button
                 className={styles.button}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
-                {props.children}
-                {props.showArrow && (
+                <div style={{ transform: showArrow ? 'translateY(-5px)' : '' }}>{children}</div>
+                {showArrow && (
                     <ArrowSVG
                         color="white"
-                        width={210}
+                        width={140}
                         height={200}
                         style={{
                             transform: hovered

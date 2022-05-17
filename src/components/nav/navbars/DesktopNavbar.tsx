@@ -52,7 +52,7 @@ const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, r
                     btnVisible ? styles.visible : styles.hidden
                 }`}
             >
-                Crowdfund
+                Open App
             </ExternalButton>
         </header>
     );
