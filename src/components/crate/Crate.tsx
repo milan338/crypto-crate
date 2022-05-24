@@ -14,9 +14,10 @@ import type { SpherePartProps, SpherePartControls } from './parts/SpherePart';
 
 interface CrateProps {
     rarity: CrateRarity;
-    sunRef: MutableRefObject<Mesh | undefined> | ((instance: Mesh) => void);
+    sunRef?: MutableRefObject<Mesh | undefined> | ((instance: Mesh) => void);
     noClick?: boolean;
     clickExplode?: boolean;
+    staticOnResize?: boolean;
     manualControls?: CrateControls;
 }
 
@@ -29,7 +30,12 @@ type CrateRef = Group & {
 
 export const crateRarities = ['common', 'rare', 'epic', 'legendary', 'one-of-a-kind'] as const;
 export type CrateRarity = typeof crateRarities[number];
-export type CrateControls = { rotY: number; scale: number; sphereControls: SpherePartControls };
+export type CrateControls = {
+    rotY: number;
+    translateX?: number;
+    scale: number;
+    sphereControls: SpherePartControls;
+};
 
 export const cratecolors: Record<CrateRarity, string> = {
     common: 'grey',
@@ -48,7 +54,8 @@ const CRATE_TOP_OFFSET = new Vector3(0, 0.1, 0);
 const CRATE_BOTTOM_OFFSET = CRATE_TOP_OFFSET.clone().multiplyScalar(-1);
 
 export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps) {
-    const { rarity, sunRef, noClick, clickExplode, manualControls, ...groupProps } = props;
+    const { rarity, sunRef, noClick, clickExplode, staticOnResize, manualControls, ...groupProps } =
+        props;
     if (noClick && clickExplode)
         throw new Error('Cannot use noClick and clickExplode props simultaneously');
     const ref = useRef<CrateRef>();
@@ -62,12 +69,11 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
     const [exploding, setExploding] = useState(false);
     const [opening, setOpening] = useState(false);
     // Update 'initial' state whenever the window is resized to prevent crate drifting
-    // * This might break with moving crates around in future
     useLayoutEffect(() => {
         const resizeCrateListener = () => {
             // Ensure higher order components using useWindowSize have had their window event listeners already called
             setTimeout(() => {
-                if (!ref.current || !initState.current) return;
+                if (!ref.current || !initState.current || staticOnResize) return;
                 initState.current.position.set(
                     ref.current.position.x,
                     initState.current.position.y,
@@ -79,7 +85,7 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
         return () => {
             window.removeEventListener('resize', resizeCrateListener);
         };
-    }, []);
+    }, [staticOnResize]);
     const { rot: rotation, rotEuler: rotationEuler, pos: position } = tmpState.current;
     // Animations
     useFrame((state) => {
@@ -99,6 +105,8 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
             rotation.setFromEuler(rotationEuler);
             const s = manualControls.scale;
             ref.current.scale.set(s, s, s);
+            if (manualControls.translateX !== undefined)
+                ref.current.position.x = initState.current.position.x + manualControls.translateX;
         }
         // Run whenever crate idling
         if (!opening) {
