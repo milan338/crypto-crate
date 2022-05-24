@@ -1,25 +1,37 @@
 import styles from '@/styles/components/scenes/AboutScene.module.scss';
-import { useRef, useEffect } from 'react';
+import { useRef, Suspense } from 'react';
 import { Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
 import { useCurrentRef } from '@/hooks/ref';
+import { useTransientScroll } from '@/hooks/window';
 import { setCssVar } from '@/util/style';
+import lazyImport from '@/util/lazy_import';
 import ContextCanvas from '@/components/canvas/ContextCanvas';
 import Crate from '@/components/crate/Crate';
 import CrateScene from '../CrateScene';
-import type { RefObject } from 'react';
+import type { RefObject, ReactNode } from 'react';
 import type { Mesh } from 'three';
 import type { CrateControls } from '@/components/crate/Crate';
+
+const CrateMoveScene = lazyImport(() => import('./CrateMoveScene'));
 
 interface AboutSceneHelperProps {
     containerRef: RefObject<HTMLDivElement>;
     wrapperRef: RefObject<HTMLDivElement>;
     overlayRef: RefObject<HTMLDivElement>;
     titleRef: RefObject<HTMLHeadingElement>;
-    dummyRef: RefObject<HTMLDivElement>;
+    contentRef: RefObject<HTMLDivElement>;
 }
 
-const PROGRESS_MAX = 18.1;
+interface AboutScenePProps {
+    heading?: string;
+    rightAlign?: boolean;
+    dummy?: boolean;
+    children?: ReactNode;
+}
+
+const PROGRESS_SPLIT = 16.5;
+const SECTION_1_MAX = 550;
 const ROTY_OFFSET = 39.8;
 const ROTY_SCALE = 8;
 const ROTY_MIN = -12.5 * Math.PI;
@@ -27,69 +39,122 @@ const FOV = 45;
 const CAMERA_POS = new Vector3(0, 0, 0);
 const POSITION = new Vector3(0, -0.3, -12.5);
 const LIGHT_POS = new Vector3(-20, 13, 1);
+const DEFAULT_CONTROLS: CrateControls = {
+    rotY: 0,
+    scale: 1.2,
+    sphereControls: {
+        animIncrement: 0,
+    },
+};
+
+let lastN = 0;
+let lastSkewI = 0;
+let lastSection = 0;
+let hasLoaded = false;
+
+function updateSection(newSection: number, overlay: HTMLDivElement) {
+    if (newSection === lastSection) return;
+    lastSection = newSection;
+    overlay.setAttribute('section', newSection.toString());
+}
 
 // TODO about scene crate seems to be constantly running its useframe
 
 function AboutSceneHelper(props: AboutSceneHelperProps) {
-    const { containerRef, wrapperRef, overlayRef, titleRef, dummyRef } = props;
+    const { containerRef, wrapperRef, overlayRef, titleRef, contentRef } = props;
     const { invalidate } = useThree();
     const [sunRef, onSunRefChange] = useCurrentRef<Mesh>();
-    const manualControls = useRef<CrateControls>({
-        rotY: 0,
-        scale: 1.2,
-        sphereControls: {
-            animIncrement: 0,
-        },
-    });
+    const manualControls = useRef<CrateControls>(DEFAULT_CONTROLS);
     const crateControls = manualControls.current;
     const sphereControls = crateControls.sphereControls;
 
     // TODO make it so that the callback doesn't run if not in view
     // TODO do it with intersection observer?
-    useEffect(
-        () => {
-            const updateAnim = () => {
-                if (!containerRef.current || !wrapperRef.current) return;
-                const navbarHeight = document.getElementById('navbar')?.clientHeight ?? 0;
-                const canvasHeight = wrapperRef.current.getBoundingClientRect().height;
-                const boundingRect = containerRef.current.getBoundingClientRect();
-                // If top < 0, then |top| is the amount of pixels scrolled into the animation
-                // If top > height - navbarHeight, then animation finished
-                const top = boundingRect.top - canvasHeight;
-                const height = boundingRect.height;
-                let progress = Math.min(Math.abs(Math.min(top, 0)), height - navbarHeight) / 300;
-                progress = Math.min(progress, PROGRESS_MAX);
-                // Update animation
-                const rotY = progress / ROTY_SCALE - ROTY_OFFSET;
-                crateControls.rotY = Math.min(rotY, ROTY_MIN);
-                const scaleProgress = 1 - Math.min(ROTY_MIN + 0.2 + Math.abs(rotY), 0);
-                crateControls.scale = Math.exp(0.8 * (scaleProgress - 1));
-                sphereControls.animIncrement = Math.max(progress / 3.5 - 1.5, 0);
-                // Update overlay
-                if (overlayRef.current && titleRef.current && dummyRef.current) {
-                    const fadeProgress = 0.9 * Math.abs(1 - scaleProgress);
-                    const bgProgress = Math.max(0, progress / 3 - 0.5) * 1.2;
-                    const titleProgress = Math.max(0, fadeProgress - 0.5);
-                    overlayRef.current.style.opacity = `${fadeProgress}`;
-                    titleRef.current.style.opacity = `${titleProgress}`;
-                    setCssVar('col-bg', `rgba(0, 0, 0, ${bgProgress})`);
-                    // Overlay new dummy container once main finishes scrolling
-                    dummyRef.current.style.visibility =
-                        progress === PROGRESS_MAX ? 'visible' : 'hidden';
 
-                    dummyRef.current.style.top = `${parseInt(dummyRef.current.style.top) / 10}`;
+    // TODO don't run expensive stuff like updating crate when crate out of view, and
+    useTransientScroll(() => {
+        if (!containerRef.current || !wrapperRef.current) return;
+        const navbarHeight = document.getElementById('navbar')?.clientHeight ?? 0;
+        const canvasHeight = wrapperRef.current.getBoundingClientRect().height;
+        const boundingRect = containerRef.current.getBoundingClientRect();
+        // If top < 0, then |top| is the amount of pixels scrolled into the animation
+        // If top > height - navbarHeight, then animation finished
+        const top = boundingRect.top - canvasHeight;
+        const height = boundingRect.height;
+        const progress = Math.min(Math.abs(Math.min(top, 0)), height - navbarHeight) / 300;
+        // Update animation
+        const rotY = progress / ROTY_SCALE - ROTY_OFFSET;
+        crateControls.rotY = Math.min(rotY, ROTY_MIN);
+        const scaleProgress = 1 - Math.min(ROTY_MIN + 0.2 + Math.abs(rotY), 0);
+        crateControls.scale = Math.exp(0.8 * (scaleProgress - 1));
+        sphereControls.animIncrement = Math.max(progress / 3.5 - 1.5, 0);
+        // Update overlay
+        if (overlayRef.current && titleRef.current && contentRef.current) {
+            // Fade the background
+            const fadeProgress = 0.9 * Math.abs(1 - scaleProgress);
+            const bgProgress = Math.max(0, progress / 3 - 0.5) * 1.2;
+            overlayRef.current.style.opacity = `${fadeProgress}`;
+            if (bgProgress >= 0 && bgProgress <= 1)
+                setCssVar('col-bg', `rgba(0, 0, 0, ${bgProgress})`);
+            // Update variables on page load
+            if (!hasLoaded) {
+                hasLoaded = true;
+                setCssVar('col-bg', `rgba(0, 0, 0, ${bgProgress})`);
+            }
+            // Fade the title
+            const titleProgress = Math.max(0, fadeProgress * 1.5 - 0.5);
+            titleRef.current.style.opacity = `${titleProgress}`;
+            titleRef.current.style.display = titleProgress ? 'flex' : 'none';
+            // Set title height
+            const twoProgress = Math.max(0, progress - PROGRESS_SPLIT);
+            const titleTranslateY = Math.min(twoProgress * 75, canvasHeight / 3.8);
+            titleRef.current.style.transform = `translateY(-${titleTranslateY}px)`;
+            // Set content height
+            const contentProgress = twoProgress * 30;
+            contentRef.current.style.transform = `translateY(-${contentProgress}px)`;
+            // Set content styles
+            const n = Math.ceil(contentProgress / 115 - 0.9);
+            const x = 1 - (n - contentProgress / 115 + 0.9);
+            const y = 1 - Math.pow(2 * x - 1, 4);
+            contentRef.current.style.opacity = `${y}`;
+            // Transition between sections
+            updateSection(contentProgress < SECTION_1_MAX ? 0 : 1, overlayRef.current);
+            // Set active box visible
+            if (n !== lastN) {
+                lastN = n;
+                // Set all inactive boxes to invisible
+                for (let i = 0; i < contentRef.current.children.length; i++)
+                    contentRef.current.children[i].setAttribute('visible', 'false');
+                try {
+                    contentRef.current.children[n - 1].setAttribute('visible', 'true');
+                } catch {}
+            }
+            // Set title skew
+            const skewI = Math.ceil((contentProgress - 80) / SECTION_1_MAX);
+            if (skewI !== lastSkewI) {
+                console.log('a');
+                lastSkewI = skewI;
+                const skewCollectors = document.getElementById('skew-collectors');
+                const skewCreators = document.getElementById('skew-creators');
+                const transform = 'skewX(-15deg)';
+                if (skewCollectors && skewCreators) {
+                    skewCollectors.style.transform = '';
+                    skewCreators.style.transform = '';
+                    switch (skewI) {
+                        case 1:
+                            skewCollectors.style.transform = transform;
+                            break;
+                        case 2:
+                            skewCreators.style.transform = transform;
+                            break;
+                    }
                 }
-                // Request new frame
-                invalidate();
-            };
-            window.addEventListener('scroll', updateAnim);
-            return () => {
-                window.removeEventListener('scroll', updateAnim);
-            };
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
-    );
+            }
+        }
+        // Request new frame
+        // TODO don't request frame if crate not in view
+        invalidate();
+    });
     return (
         <CrateScene lightPosition={LIGHT_POS} suns={[sunRef]} keys={['sun-about']}>
             <Crate
@@ -103,36 +168,94 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
     );
 }
 
+function AboutSceneP(props: AboutScenePProps) {
+    const { heading, rightAlign, dummy, children } = props;
+    return (
+        <div
+            className={`${styles['content-box']} ${rightAlign ? styles.r : ''}`}
+            style={dummy ? { visibility: 'hidden' } : {}}
+        >
+            <h2>{heading}</h2>
+            <p>{children}</p>
+        </div>
+    );
+}
+
 export default function AboutScene() {
     const containerRef = useRef<HTMLDivElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
-    const dummyRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
     return (
-        <>
-            <div ref={containerRef} className={styles.container}>
-                <div ref={wrapperRef} className={styles['canvas-wrapper']}>
+        <div ref={containerRef} className={styles.container}>
+            {/* Main zoom-in crate scene */}
+            <div ref={wrapperRef} className={styles['canvas-wrapper']}>
+                <ContextCanvas frameloop="demand" camera={{ position: CAMERA_POS, fov: FOV }}>
+                    <AboutSceneHelper
+                        containerRef={containerRef}
+                        wrapperRef={wrapperRef}
+                        overlayRef={overlayRef}
+                        titleRef={titleRef}
+                        contentRef={contentRef}
+                    />
+                </ContextCanvas>
+            </div>
+            {/* Secondary crate scene */}
+            <div className={`${styles['canvas-wrapper']} ${styles.secondary}`}>
+                <Suspense fallback={null}>
                     <ContextCanvas frameloop="demand" camera={{ position: CAMERA_POS, fov: FOV }}>
-                        <AboutSceneHelper
-                            containerRef={containerRef}
-                            wrapperRef={wrapperRef}
-                            overlayRef={overlayRef}
-                            titleRef={titleRef}
-                            dummyRef={dummyRef}
-                        />
+                        <CrateMoveScene containerRef={containerRef} />
                     </ContextCanvas>
-                </div>
-                <div ref={overlayRef} className={styles.overlay}>
-                    {/* TODO some sort of underline here */}
-                    <h1 ref={titleRef}>For creators and collectors</h1>
+                </Suspense>
+            </div>
+            {/* Actual text content */}
+            <div ref={overlayRef} className={styles.overlay}>
+                <h1 ref={titleRef}>
+                    For{' '}
+                    <a id="skew-collectors" className={styles.skewed}>
+                        collectors
+                    </a>{' '}
+                    and{' '}
+                    <a id="skew-creators" className={styles.skewed}>
+                        creators
+                    </a>
+                </h1>
+                <div ref={contentRef} className={styles['overlay-content']}>
+                    {/* Collectors section */}
+                    <AboutSceneP heading="Better NFT collection">
+                        Rare NFTs are expensive. Bidding drives their price up until it&apos;s just
+                        too much, which leaves the average collector out of luck.{' '}
+                        <u>CryptoCrate evens the playing field</u>.
+                    </AboutSceneP>
+                    <AboutSceneP heading="Leave it to luck" rightAlign>
+                        CryptoCrate distributes its NFTs randomly - you never know what you&apos;ll
+                        get when you open a crate, and it&apos;s totally unpredictable.
+                    </AboutSceneP>
+                    <AboutSceneP heading="They're just tokens">
+                        Each crate is a token on the blockchain. That means you can store them, open
+                        them, trade them, or use them in any other CryptoCrate contract functions.
+                    </AboutSceneP>
+                    {/* Dummy cards for transition padding */}
+                    <AboutSceneP dummy />
+                    <AboutSceneP dummy />
+                    {/* Creators section */}
+                    <AboutSceneP heading="Make yourself known" rightAlign>
+                        With traditional bidding, it&apos;s hard for people to discover new
+                        creators. When a user opens a crate though, they&apos;ll have a chance of
+                        finding your work without having to search for it.{' '}
+                        <u>CryptoCrate helps new creators.</u>
+                    </AboutSceneP>
+                    <AboutSceneP heading="Get rewarded">
+                        Each time your creation is found in a crate, you get a cut of the fees. You
+                        also get a portion of the fees whenever you work is traded.
+                    </AboutSceneP>
+                    <AboutSceneP heading="Removing the hassle" rightAlign>
+                        Don&apos;t worry about the underlying implementation - we do all that work
+                        behind the scenes for you, so you can focus on what&apos;s important.
+                    </AboutSceneP>
                 </div>
             </div>
-            <div ref={dummyRef} className={styles.dummy}>
-                <div className={styles['dummy-content']}>
-                    <h1>For creators and collectors</h1>
-                </div>
-            </div>
-        </>
+        </div>
     );
 }

@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef } from 'react';
 import { Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
 import { useTransientScroll } from '@/hooks/window';
@@ -36,9 +36,9 @@ export default function CrateMoveScene(props: CrateRotateSceneProps) {
         crateControls.translateX = 11 * aspect * progress - offsetLeft;
         invalidate();
     });
-    const crates = useMemo(
-        () => {
-            return Array.apply(0, Array(5)).map((_, i) => (
+    return (
+        <CrateScene lightPosition={LIGHT_POS}>
+            {Array.apply(0, Array(5)).map((_, i) => (
                 <Crate
                     key={`crate-bw-${i}`}
                     position={POSITION.clone().setX(-8 * i)}
@@ -47,10 +47,7 @@ export default function CrateMoveScene(props: CrateRotateSceneProps) {
                     noClick
                     staticOnResize
                 />
-            ));
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
+            ))}
+        </CrateScene>
     );
-    return <CrateScene lightPosition={LIGHT_POS}>{crates}</CrateScene>;
 }

@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { Vector3 } from 'three';
-import { useThree } from '@react-three/fiber';
 import lazyImport from '@/util/lazy_import';
 import type { ReactNode } from 'react';
 import type { Suns, Keys } from '@/components/crate/CrateEffects';
