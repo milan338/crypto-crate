@@ -1,5 +1,5 @@
 import styles from '@/styles/components/scenes/AboutScene.module.scss';
-import { useRef, Suspense } from 'react';
+import { useRef, useEffect, Suspense } from 'react';
 import { Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
 import { useCurrentRef } from '@/hooks/ref';
@@ -51,14 +51,13 @@ let lastN = 0;
 let lastSkewI = 0;
 let lastSection = 0;
 let hasLoaded = false;
+let inView = false;
 
 function updateSection(newSection: number, overlay: HTMLDivElement) {
     if (newSection === lastSection) return;
     lastSection = newSection;
     overlay.setAttribute('section', newSection.toString());
 }
-
-// TODO about scene crate seems to be constantly running its useframe
 
 function AboutSceneHelper(props: AboutSceneHelperProps) {
     const { containerRef, wrapperRef, overlayRef, titleRef, contentRef } = props;
@@ -67,13 +66,17 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
     const manualControls = useRef<CrateControls>(DEFAULT_CONTROLS);
     const crateControls = manualControls.current;
     const sphereControls = crateControls.sphereControls;
-
-    // TODO make it so that the callback doesn't run if not in view
-    // TODO do it with intersection observer?
-
-    // TODO don't run expensive stuff like updating crate when crate out of view, and
+    // Don't render when not visible
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => (inView = entry.isIntersecting));
+        if (containerRef.current) observer.observe(containerRef.current);
+        return () => {
+            observer.disconnect();
+        };
+    }, [containerRef]);
+    // Main scroll animation
     useTransientScroll(() => {
-        if (!containerRef.current || !wrapperRef.current) return;
+        if (!containerRef.current || !wrapperRef.current || !inView) return;
         const navbarHeight = document.getElementById('navbar')?.clientHeight ?? 0;
         const canvasHeight = wrapperRef.current.getBoundingClientRect().height;
         const boundingRect = containerRef.current.getBoundingClientRect();
@@ -132,7 +135,6 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
             // Set title skew
             const skewI = Math.ceil((contentProgress - 80) / SECTION_1_MAX);
             if (skewI !== lastSkewI) {
-                console.log('a');
                 lastSkewI = skewI;
                 const skewCollectors = document.getElementById('skew-collectors');
                 const skewCreators = document.getElementById('skew-creators');
@@ -152,7 +154,6 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
             }
         }
         // Request new frame
-        // TODO don't request frame if crate not in view
         invalidate();
     });
     return (
