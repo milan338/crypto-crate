@@ -46,6 +46,21 @@ export function useScrollPosition(debounceDelay: number) {
     return scrollY;
 }
 
+// Run onscroll callback without triggering a rerender
+export function useTransientScroll(cb: () => void) {
+    useEffect(
+        () => {
+            const scrollListener = cb;
+            window.addEventListener('scroll', scrollListener);
+            return () => {
+                window.removeEventListener('scroll', scrollListener);
+            };
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
+}
+
 export function useBeforeUnload(message: string): [DisableReloadCb, EnableReloadCb] {
     const handleWindowClose = useCallback(
         (event: BeforeUnloadEvent) => {
