@@ -53,6 +53,7 @@ let lastSkewI = 0;
 let lastSection = 0;
 let hasLoaded = false;
 let inView = false;
+let forceUpdateCount = 0;
 
 function updateSection(newSection: number, overlay: HTMLDivElement) {
     if (newSection === lastSection) return;
@@ -74,7 +75,10 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
     );
     // Main scroll animation
     useTransientScroll(() => {
-        if (!containerRef.current || !wrapperRef.current || !inView) return;
+        if (!containerRef.current || !wrapperRef.current || (!inView && forceUpdateCount === 120))
+            return;
+        // Update scene for some frames while offscreen to prevent crate rotation jank
+        if (forceUpdateCount < 120) forceUpdateCount++;
         const navbarHeight = document.getElementById('navbar')?.clientHeight ?? 0;
         const canvasHeight = wrapperRef.current.getBoundingClientRect().height;
         const boundingRect = containerRef.current.getBoundingClientRect();
