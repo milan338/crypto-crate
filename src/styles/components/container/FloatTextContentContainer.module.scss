@@ -1,0 +1,9 @@
+@use '../../abstracts/' as *;
+
+.container {
+    @include flex-center;
+}
+
+.content-container {
+    transition: transform 0.3s ease-out;
+}
