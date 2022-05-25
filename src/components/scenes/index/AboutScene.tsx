@@ -1,9 +1,10 @@
 import styles from '@/styles/components/scenes/AboutScene.module.scss';
-import { useRef, useEffect, Suspense } from 'react';
+import { useRef, Suspense } from 'react';
 import { Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
 import { useCurrentRef } from '@/hooks/ref';
 import { useTransientScroll } from '@/hooks/window';
+import { useIntersectionObserver } from '@/hooks/observer';
 import { setCssVar } from '@/util/style';
 import lazyImport from '@/util/lazy_import';
 import ContextCanvas from '@/components/canvas/ContextCanvas';
@@ -67,13 +68,10 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
     const crateControls = manualControls.current;
     const sphereControls = crateControls.sphereControls;
     // Don't render when not visible
-    useEffect(() => {
-        const observer = new IntersectionObserver(([entry]) => (inView = entry.isIntersecting));
-        if (containerRef.current) observer.observe(containerRef.current);
-        return () => {
-            observer.disconnect();
-        };
-    }, [containerRef]);
+    useIntersectionObserver(
+        (event) => (inView = event.isIntersecting),
+        containerRef.current ?? undefined
+    );
     // Main scroll animation
     useTransientScroll(() => {
         if (!containerRef.current || !wrapperRef.current || !inView) return;
@@ -204,11 +202,11 @@ export default function AboutScene() {
             </div>
             {/* Secondary crate scene */}
             <div className={`${styles['canvas-wrapper']} ${styles.secondary}`}>
-                <Suspense fallback={null}>
-                    <ContextCanvas frameloop="demand" camera={{ position: CAMERA_POS, fov: FOV }}>
+                <ContextCanvas frameloop="demand" camera={{ position: CAMERA_POS, fov: FOV }}>
+                    <Suspense fallback={null}>
                         <CrateMoveScene containerRef={containerRef} />
-                    </ContextCanvas>
-                </Suspense>
+                    </Suspense>
+                </ContextCanvas>
             </div>
             {/* Actual text content */}
             <div ref={overlayRef} className={styles.overlay}>

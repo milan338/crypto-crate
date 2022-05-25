@@ -73,7 +73,8 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
         const resizeCrateListener = () => {
             // Ensure higher order components using useWindowSize have had their window event listeners already called
             setTimeout(() => {
-                if (!ref.current || !initState.current || staticOnResize) return;
+                if (!ref.current || !initState.current) return;
+                if (initState.current !== undefined && staticOnResize) return;
                 initState.current.position.set(
                     ref.current.position.x,
                     initState.current.position.y,
