@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
 import { useTransientScroll } from '@/hooks/window';
+import { useIntersectionObserver } from '@/hooks/observer';
 import Crate from '@/components/crate/Crate';
 import CrateScene from '../CrateScene';
 import type { RefObject } from 'react';
@@ -25,10 +26,17 @@ const DEFAULT_CONTROLS: CrateControls = {
 export default function CrateMoveScene(props: CrateRotateSceneProps) {
     const { containerRef } = props;
     const { invalidate } = useThree();
+    const inView = useRef(false);
     const manualControls = useRef<CrateControls>(DEFAULT_CONTROLS);
     const crateControls = manualControls.current;
+    // Don't render when not visible
+    useIntersectionObserver(
+        (event) => (inView.current = event.isIntersecting),
+        containerRef.current ?? undefined
+    );
+    // Main scroll animation
     useTransientScroll(() => {
-        if (!containerRef.current) return;
+        if (!containerRef.current || !inView.current) return;
         const top = containerRef.current.getBoundingClientRect().top;
         const progress = Math.max(0, Math.abs(top) / 1000 - 8.1);
         const aspect = window.innerWidth / window.innerHeight;
