@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useIntersectionObserver } from '@/hooks/observer';
-import { useHasMounted } from '@/hooks/ssr';
 import type { RefObject, RefAttributes, ReactNode } from 'react';
 import type { Props } from '@react-three/fiber';
 
@@ -37,8 +36,6 @@ function SmartCanvasHelper(props: SmartCanvasHelperProps) {
 export default function SmartCanvas(props: SmartCanvasProps) {
     const { children, frameloop, ...canvasProps } = props;
     const ref = useRef<HTMLCanvasElement>(null);
-    // Re-render when component mounts and ref exists
-    useHasMounted();
     return (
         <Canvas ref={ref} frameloop="demand" resize={{ scroll: false }} {...canvasProps}>
             <SmartCanvasHelper canvasRef={ref} frameloop={frameloop}>
