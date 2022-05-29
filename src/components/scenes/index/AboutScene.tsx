@@ -32,7 +32,7 @@ interface AboutScenePProps {
 }
 
 const PROGRESS_SPLIT = 16.5;
-const SECTION_1_MAX = 550;
+const SECTION_1_MAX = 505;
 const ROTY_OFFSET = 39.8;
 const ROTY_SCALE = 8;
 const ROTY_MIN = -12.5 * Math.PI;
@@ -107,7 +107,10 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
                 setCssVar('col-bg', `rgba(0, 0, 0, ${bgProgress})`);
             }
             // Fade the title
-            const titleProgress = Math.max(0, fadeProgress * 1.5 - 0.5);
+            const titleProgress =
+                fadeProgress < 4.5
+                    ? Math.max(0, fadeProgress * 1.5 - 0.5)
+                    : 1 + 10 * (4.5 - fadeProgress);
             titleRef.current.style.opacity = `${titleProgress}`;
             titleRef.current.style.display = titleProgress ? 'flex' : 'none';
             // Set title height
@@ -135,7 +138,7 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
                 } catch {}
             }
             // Set title skew
-            const skewI = Math.ceil((contentProgress - 80) / SECTION_1_MAX);
+            const skewI = Math.ceil(contentProgress / SECTION_1_MAX);
             if (skewI !== lastSkewI) {
                 lastSkewI = skewI;
                 const skewCollectors = document.getElementById('skew-collectors');
@@ -208,7 +211,7 @@ export default function AboutScene() {
             <div className={`${styles['canvas-wrapper']} ${styles.secondary}`}>
                 <ContextCanvas frameloop="demand" camera={{ position: CAMERA_POS, fov: FOV }}>
                     <Suspense fallback={null}>
-                        <CrateMoveScene containerRef={containerRef} />
+                        <CrateMoveScene nCrates={4} containerRef={containerRef} />
                     </Suspense>
                 </ContextCanvas>
             </div>
@@ -240,7 +243,6 @@ export default function AboutScene() {
                         them, trade them, or use them in any other CryptoCrate contract functions.
                     </AboutSceneP>
                     {/* Dummy cards for transition padding */}
-                    <AboutSceneP dummy />
                     <AboutSceneP dummy />
                     {/* Creators section */}
                     <AboutSceneP heading="Make yourself known" rightAlign>

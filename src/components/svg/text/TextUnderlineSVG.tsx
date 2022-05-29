@@ -29,7 +29,7 @@ export default function TextUnderlineSVG(props: UnderlineSVGProps) {
             </defs>
             <path
                 transform={`rotate(${rot}) translate(${rot})`}
-                d="M1.989 26.738c20.265-14.997 65.29-38.565 83.265-12.86"
+                d="M2.725 17.387c19.845-9.663 64.184-24.516 82.774-6.62"
                 style={{ stroke: LINEAR_GRADIENT }}
                 strokeWidth={5.5}
                 strokeLinecap="round"
