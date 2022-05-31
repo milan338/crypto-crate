@@ -41,7 +41,7 @@ $external-button-padding: 0.7em 1.6em;
     z-index: 99;
     position: fixed;
     top: 0;
-    width: 100%;
+    width: 100vw;
     overflow: hidden;
     height: $navbar-height-full;
     background-color: transparent; // TODO
