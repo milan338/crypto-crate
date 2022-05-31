@@ -2,6 +2,7 @@ import styles from '@/styles/components/container/FloatTextContainer.module.scss
 import { useState, useRef } from 'react';
 import { useIntersectionObserver } from '@/hooks/observer';
 import { useHasMounted } from '@/hooks/ssr';
+import { linspace } from '@/util/math';
 import type { ReactNode } from 'react';
 
 export interface FloatTextContainerProps {
@@ -12,15 +13,19 @@ export interface FloatTextContainerProps {
 }
 
 // Intersection ratio threshold values to run intersection observer callbacks at
-const thresholds = Array.apply(null, Array(11)).map((_, i) => i / 10);
+const thresholds = linspace(10);
 
 export default function FloatTextContainer(props: FloatTextContainerProps) {
     const { heading, subheading, rightAlign, children } = props;
     const [intRatio, setIntRatio] = useState(0);
+    const [visible, setVisible] = useState(false);
     const hasMounted = useHasMounted();
     const ref = useRef<HTMLDivElement>(null);
     useIntersectionObserver(
         (event) => {
+            // Stop fading once fully visible
+            if (visible) return;
+            if (event.intersectionRatio === 1) setVisible(true);
             // Prevent fading out at top of screen - only fade in from bottom
             if (event.intersectionRect.y > 0) setIntRatio(event.intersectionRatio);
         },

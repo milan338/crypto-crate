@@ -32,3 +32,8 @@ export function getFullScreenPlaneDim(fov: number, z: number, canvasW: number, c
     const w = h * (canvasW / canvasH);
     return [w, h];
 }
+
+// Get an array of evenly spaced elements from 0 to n
+export function linspace(n: number) {
+    return Array.apply(null, Array(n + 1)).map((_, i) => i / n);
+}

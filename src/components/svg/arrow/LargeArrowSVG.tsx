@@ -5,6 +5,7 @@ import type { SVGProps } from '../svg_props';
 interface LargeArrowProps extends SVGProps {
     type: 1 | 2 | 3;
     style?: CSSProperties;
+    marginTop?: number;
 }
 
 const PATHS = {
@@ -19,11 +20,11 @@ const VIEWBOXES = {
 };
 
 export default function LargeArrowSVG(props: LargeArrowProps) {
-    const { color, width, height, className, type, style } = props;
+    const { color, width, height, className, type, style, marginTop } = props;
     return (
         <svg
             className={className}
-            style={{ ...style, marginTop: '-100px' }}
+            style={{ ...style, marginTop: `${marginTop}px` }}
             width={width}
             height={height}
             viewBox={VIEWBOXES[type]}

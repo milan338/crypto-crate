@@ -7,10 +7,9 @@
     text-align: left;
     background-color: rgb(243, 232, 232); // TODO theme color
     border-radius: 3rem;
-    width: 600px;
+    width: min(600px, 50vw);
     height: 400px;
     padding: 1.5rem 2.2rem;
-    // margin-top: 3rem;
     box-shadow: 0 0 40px rgba(grey, 0.3); // TODO theme color
     opacity: 0.1;
     transition: opacity 0.4s ease-out, transform 0.4s ease-out;
@@ -26,5 +25,24 @@
 
     p {
         font-size: 1.4rem;
+    }
+
+    // Mobile view
+    @media only screen and (max-width: 850px) {
+        width: min(600px, 80vw);
+        margin-bottom: 10vh;
+        height: min(100vw, 400px);
+
+        h1 {
+            font-size: min(8vw, 3rem);
+        }
+
+        h2 {
+            font-size: min(5vw, 2rem);
+        }
+
+        p {
+            font-size: min(1.4rem, 20vw);
+        }
     }
 }

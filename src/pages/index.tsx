@@ -8,12 +8,7 @@
 
 import styles from '@/styles/components/pages/Index.module.scss';
 import Head from 'next/head';
-import Image from 'next/image';
 import type { NextPage } from 'next';
-
-import CrateScene from '@/components/scenes/CrateScene';
-
-import SmartCanvas from '@/components/canvas/SmartCanvas';
 
 import Starfield from '@/components/starfield/Starfield';
 
@@ -38,8 +33,6 @@ import HomeScene from '@/components/scenes/index/HomeScene';
 import TextUnderlineSVG from '@/components/svg/text/TextUnderlineSVG';
 
 import AboutScene from '@/components/scenes/index/AboutScene';
-
-// TODO fix the vertical positioning of the external button text
 
 // TODO footer with credits for the google fonts and material icons etc...
 
@@ -106,27 +99,23 @@ const Home: NextPage = () => {
                         <FloatTextContentContainer
                             heading="A luck-based NFT platform"
                             subheading="Randomised NFTs"
-                            content={
-                                <LargeArrowSVG
-                                    color={'black'}
-                                    width={300}
-                                    type={1}
-                                    style={{ transform: 'translateY(1rem)' }}
-                                />
-                            }
+                            content={<LargeArrowSVG color={'black'} width={300} type={1} />}
                         >
                             Instead of bidding for NFTs on CryptoCrate, you open a crate that is
                             guaranteed to give a random NFT. Simple.
                         </FloatTextContentContainer>
                         <FloatTextContentContainer
-                            heading="Better for everyone"
+                            heading="Better for all"
                             subheading="Helping creators and collectors"
                             content={
                                 <LargeArrowSVG
                                     color={'black'}
                                     width={300}
                                     type={2}
-                                    style={{ transform: 'translateY(1rem)' }}
+                                    marginTop={-60}
+                                    style={{
+                                        transform: 'translateY(2rem) translateX(4rem) scale(1.1)',
+                                    }}
                                 />
                             }
                             rightAlign
@@ -143,8 +132,9 @@ const Home: NextPage = () => {
                                     color={'black'}
                                     width={300}
                                     type={3}
+                                    marginTop={-110}
                                     style={{
-                                        transform: 'translateX(-3rem) translateY(1rem) scale(1.2)',
+                                        transform: 'translateX(-3rem) translateY(-1rem) scale(1.3)',
                                     }}
                                 />
                             }
