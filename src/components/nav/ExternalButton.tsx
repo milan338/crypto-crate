@@ -22,7 +22,7 @@ export default function ExternalButton(props: ExternalButtonProps) {
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
-                <div style={{ transform: showArrow ? 'translateY(-5px)' : '' }}>{children}</div>
+                {children}
                 {showArrow && (
                     <ArrowSVG
                         color="white"

@@ -11,6 +11,7 @@
     color: white;
     transition: background-color 1s ease;
     text-align: left;
+    will-change: transform;
 
     // Gradient background
     &::before {

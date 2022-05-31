@@ -1,0 +1,115 @@
+.wrapper {
+    position: relative;
+    width: 100%;
+    height: 200vh;
+    background: white;
+    overflow: hidden;
+    // Fix weird black line on widescreen
+    margin-top: -2px;
+}
+
+.container {
+    position: fixed;
+    left: 1.5vw;
+    z-index: 2;
+    font-size: min(5vw, 6rem);
+    font-weight: 300;
+    letter-spacing: -4px;
+    word-spacing: -5px;
+    line-height: 7rem;
+    bottom: 0;
+    width: 100%;
+
+    h1 {
+        position: absolute;
+        width: 100vw;
+    }
+
+    .btn {
+        position: absolute;
+        bottom: -80vh;
+        margin-left: -1.1vw;
+    }
+
+    :nth-child(1) {
+        bottom: -10vh; // Change to em units?
+    }
+
+    :nth-child(2) {
+        bottom: -21vh;
+    }
+
+    :nth-child(3) {
+        bottom: -31.3vh;
+    }
+
+    :nth-child(4) {
+        bottom: -40vh;
+    }
+
+    :nth-child(5) {
+        bottom: -130vh;
+    }
+
+    // Mobile view
+    @media only screen and (max-width: 850px) {
+        text-align: center;
+        word-spacing: normal;
+        font-size: 10vw;
+        line-height: 4vh;
+        transform: translateY(-8vh);
+        display: flex;
+        align-items: center;
+    }
+}
+
+.external-button {
+    padding: 75vh 7.3vw;
+
+    @media only screen and (max-width: 850px) {
+        padding: 87vh 5.3vw;
+        position: relative;
+    }
+
+    button {
+        width: 12em;
+        height: 140px;
+        padding: 2rem 4.5rem;
+        border-radius: 3.9rem;
+        font-weight: 500;
+        font-size: 2.8rem;
+        background-color: black;
+        opacity: 1;
+        z-index: 3;
+
+        &::before {
+            background-image: none;
+        }
+
+        &::after {
+            background-color: black;
+        }
+
+        &:hover {
+            &::after {
+                background-color: black;
+            }
+        }
+
+        @media only screen and (max-width: 850px) {
+            font-size: 2.4rem;
+            width: 89vw;
+            padding: 2rem 2rem;
+
+            * {
+                display: none;
+            }
+        }
+    }
+}
+
+.canvas {
+    width: 100vw;
+    height: 100%;
+    transform: translateY(54vh);
+}
