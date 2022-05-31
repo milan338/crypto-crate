@@ -52,7 +52,7 @@ const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, r
                     btnVisible ? styles.visible : styles.hidden
                 }`}
             >
-                Open App
+                Launch App
             </ExternalButton>
         </header>
     );

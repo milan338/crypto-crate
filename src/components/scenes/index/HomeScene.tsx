@@ -8,12 +8,11 @@ import CrateScene from '../CrateScene';
 import type { Mesh } from 'three';
 
 const RESPONSIVE_X = 3.5;
+const MAX_SCALE = 1920 / 966;
 const POSITION = new Vector3(-1.2, 0, -12.5);
 const LIGHT_POS = new Vector3(-2, 10, 4);
 const ROT_DESKTOP = new Euler(0, -0.5, 0);
-const ROT_MOBILE = new Euler(-0.1, -0.25, 0);
-
-// TODO move the canvas stuff into here
+const ROT_MOBILE = new Euler(-0.15, -0.25, 0);
 
 export default function HomeScene() {
     const [windowW, windowH] = useWindowSize();
@@ -23,7 +22,7 @@ export default function HomeScene() {
             POSITION.clone().setX((windowW / windowH) * RESPONSIVE_X + POSITION.x),
             POSITION.clone().set(
                 (windowW / windowH) * RESPONSIVE_X * 0.25,
-                POSITION.y - 1.45,
+                POSITION.y - 2.45,
                 POSITION.z * 1.3
             ),
         ],
@@ -35,6 +34,11 @@ export default function HomeScene() {
                 // TODO fix position and rotation not updating when switching between mobile / desktop
                 position={windowW >= DESKTOP_MIN_W ? desktopPos : mobilePos}
                 rotation={windowW >= DESKTOP_MIN_W ? ROT_DESKTOP : ROT_MOBILE}
+                scale={
+                    windowW >= DESKTOP_MIN_W
+                        ? Math.min((windowW / windowH) * 1.2, MAX_SCALE) * 0.5
+                        : 1
+                }
                 sunRef={onSunRefChange}
                 rarity="epic"
                 clickExplode

@@ -19,13 +19,13 @@
 
     h1 {
         font-size: min(8rem, 7.5vw);
-        padding: 22vh 7vw;
+        padding: min(22vh, 20vh) 7vw;
     }
 
     p {
         font-size: min(6rem, 6.5vw);
         font-weight: 300;
-        padding: 42vh 7vw;
+        padding: min(42vh, 40vw) 7vw;
     }
 
     .button {
@@ -33,26 +33,16 @@
         position: absolute;
 
         button {
-            width: 11em;
-            height: 140px;
-            padding: 2rem 4.5rem;
+            width: min(33.5rem, 40vmax);
+            height: 14.3vmin;
+            padding: 0 4.5rem;
             border-radius: 3.9rem;
             font-weight: 500;
-            font-size: 2.8rem;
-        }
-    }
+            font-size: min(2.8rem, 3.1vmax);
 
-    // Tablet view
-    @media only screen and (min-width: 850px) and (max-width: 1100px) {
-        h1 {
-            font-size: 5.3rem;
-            padding: 150px 7vw;
-        }
-
-        p {
-            font-size: 4.3rem;
-            font-weight: 300;
-            padding: 280px 7vw;
+            * {
+                width: min(140px, 9vw);
+            }
         }
     }
 
@@ -60,33 +50,17 @@
     @media only screen and (max-width: 850px) {
         h1 {
             font-size: 15vw;
-            padding: 120px 5vw;
+            padding: 14vh 5vw;
         }
 
         p {
-            font-size: 10vw;
+            font-size: 13vw;
             font-weight: 300;
-            padding: 210px 5.5vw;
+            padding: 25vh 5.5vw;
         }
 
         .button {
-            padding: 87vh 5.3vw;
-            position: absolute;
-            z-index: 10;
-            height: 20px;
-
-            button {
-                width: 89vw;
-                height: 5.5rem;
-                padding: 1rem 2.2rem;
-                border-radius: 2.5rem;
-                font-weight: 500;
-                font-size: 1.5rem;
-
-                * {
-                    display: none;
-                }
-            }
+            display: none;
         }
     }
 }
@@ -100,7 +74,10 @@
     text-align: center;
 
     .inset {
-        padding: 11vh 23% 40px 23%;
+        @include flex-center;
+        flex-direction: column;
+        padding-top: 6%;
+        padding-bottom: 3%;
 
         svg {
             padding-top: 32vh;
