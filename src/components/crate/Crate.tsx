@@ -16,6 +16,7 @@ interface CrateProps {
     rarity: CrateRarity;
     sunRef?: MutableRefObject<Mesh | undefined> | ((instance: Mesh) => void);
     noClick?: boolean;
+    noHover?: boolean;
     clickExplode?: boolean;
     staticOnResize?: boolean;
     manualControls?: CrateControls;
@@ -54,8 +55,16 @@ const CRATE_TOP_OFFSET = new Vector3(0, 0.1, 0);
 const CRATE_BOTTOM_OFFSET = CRATE_TOP_OFFSET.clone().multiplyScalar(-1);
 
 export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps) {
-    const { rarity, sunRef, noClick, clickExplode, staticOnResize, manualControls, ...groupProps } =
-        props;
+    const {
+        rarity,
+        sunRef,
+        noClick,
+        noHover,
+        clickExplode,
+        staticOnResize,
+        manualControls,
+        ...groupProps
+    } = props;
     if (noClick && clickExplode)
         throw new Error('Cannot use noClick and clickExplode props simultaneously');
     const ref = useRef<CrateRef>();
@@ -175,10 +184,10 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
             {...groupProps}
             ref={ref}
             onPointerOver={() => {
-                if (!manualControls) setHovered(true);
+                if (!manualControls && !noHover) setHovered(true);
             }}
             onPointerOut={() => {
-                if (!manualControls) setHovered(false);
+                if (!manualControls && !noHover) setHovered(false);
             }}
             onClick={(event) => {
                 // Prevent raycaster from triggering multiple click events

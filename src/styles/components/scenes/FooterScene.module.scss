@@ -16,7 +16,6 @@
     font-weight: 300;
     letter-spacing: -4px;
     word-spacing: -5px;
-    line-height: 7rem;
     bottom: 0;
     width: 100%;
 
@@ -27,12 +26,11 @@
 
     .btn {
         position: absolute;
-        bottom: -80vh;
         margin-left: -1.1vw;
     }
 
     :nth-child(1) {
-        bottom: -10vh; // Change to em units?
+        bottom: -10vh;
     }
 
     :nth-child(2) {
@@ -55,11 +53,29 @@
     @media only screen and (max-width: 850px) {
         text-align: center;
         word-spacing: normal;
-        font-size: 10vw;
-        line-height: 4vh;
-        transform: translateY(-8vh);
+        font-size: 9vmin;
         display: flex;
         align-items: center;
+
+        :nth-child(1) {
+            bottom: -3vh;
+        }
+
+        :nth-child(2) {
+            bottom: -11vh;
+        }
+
+        :nth-child(3) {
+            bottom: -18.5vh;
+        }
+
+        :nth-child(4) {
+            bottom: -24.5vh;
+        }
+
+        :nth-child(5) {
+            bottom: -140vh;
+        }
     }
 }
 
