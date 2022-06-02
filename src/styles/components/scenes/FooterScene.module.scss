@@ -10,7 +10,6 @@
 
 .container {
     position: fixed;
-    left: 1.5vw;
     z-index: 2;
     font-size: min(5vw, 6rem);
     font-weight: 300;
@@ -21,28 +20,29 @@
 
     h1 {
         position: absolute;
-        width: 100vw;
+        width: 100%;
+        left: 0.5vw;
     }
 
     .btn {
-        position: absolute;
-        margin-left: -1.1vw;
+        position: relative;
+        margin-left: 0.35vw;
     }
 
     :nth-child(1) {
-        bottom: -10vh;
+        bottom: -10.5vh;
     }
 
     :nth-child(2) {
-        bottom: -21vh;
+        bottom: -21.4vh;
     }
 
     :nth-child(3) {
-        bottom: -31.3vh;
+        bottom: -31.4vh;
     }
 
     :nth-child(4) {
-        bottom: -40vh;
+        bottom: -39.9vh;
     }
 
     :nth-child(5) {
@@ -54,27 +54,33 @@
         text-align: center;
         word-spacing: normal;
         font-size: 9vmin;
-        display: flex;
-        align-items: center;
+
+        h1 {
+            left: -0.4vw;
+        }
+
+        .btn {
+            padding-left: 4.6%;
+        }
 
         :nth-child(1) {
-            bottom: -3vh;
+            bottom: -10vh;
         }
 
         :nth-child(2) {
-            bottom: -11vh;
+            bottom: -19vh;
         }
 
         :nth-child(3) {
-            bottom: -18.5vh;
+            bottom: -28vh;
         }
 
         :nth-child(4) {
-            bottom: -24.5vh;
+            bottom: -36vh;
         }
 
         :nth-child(5) {
-            bottom: -140vh;
+            bottom: -130vh;
         }
     }
 }
@@ -114,7 +120,7 @@
 
         @media only screen and (max-width: 850px) {
             font-size: 2.4rem;
-            width: 89vw;
+            width: 94%;
             padding: 2rem 2rem;
 
             * {
