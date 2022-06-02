@@ -4,6 +4,7 @@ import { Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
 import { useCurrentRef } from '@/hooks/ref';
 import { useTransientScroll, useWindowSize } from '@/hooks/window';
+import { useHasMounted } from '@/hooks/ssr';
 import { useIntersectionObserver } from '@/hooks/observer';
 import { setCssVar } from '@/util/style';
 import { DESKTOP_MIN_W } from '@/util/constants';
@@ -193,6 +194,7 @@ function AboutSceneP(props: AboutScenePProps) {
 
 export default function AboutScene() {
     const [windowW] = useWindowSize();
+    const hasMounted = useHasMounted();
     const containerRef = useRef<HTMLDivElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
@@ -227,7 +229,7 @@ export default function AboutScene() {
             <div ref={overlayRef} className={styles.overlay}>
                 <h1 ref={titleRef}>
                     For{' '}
-                    {windowW >= 600 ? (
+                    {windowW >= 600 || !hasMounted ? (
                         <a id="skew-collectors" className={styles.skewed}>
                             collectors
                         </a>
@@ -235,7 +237,7 @@ export default function AboutScene() {
                         'collectors'
                     )}{' '}
                     and{' '}
-                    {windowW >= 600 ? (
+                    {windowW >= 600 || !hasMounted ? (
                         <a id="skew-creators" className={styles.skewed}>
                             creators
                         </a>
