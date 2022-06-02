@@ -3,9 +3,10 @@ import { useRef, Suspense } from 'react';
 import { Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
 import { useCurrentRef } from '@/hooks/ref';
-import { useTransientScroll } from '@/hooks/window';
+import { useTransientScroll, useWindowSize } from '@/hooks/window';
 import { useIntersectionObserver } from '@/hooks/observer';
 import { setCssVar } from '@/util/style';
+import { DESKTOP_MIN_W } from '@/util/constants';
 import lazyImport from '@/util/lazy_import';
 import ContextCanvas from '@/components/canvas/ContextCanvas';
 import Crate from '@/components/crate/Crate';
@@ -22,6 +23,7 @@ interface AboutSceneHelperProps {
     overlayRef: RefObject<HTMLDivElement>;
     titleRef: RefObject<HTMLHeadingElement>;
     contentRef: RefObject<HTMLDivElement>;
+    windowW: number;
 }
 
 interface AboutScenePProps {
@@ -62,7 +64,7 @@ function updateSection(newSection: number, overlay: HTMLDivElement) {
 }
 
 function AboutSceneHelper(props: AboutSceneHelperProps) {
-    const { containerRef, wrapperRef, overlayRef, titleRef, contentRef } = props;
+    const { containerRef, wrapperRef, overlayRef, titleRef, contentRef, windowW } = props;
     const { invalidate } = useThree();
     const [sunRef, onSunRefChange] = useCurrentRef<Mesh>();
     const manualControls = useRef<CrateControls>(DEFAULT_CONTROLS);
@@ -119,7 +121,9 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
             titleRef.current.style.transform = `translateY(-${titleTranslateY}px)`;
             // Set content height
             const contentProgress = twoProgress * 30;
-            contentRef.current.style.transform = `translateY(-${contentProgress}px)`;
+            contentRef.current.style.transform = `translateY(-${
+                windowW >= DESKTOP_MIN_W ? contentProgress : contentProgress * 0.93
+            }px)`;
             // Set content styles
             const n = Math.ceil(contentProgress / 115 - 0.9);
             const x = 1 - (n - contentProgress / 115 + 0.9);
@@ -188,6 +192,7 @@ function AboutSceneP(props: AboutScenePProps) {
 }
 
 export default function AboutScene() {
+    const [windowW] = useWindowSize();
     const containerRef = useRef<HTMLDivElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
@@ -204,6 +209,7 @@ export default function AboutScene() {
                         overlayRef={overlayRef}
                         titleRef={titleRef}
                         contentRef={contentRef}
+                        windowW={windowW}
                     />
                 </ContextCanvas>
             </div>
@@ -211,7 +217,9 @@ export default function AboutScene() {
             <div className={`${styles['canvas-wrapper']} ${styles.secondary}`}>
                 <ContextCanvas frameloop="demand" camera={{ position: CAMERA_POS, fov: FOV }}>
                     <Suspense fallback={null}>
-                        <CrateMoveScene nCrates={4} containerRef={containerRef} />
+                        {windowW >= DESKTOP_MIN_W && (
+                            <CrateMoveScene nCrates={4} containerRef={containerRef} />
+                        )}
                     </Suspense>
                 </ContextCanvas>
             </div>
@@ -219,20 +227,27 @@ export default function AboutScene() {
             <div ref={overlayRef} className={styles.overlay}>
                 <h1 ref={titleRef}>
                     For{' '}
-                    <a id="skew-collectors" className={styles.skewed}>
-                        collectors
-                    </a>{' '}
+                    {windowW >= 600 ? (
+                        <a id="skew-collectors" className={styles.skewed}>
+                            collectors
+                        </a>
+                    ) : (
+                        'collectors'
+                    )}{' '}
                     and{' '}
-                    <a id="skew-creators" className={styles.skewed}>
-                        creators
-                    </a>
+                    {windowW >= 600 ? (
+                        <a id="skew-creators" className={styles.skewed}>
+                            creators
+                        </a>
+                    ) : (
+                        'creators'
+                    )}
                 </h1>
                 <div ref={contentRef} className={styles['overlay-content']}>
                     {/* Collectors section */}
                     <AboutSceneP heading="Better NFT collection">
-                        Rare NFTs are expensive. Bidding drives their price up until it&apos;s just
-                        too much, which leaves the average collector out of luck.{' '}
-                        <u>CryptoCrate evens the playing field</u>.
+                        Bidding drives NFT prices up way too high, leaving the average collector out
+                        of luck. CryptoCrate evens the playing field.
                     </AboutSceneP>
                     <AboutSceneP heading="Leave it to luck" rightAlign>
                         CryptoCrate distributes its NFTs randomly - you never know what you&apos;ll
@@ -246,10 +261,8 @@ export default function AboutScene() {
                     <AboutSceneP dummy />
                     {/* Creators section */}
                     <AboutSceneP heading="Make yourself known" rightAlign>
-                        With traditional bidding, it&apos;s hard for people to discover new
-                        creators. When a user opens a crate though, they&apos;ll have a chance of
-                        finding your work without having to search for it.{' '}
-                        <u>CryptoCrate helps new creators.</u>
+                        When anyone opens a crate, they&apos;ll have the same chance of finding your
+                        work, for both established and up-and-coming creators.
                     </AboutSceneP>
                     <AboutSceneP heading="Get rewarded">
                         Each time your creation is found in a crate, you get a cut of the fees. You

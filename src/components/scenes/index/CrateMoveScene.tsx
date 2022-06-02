@@ -37,9 +37,14 @@ export default function CrateMoveScene(props: CrateRotateSceneProps) {
             const top = containerRef.current.getBoundingClientRect().top;
             const progress = Math.max(0, Math.abs(top) / 1000 - 8.1);
             const aspect = window.innerWidth / window.innerHeight;
-            const offsetLeft = aspect * 10;
+            const offsetLeft = aspect * 10.5;
             crateControls.translateX =
-                18 * aspect * (1920 / window.innerWidth) * progress - offsetLeft;
+                18 *
+                    aspect *
+                    (1920 / window.innerWidth) *
+                    (window.innerWidth < 1300 ? 0.7 : 1) *
+                    progress -
+                offsetLeft;
             invalidate();
         },
 
