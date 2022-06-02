@@ -28,6 +28,10 @@ $nav-menu-indicator-translateY: translateY(0.15rem);
         }
     }
 
+    &.hidden {
+        display: none;
+    }
+
     &.hidden * {
         opacity: 0;
         display: none;

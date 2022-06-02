@@ -72,7 +72,7 @@ export default function FooterScene() {
     });
     return (
         <section ref={wrapperRef} id="footer-scene" className={styles.wrapper}>
-            <div ref={containerRef} className={styles.container}>
+            <div ref={containerRef} className={styles.container} style={{ display: 'none' }}>
                 <h1 ref={contentRef1}>THE FUTURE</h1>
                 <h1 ref={contentRef2}>OF NFT</h1>
                 <h1 ref={contentRef3}>PLATFORMS IS</h1>
