@@ -5,12 +5,12 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-    background-color: rgb(243, 232, 232); // TODO theme color
+    background-color: var(--col-fg);
     border-radius: 3rem;
     width: min(600px, 50vw);
     height: 400px;
     padding: 1.5rem 2.2rem;
-    box-shadow: 0 0 40px rgba(grey, 0.3); // TODO theme color
+    box-shadow: 0 0 40px var(--col-shadow);
     opacity: 0.1;
     transition: opacity 0.4s ease-out, transform 0.4s ease-out;
     z-index: 3;

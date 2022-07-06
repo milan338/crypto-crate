@@ -64,6 +64,11 @@ function updateSection(newSection: number, overlay: HTMLDivElement) {
     overlay.setAttribute('section', newSection.toString());
 }
 
+function setBgCol(opacity: number) {
+    const theme = document.documentElement.dataset.theme;
+    if (theme !== 'dark') setCssVar('col-bg', `rgba(0, 0, 0, ${opacity})`);
+}
+
 function AboutSceneHelper(props: AboutSceneHelperProps) {
     const { containerRef, wrapperRef, overlayRef, titleRef, contentRef, windowW } = props;
     const { invalidate } = useThree();
@@ -102,12 +107,11 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
             const fadeProgress = 0.9 * Math.abs(1 - scaleProgress);
             const bgProgress = Math.max(0, progress / 3 - 0.5) * 1.2;
             overlayRef.current.style.opacity = `${fadeProgress}`;
-            if (bgProgress >= 0 && bgProgress <= 1)
-                setCssVar('col-bg', `rgba(0, 0, 0, ${bgProgress})`);
+            if (bgProgress >= 0 && bgProgress <= 1) setBgCol(bgProgress);
             // Update variables on page load
             if (!hasLoaded) {
                 hasLoaded = true;
-                setCssVar('col-bg', `rgba(0, 0, 0, ${bgProgress})`);
+                setBgCol(bgProgress);
             }
             // Fade the title
             const titleProgress =

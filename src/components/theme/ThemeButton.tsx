@@ -1,10 +1,12 @@
 import styles from '@/styles/components/theme/ThemeButton.module.scss';
 import { useState, useMemo } from 'react';
+import { useUser } from '@/hooks/context';
 import DarkModeSVG from '@/components/svg/material/DarkModeSVG';
 import LightModeSVG from '@/components/svg/material/LightModeSVG';
 import BrightnessAutoSVG from '@/components/svg/material/BrightnessAutoSVG';
 import { getSysColorScheme, updateDomTheme } from './ThemeLoader';
 import type { SVGProps } from '@/components/svg/svg_props';
+import type { Theme } from '@/contexts/user/UserProvider';
 
 const svgProps: SVGProps = {
     width: 30,
@@ -21,6 +23,7 @@ export default function ThemeButton() {
     const dataset = document.documentElement.dataset;
     const [theme, setTheme] = useState(dataset.theme);
     const [rotateOnHover, setRotateOnHover] = useState(true);
+    const { dispatchUser } = useUser();
     const getClassName = (themeName: string) => {
         return theme === themeName ? visible : hidden;
     };
@@ -44,6 +47,7 @@ export default function ThemeButton() {
                     dataset.theme = newTheme;
                 }
                 setTheme(newTheme);
+                dispatchUser({ theme: document.documentElement.dataset.theme as Theme });
                 setRotateOnHover(false);
             }}
             onMouseLeave={() => {

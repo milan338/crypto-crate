@@ -1,9 +1,6 @@
 @use './abstracts/' as *;
 @use './fonts/' as *;
 
-// TODO eventually remove unused imports from all scss files
-// TODO and remove index.scss and import of those directories that only contain modules
-
 * {
     font-family: Ubuntu, sans-serif;
     text-rendering: optimizeLegibility;
@@ -11,9 +8,6 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    // TODO better transition for colours only? only should be global for theme changing
-    // transition: all $ease-time;
-    // transition-timing-function: $ease-type;
 }
 
 html {
@@ -24,10 +18,14 @@ html {
     &[data-theme='light'] {
         --col-bg: #{getThemeValue(col-bg, 'light')};
         --col-fg: #{getThemeValue(col-fg, 'light')};
+        --col-txt: #{getThemeValue(col-txt, 'light')};
+        --col-shadow: #{getThemeValue(col-shadow, 'light')};
     }
 
     &[data-theme='dark'] {
         --col-bg: #{getThemeValue(col-bg, 'dark')};
         --col-fg: #{getThemeValue(col-fg, 'dark')};
+        --col-txt: #{getThemeValue(col-txt, 'dark')};
+        --col-shadow: #{getThemeValue(col-shadow, 'dark')};
     }
 }

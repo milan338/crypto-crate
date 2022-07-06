@@ -1,24 +1,19 @@
-// $col-accent: hsl(317, 100%, 35%);
-// $col-accent: hsl(300, 83%, 31%);
-// $col-accent: rgb(140, 26, 160);
 $col-accent: rgb(147, 21, 155);
-// $col-accent: purple;
-$col-accent-secondary: hsl(222, 100%, 56%);
-// $col-accent-secondary: rgb(27, 27, 218);
-
+$col-accent-secondary: rgb(31, 98, 255);
 $gradient-accent: linear-gradient(to top right, $col-accent, 65%, $col-accent-secondary);
+$color-transition: color 5s ease;
 
 $themes: (
     light: (
-        col-bg: hsl(0 0% 100%),
-        col-fg: hsl(0 0% 0%),
-        col-txt: hsl(0, 0%, 0%),
-        col-txt-hover: hsl(0, 0%, 0%),
+        col-bg: rgb(255, 255, 255),
+        col-fg: rgb(255, 255, 255),
+        col-txt: rgb(0, 0, 0),
+        col-shadow: rgba(grey, 0.3),
     ),
     dark: (
-        col-bg: hsl(0, 0%, 0%),
-        col-fg: hsl(0, 0%, 100%),
-        col-txt: hsl(0, 0%, 0%),
-        col-txt-hover: hsl(0, 0%, 0%),
+        col-bg: rgb(0, 0, 0),
+        col-fg: rgb(20, 20, 20),
+        col-txt: rgb(255, 255, 255),
+        col-shadow: rgba(grey, 0.3),
     ),
 );

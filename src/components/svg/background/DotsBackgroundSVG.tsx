@@ -1,6 +1,7 @@
 import styles from '@/styles/components/svg/DotsBackgroundSVG.module.scss';
 import { useMemo } from 'react';
 import { useWindowSize } from '@/hooks/window';
+import { useUser } from '@/hooks/context';
 import type { SVGProps } from '../svg_props';
 
 interface DotsBackgroundSVGProps extends SVGProps {
@@ -14,6 +15,7 @@ interface DotsBackgroundSVGProps extends SVGProps {
 
 export default function DotsBackgroundSVG(props: DotsBackgroundSVGProps) {
     const { element, radius, spacing, fadeConst, fadeN, padHeight } = props;
+    const { user } = useUser();
     useWindowSize();
     const width = element?.clientWidth ?? 0;
     const height = element?.clientHeight ?? 0;
@@ -38,7 +40,9 @@ export default function DotsBackgroundSVG(props: DotsBackgroundSVGProps) {
             const r = radius * (fadeConst - (Math.abs(cx - width / 2) * 2) / width);
             for (let y = 0; y < nY; y++) {
                 const yTransform = halfNY - Math.abs(y - halfNY);
-                const opacity = yTransform < fadeN ? (yTransform + 1) / fadeN : 1;
+                let opacity = yTransform < fadeN ? (yTransform + 1) / fadeN : 1;
+                if (user.theme === 'dark' || document.documentElement.dataset.theme === 'dark')
+                    opacity /= 3.5;
                 const cy = y * delta + d + offsetY;
                 dotComponents[i] = (
                     <circle key={`BG-DOT-${i++}`} cx={cx} cy={cy} r={r} opacity={opacity} />
@@ -46,7 +50,7 @@ export default function DotsBackgroundSVG(props: DotsBackgroundSVGProps) {
             }
         }
         return dotComponents;
-    }, [width, spacing, height, padHeight, radius, fadeConst, fadeN]);
+    }, [width, spacing, height, padHeight, radius, fadeConst, fadeN, user.theme]);
     return (
         <svg
             className={styles.container}

@@ -8,14 +8,11 @@ interface UserProviderProps {
     children: ReactNode;
 }
 
-// TODO store user preferences here i.e. language, ...
+type OwnedCrates = Partial<Record<CrateRarity, number>>;
+export type Theme = 'light' | 'dark';
 
-export type UserData = {
-    action: string;
-};
-export type UserState = {
-    ownedCrates: Partial<Record<CrateRarity, number>>;
-};
+export type UserState = { ownedCrates: OwnedCrates; theme: Theme };
+export type UserData = Partial<UserState>;
 type UserDispatch = (action: UserData) => void;
 export type UserContextT = { user: UserState; dispatchUser: UserDispatch };
 
@@ -24,14 +21,13 @@ export const UserContext = createContext<UserContextT | undefined>(undefined);
 export default function UserProvider(props: UserProviderProps) {
     const [user, dispatchUser] = useReducer(userReducer, {
         ownedCrates: {},
+        theme: 'light',
     });
     const value = { user, dispatchUser };
-    // Initially set all owned crates to 0
-    // TODO async fetch user crates
+    // TODO get user owned crates
     if (!Object.keys(user.ownedCrates).length) {
         for (const rarity of crateRarities) {
-            // TODO change back to 0
-            user.ownedCrates[rarity] = 1;
+            user.ownedCrates[rarity] = 0;
         }
     }
     return <UserContext.Provider value={value}>{props.children}</UserContext.Provider>;

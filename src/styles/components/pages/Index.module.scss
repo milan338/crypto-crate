@@ -68,10 +68,16 @@
 .about-section {
     position: relative;
     box-shadow: inset 0 15px 15px -15px;
-    // background-color: white; // TODO theme colour
     background-color: var(--col-bg);
     overflow: hidden;
     text-align: center;
+
+    h1,
+    h2,
+    p {
+        transition: $color-transition;
+        color: var(--col-txt);
+    }
 
     .inset {
         @include flex-center;
