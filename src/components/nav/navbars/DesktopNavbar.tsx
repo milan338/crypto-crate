@@ -46,7 +46,7 @@ const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, r
                     />
                 )}
             </nav>
-            <ThemeButton />
+            {/* <ThemeButton /> */}
             <ExternalButton
                 className={`${styles['external-button']} ${
                     btnVisible ? styles.visible : styles.hidden

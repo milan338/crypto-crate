@@ -39,7 +39,7 @@ export default function NavMenu(props: NavMenuProps) {
                     Creators
                 </NavbarLink>
             </ul>
-            <ThemeButton />
+            {/* <ThemeButton /> */}
         </nav>
     );
 }

@@ -3,7 +3,8 @@ import { useUser } from '@/hooks/context';
 import type { Theme } from '@/contexts/user/UserProvider';
 
 export function getSysColorScheme() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    // return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return 'light';
 }
 
 export function updateDomTheme() {
