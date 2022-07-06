@@ -8,15 +8,12 @@ import { useHasMounted } from '@/hooks/ssr';
 import { useIntersectionObserver } from '@/hooks/observer';
 import { setCssVar } from '@/util/style';
 import { DESKTOP_MIN_W } from '@/util/constants';
-import lazyImport from '@/util/lazy_import';
 import ContextCanvas from '@/components/canvas/ContextCanvas';
 import Crate from '@/components/crate/Crate';
 import CrateScene from '../CrateScene';
 import type { RefObject, ReactNode } from 'react';
 import type { Mesh } from 'three';
 import type { CrateControls } from '@/components/crate/Crate';
-
-const CrateMoveScene = lazyImport(() => import('./CrateMoveScene'));
 
 interface AboutSceneHelperProps {
     containerRef: RefObject<HTMLDivElement>;
@@ -217,16 +214,6 @@ export default function AboutScene() {
                         contentRef={contentRef}
                         windowW={windowW}
                     />
-                </ContextCanvas>
-            </div>
-            {/* Secondary crate scene */}
-            <div className={`${styles['canvas-wrapper']} ${styles.secondary}`}>
-                <ContextCanvas frameloop="demand" camera={{ position: CAMERA_POS, fov: FOV }}>
-                    <Suspense fallback={null}>
-                        {windowW >= DESKTOP_MIN_W && (
-                            <CrateMoveScene nCrates={4} containerRef={containerRef} />
-                        )}
-                    </Suspense>
                 </ContextCanvas>
             </div>
             {/* Actual text content */}
