@@ -13,11 +13,11 @@
     height: 400px;
     padding: 1.5rem 2.2rem;
     box-shadow: 0 0 40px var(--col-shadow);
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
     z-index: 3;
 
     &::before {
-        transition: opacity 0.3s ease;
+        transition: opacity 0.2s ease;
     }
 
     &.hovered {
