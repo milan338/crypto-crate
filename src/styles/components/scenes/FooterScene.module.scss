@@ -1,3 +1,5 @@
+@use '../../abstracts/' as *;
+
 .wrapper {
     position: relative;
     width: 100%;
@@ -51,7 +53,7 @@
     }
 
     // Mobile view
-    @media only screen and (max-width: 850px) {
+    @media only screen and (max-width: $desktop-min-width) {
         text-align: center;
         word-spacing: normal;
         font-size: 9vmin;
@@ -89,7 +91,7 @@
 .external-button {
     padding: 75vh 7.3vw;
 
-    @media only screen and (max-width: 850px) {
+    @media only screen and (max-width: $desktop-min-width) {
         padding: 87vh 5.3vw;
         position: relative;
     }
@@ -119,7 +121,7 @@
             }
         }
 
-        @media only screen and (max-width: 850px) {
+        @media only screen and (max-width: $desktop-min-width) {
             font-size: 2.4rem;
             width: 94%;
             padding: 2rem 2rem;

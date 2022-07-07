@@ -58,8 +58,7 @@
     }
 
     // Mobile view
-    @media only screen and (max-width: 850px) {
-        // TODO make the max width an scss variable
+    @media only screen and (max-width: $desktop-min-width) {
         h1 {
             font-size: min(7rem, 13vw);
         }
@@ -119,7 +118,7 @@
         }
 
         // Mobile view
-        @media only screen and (max-width: 850px) {
+        @media only screen and (max-width: $desktop-min-width) {
             padding-top: 15%;
 
             // Arrow SVGs
@@ -141,7 +140,7 @@
         position: relative;
 
         // Mobile view
-        @media only screen and (max-width: 850px) {
+        @media only screen and (max-width: $desktop-min-width) {
             padding-top: 7vh;
             font-size: 50px;
 

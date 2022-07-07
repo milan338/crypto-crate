@@ -43,7 +43,7 @@
     }
 
     // Mobile view
-    @media only screen and (max-width: 850px) {
+    @media only screen and (max-width: $desktop-min-width) {
         width: min(600px, 80vw);
         margin-bottom: 10vh;
         height: min(100vw, 400px);

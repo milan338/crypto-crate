@@ -2,6 +2,7 @@ $col-accent: rgb(147, 21, 155);
 $col-accent-secondary: rgb(31, 98, 255);
 $gradient-accent: linear-gradient(to top right, $col-accent, 65%, $col-accent-secondary);
 $color-transition: color 5s ease;
+$desktop-min-width: 850px;
 
 $themes: (
     light: (
