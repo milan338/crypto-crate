@@ -1,0 +1,94 @@
+@use '../../abstracts/' as *;
+
+.part {
+    @include gradient-box-shadow;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    background: white;
+    border-radius: 2.5rem;
+    box-shadow: 0 0 40px var(--col-shadow);
+    padding: 5rem 2.2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &.hovered {
+        transform: translateY(-10px);
+
+        &::before {
+            opacity: 0.7;
+        }
+    }
+
+    @media only screen and (max-width: 1250px) {
+        flex-direction: column;
+        width: min(600px, 80vw);
+        height: min(100vw, 300px);
+        justify-content: center;
+    }
+}
+
+.section {
+    @include flex-center;
+    position: relative;
+    flex-direction: column;
+    min-height: 0;
+    text-align: left;
+    height: 100vh;
+    width: 100%;
+    gap: min(8.5rem, 7vw);
+    padding-bottom: 5rem;
+    z-index: 10;
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 2rem;
+        text-align: left;
+        width: 80%;
+        z-index: 11;
+
+        @media only screen and (max-width: 1250px) {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    h2 {
+        font-size: min(3rem, 5vw);
+        padding-bottom: 1rem;
+    }
+
+    p {
+        font-size: min(1.8rem, 4vw);
+    }
+
+    @media only screen and (max-width: 1250px) {
+        height: max-content;
+        padding-top: 3rem;
+        text-align: center;
+
+        h2 {
+            font-size: min(8vw, 3rem);
+        }
+
+        p {
+            font-size: min(1.4rem, 20vw);
+        }
+    }
+}
+
+.section-header {
+    font-size: min(8rem, 6.5vw);
+    color: transparent;
+    background-image: linear-gradient(to top right, $col-accent, 75%, $col-accent-secondary);
+    background-clip: text;
+    background-color: var(--col-txt);
+    z-index: 11;
+
+    @media only screen and (max-width: 1250px) {
+        font-size: max(51px, 7vw);
+        word-wrap: break-word;
+    }
+}
