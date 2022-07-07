@@ -14,27 +14,23 @@
         color: white;
         z-index: 80;
         text-shadow: white 0 0 3px;
-        position: absolute;
     }
 
     h1 {
         font-size: min(8rem, 7.5vw);
-        padding: min(22vh, 20vh) 7vw;
     }
 
     p {
         font-size: min(6rem, 6.5vw);
         font-weight: 300;
-        padding: min(42vh, 40vw) 7vw;
     }
 
     .button {
-        padding: 75vh 7.3vw;
-        position: absolute;
+        padding-top: 10vh;
 
         button {
             width: min(33.5rem, 40vmax);
-            height: 14.3vmin;
+            height: min(9rem, 7.5vmax);
             padding: 0 4.5rem;
             border-radius: 3.9rem;
             font-weight: 500;
@@ -46,21 +42,48 @@
         }
     }
 
+    .home-content {
+        position: absolute;
+        display: flex;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 50%;
+        align-items: center;
+
+        & > div {
+            padding-left: 7vw;
+        }
+    }
+
     // Mobile view
     @media only screen and (max-width: 850px) {
+        // TODO make the max width an scss variable
         h1 {
-            font-size: 15vw;
-            padding: 14vh 5vw;
+            font-size: min(7rem, 13vw);
         }
 
         p {
-            font-size: 13vw;
             font-weight: 300;
-            padding: 26vh 5.5vw;
+            font-size: min(4rem, 12vw);
         }
 
         .button {
             display: none;
+        }
+
+        .home-content {
+            width: 100%;
+            justify-content: center;
+
+            & > div {
+                position: absolute;
+                padding-left: 0;
+                top: 15vh;
+                justify-content: center;
+                text-align: center;
+            }
         }
     }
 }

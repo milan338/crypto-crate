@@ -61,18 +61,27 @@ const Home: NextPage = () => {
             <main id="main-content">
                 {/* Landing page home section */}
                 <section id="home" className={styles.home}>
-                    <h1>CryptoCrate</h1>
-                    <TextCycle
-                        defaultText="The better"
-                        wordToCycle="better"
-                        altWords={['better', 'fairer', 'more fun', 'innovative']}
-                        period={2200}
-                    >
-                        <br /> NFT platform
-                    </TextCycle>
-                    <ExternalButton id="external-button" className={styles.button} showArrow>
-                        Launch App
-                    </ExternalButton>
+                    <div className={styles['home-content']}>
+                        <div>
+                            <h1>CryptoCrate</h1>
+                            <TextCycle
+                                defaultText="The better"
+                                wordToCycle="better"
+                                altWords={['better', 'fairer', 'more fun', 'innovative']}
+                                period={2200}
+                            >
+                                <br /> NFT platform
+                            </TextCycle>
+                            <ExternalButton
+                                id="external-button"
+                                className={styles.button}
+                                showArrow
+                            >
+                                Launch App
+                            </ExternalButton>
+                        </div>
+                    </div>
+
                     <ContextCanvas camera={{ position: CAMERA_POS, fov: FOV }}>
                         <HomeScene />
                         <Starfield fov={FOV} position={[0, 0, -50]} />
