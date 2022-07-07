@@ -2,6 +2,8 @@
 
 .container {
     @include flex-center;
+    @include gradient-box-shadow;
+    position: relative;
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
@@ -11,9 +13,20 @@
     height: 400px;
     padding: 1.5rem 2.2rem;
     box-shadow: 0 0 40px var(--col-shadow);
-    opacity: 0.1;
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    transition: transform 0.3s ease;
     z-index: 3;
+
+    &::before {
+        transition: opacity 0.3s ease;
+    }
+
+    &.hovered {
+        transform: translateY(-10px);
+
+        &::before {
+            opacity: 0.7;
+        }
+    }
 
     h1 {
         font-size: 3rem;
@@ -21,10 +34,12 @@
 
     h2 {
         font-size: 2rem;
+        opacity: 0.7;
     }
 
     p {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
+        padding-top: 0.5rem;
     }
 
     // Mobile view
