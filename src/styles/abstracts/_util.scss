@@ -26,3 +26,34 @@
         grid-column: 1;
     }
 }
+
+// Gradient box shadow
+@mixin gradient-box-shadow {
+    &::before {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: $gradient-accent;
+        filter: blur(20px);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        border-radius: 2.5rem;
+    }
+
+    // Prevent transform issues with shadow
+    &::after {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: inherit;
+        border-radius: 2.5rem;
+    }
+}
