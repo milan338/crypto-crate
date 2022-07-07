@@ -144,7 +144,6 @@ const Home: NextPage = () => {
                 </section>
                 {/* Interactive detailed about section */}
                 <AboutScene />
-                {/* TODO make these sections instead of divs and pass through the id */}
                 {/* TODO rename the aboutscene to the title scene or something now that it's not about */}
                 {/* Collectors section */}
                 <AboutSceneSection
@@ -174,30 +173,10 @@ const Home: NextPage = () => {
                     content3="Don't worry about the underlying implementation - we do all that work
                         behind the scenes for you, so you can focus on what's important."
                 />
-                {/* Outro scene above footer */}
-                {/* TODO don't suspend the entire footer, just the crate */}
-                <Suspense fallback={null}>
-                    <FooterScene />
-                </Suspense>
+                {/* Outro footer scene */}
+                <div style={{ height: '30rem' }} />
+                <FooterScene />
             </main>
-
-            {/* <footer className={styles.footer}>
-                <a
-                    href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Powered by{' '}
-                    <span className={styles.logo}>
-                        <Image
-                            src="/vercel.svg"
-                            alt="Vercel Logo"
-                            width={72}
-                            height={16}
-                        />
-                    </span>
-                </a>
-            </footer> */}
         </>
     );
 };

@@ -1,5 +1,5 @@
 import styles from '@/styles/components/scenes/FooterScene.module.scss';
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, Suspense } from 'react';
 import { Vector3, Euler } from 'three';
 import { useTransientScroll, useWindowSize } from '@/hooks/window';
 import { DESKTOP_MIN_W } from '@/util/constants';
@@ -84,18 +84,20 @@ export default function FooterScene() {
                 </div>
             </div>
             <ContextCanvas camera={{ position: CAMERA_POS, fov: FOV }} className={styles.canvas}>
-                <CrateScene lightPosition={LIGHT_POS} suns={[]} keys={[]}>
-                    {wW >= MIN_W_CRATE && (
-                        <Crate
-                            position={desktopPos}
-                            rotation={ROTATION}
-                            scale={1}
-                            rarity="epic"
-                            noClick
-                            noHover
-                        />
-                    )}
-                </CrateScene>
+                <Suspense fallback={null}>
+                    <CrateScene lightPosition={LIGHT_POS} suns={[]} keys={[]}>
+                        {wW >= MIN_W_CRATE && (
+                            <Crate
+                                position={desktopPos}
+                                rotation={ROTATION}
+                                scale={1}
+                                rarity="epic"
+                                noClick
+                                noHover
+                            />
+                        )}
+                    </CrateScene>
+                </Suspense>
             </ContextCanvas>
         </section>
     );

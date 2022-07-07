@@ -6,6 +6,7 @@
     overflow: hidden;
     // Fix weird black line on widescreen
     margin-top: -2px;
+    z-index: 10;
 }
 
 .container {
