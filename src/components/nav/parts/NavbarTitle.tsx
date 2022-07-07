@@ -3,7 +3,7 @@ import LogoSVG from '@/components/svg/logo/LogoSVG';
 import type { LogoSVGProps } from '@/components/svg/logo/LogoSVG';
 
 interface NavbarTitleProps {
-    scrollY: number;
+    small: boolean;
     hidden?: boolean;
 }
 
@@ -14,16 +14,12 @@ const logoSvgProps: LogoSVGProps = {
 };
 
 export default function NavbarTitle(props: NavbarTitleProps) {
-    const { scrollY } = props;
+    const { small, hidden } = props;
     return (
-        <div className={`${styles['navbar-title']} ${props.hidden ? styles.hidden : ''}`}>
-            <LogoSVG
-                {...logoSvgProps}
-                monochrome={!!scrollY}
-                className={scrollY ? styles.small : ''}
-            />
+        <div className={`${styles['navbar-title']} ${hidden ? styles.hidden : ''}`}>
+            <LogoSVG {...logoSvgProps} monochrome={small} className={small ? styles.small : ''} />
             <h1
-                className={scrollY && !props.hidden ? styles.visible : styles.hidden}
+                className={small && !hidden ? styles.visible : styles.hidden}
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
                 CryptoCrate

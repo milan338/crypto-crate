@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useIsomorphicLayoutEffect } from './helper';
 import { isServer } from './ssr';
+import type { DependencyList } from 'react';
 
 export type EnableReloadCb = () => void;
 export type DisableReloadCb = () => void;
@@ -24,6 +25,7 @@ export function useScrollPosition(debounceDelay: number) {
     const _scrollY = useRef(scrollY);
     const wait = useRef(false);
     useEffect(() => {
+        // TODO this function is slow
         const updateScrollY = () => {
             const oldScroll = _scrollY.current;
             _scrollY.current = window.scrollY;
@@ -47,7 +49,7 @@ export function useScrollPosition(debounceDelay: number) {
 }
 
 // Run onscroll callback without triggering a rerender
-export function useTransientScroll(cb: () => void) {
+export function useTransientScroll(cb: () => void, deps?: DependencyList) {
     useEffect(
         () => {
             const scrollListener = cb;
@@ -57,7 +59,7 @@ export function useTransientScroll(cb: () => void) {
             };
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
+        deps ?? []
     );
 }
 
