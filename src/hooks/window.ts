@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { useIsomorphicLayoutEffect } from './helper';
+import { useEffect, useState, useCallback } from 'react';
+import { useIsomorphicLayoutEffect, useThrottle } from './helper';
 import { isServer } from './ssr';
 import type { DependencyList } from 'react';
 
@@ -21,10 +21,15 @@ export function useWindowSize() {
 }
 
 // Run onscroll callback without triggering a rerender
-export function useTransientScroll(cb: () => void, deps?: DependencyList) {
+export function useTransientScroll(
+    cb: () => void,
+    options?: { deps?: DependencyList; throttleMs?: number }
+) {
+    const { deps, throttleMs } = options ?? {};
+    const throttled = useThrottle(throttleMs ?? 0);
     useEffect(
         () => {
-            const scrollListener = cb;
+            const scrollListener = throttled(cb);
             window.addEventListener('scroll', scrollListener);
             return () => {
                 window.removeEventListener('scroll', scrollListener);
