@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useTransientScroll, useWindowSize } from '@/hooks/window';
 import { DESKTOP_MIN_W } from '@/util/constants';
 import { isServer } from '@/hooks/ssr';
@@ -47,7 +47,7 @@ export default function Navbar() {
     // Update current section based on scroll
     useTransientScroll(() => {
         let activeSection = 0;
-        if (window.scrollY > windowH) {
+        if (window.scrollY > windowH - 100) {
             for (const section of sections) {
                 if (window.scrollY > section.offsetTop - 100) activeSection++;
             }
@@ -63,7 +63,7 @@ export default function Navbar() {
     // Handle trying to read non-existent anchor data when resizing the window
     const currentAnchorData = anchorData[currentSection] || { offsetLeft: 0, offsetWidth: 0 };
     return (
-        <>
+        <Suspense fallback={null}>
             {windowW >= DESKTOP_MIN_W + 50 ? (
                 <DesktopNavbar
                     ref={navListRef}
@@ -72,8 +72,8 @@ export default function Navbar() {
                     small={small}
                 />
             ) : (
-                <MobileNavbar currentSection={currentSection} scrollY={scrollY} />
+                <MobileNavbar currentSection={currentSection} small={small} />
             )}
-        </>
+        </Suspense>
     );
 }

@@ -7,10 +7,11 @@ import Hamburger from '../menu/Hamburger';
 
 interface MobileNavbarProps {
     currentSection: number;
-    scrollY: number;
+    small: boolean;
 }
 
 export default function MobileNavbar(props: MobileNavbarProps) {
+    const { currentSection, small } = props;
     const [showMenu, setShowMenu] = useState(false);
     useScrollBehavior('auto');
     usePreventScroll(showMenu);
@@ -19,17 +20,13 @@ export default function MobileNavbar(props: MobileNavbarProps) {
             <header
                 id="navbar"
                 className={`${styles.navbar} ${styles.mobile} ${
-                    props.scrollY || showMenu ? styles.small : ''
+                    small || showMenu ? styles.small : ''
                 }`}
             >
-                <NavbarTitle scrollY={props.scrollY} hidden={showMenu} />
+                <NavbarTitle small={small} hidden={showMenu} />
                 <Hamburger active={showMenu} setActive={setShowMenu} />
             </header>
-            <NavMenu
-                currentSection={props.currentSection}
-                visible={showMenu}
-                setVisible={setShowMenu}
-            />
+            <NavMenu currentSection={currentSection} visible={showMenu} setVisible={setShowMenu} />
         </>
     );
 }
