@@ -20,34 +20,6 @@ export function useWindowSize() {
     return size;
 }
 
-export function useScrollPosition(debounceDelay: number) {
-    const [scrollY, setScrollY] = useState(isServer() ? 0 : window.scrollY);
-    const _scrollY = useRef(scrollY);
-    const wait = useRef(false);
-    useEffect(() => {
-        // TODO this function is slow
-        const updateScrollY = () => {
-            const oldScroll = _scrollY.current;
-            _scrollY.current = window.scrollY;
-            // If scrolled to or from top, don't delay
-            if (!!oldScroll === !!_scrollY.current) setScrollY(_scrollY.current);
-            // Debounce delay
-            if (wait.current) return;
-            wait.current = true;
-            // Update in future after wait period
-            setTimeout(() => {
-                wait.current = false;
-                setScrollY(_scrollY.current);
-            }, debounceDelay);
-        };
-        window.addEventListener('scroll', updateScrollY);
-        return () => {
-            window.removeEventListener('scroll', updateScrollY);
-        };
-    }, [debounceDelay]);
-    return scrollY;
-}
-
 // Run onscroll callback without triggering a rerender
 export function useTransientScroll(cb: () => void, deps?: DependencyList) {
     useEffect(

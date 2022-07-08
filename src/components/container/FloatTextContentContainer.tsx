@@ -1,6 +1,6 @@
 import styles from '@/styles/components/container/FloatTextContentContainer.module.scss';
 import { useRef } from 'react';
-import { useScrollPosition } from '@/hooks/window';
+import { useTransientScroll } from '@/hooks/window';
 import { useHasMounted } from '@/hooks/ssr';
 import FloatTextContainer from './FloatTextContainer';
 import type { ReactNode } from 'react';
@@ -12,31 +12,20 @@ interface FloatTextContentContainerProps extends FloatTextContainerProps {
 
 export default function FloatTextContentContainer(props: FloatTextContentContainerProps) {
     const { content, heading, subheading, rightAlign, children } = props;
-    const scrollY = useScrollPosition(100);
     const hasMounted = useHasMounted();
     const contentRef = useRef<HTMLDivElement>(null);
+    useTransientScroll(() => {
+        if (!contentRef.current) return;
+        contentRef.current.style.transform = `translateY(${
+            (contentRef.current.offsetTop - window.scrollY) / 30 + window.scrollY / 100
+        }px) translateX(${rightAlign ? '-' : ''}50px)`;
+    });
     return (
         <div
             className={styles.container}
             style={{ flexDirection: rightAlign ? 'row' : 'row-reverse' }}
         >
-            <div
-                ref={contentRef}
-                className={styles['content-container']}
-                style={
-                    hasMounted && contentRef.current
-                        ? /* eslint-disable indent */
-                          {
-                              zIndex: 2,
-                              transform: `translateY(${
-                                  (contentRef.current.offsetTop - scrollY) / 30 + scrollY / 100
-                              }px)
-                               translateX(${rightAlign ? '-' : ''}50px)`,
-                          }
-                        : {}
-                    /* eslint-enable indent */
-                }
-            >
+            <div ref={contentRef} className={styles['content-container']} style={{ zIndex: 2 }}>
                 {content}
             </div>
             <FloatTextContainer {...{ heading, subheading, rightAlign }}>
