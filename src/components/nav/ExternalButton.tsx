@@ -1,19 +1,18 @@
 import styles from '@/styles/components/nav/ExternalButton.module.scss';
 import { useState } from 'react';
 import ArrowSVG from '../svg/arrow/ArrowSVG';
-import type { ReactNode } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 
 interface ExternalButtonProps {
     id?: string;
     className?: string;
     showArrow?: boolean;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
     children?: ReactNode;
 }
 
-// TODO show modal on click
-
 export default function ExternalButton(props: ExternalButtonProps) {
-    const { id, className, showArrow, children } = props;
+    const { id, className, showArrow, onClick, children } = props;
     const [hovered, setHovered] = useState(false);
     return (
         <div id={id} className={className}>
@@ -21,6 +20,7 @@ export default function ExternalButton(props: ExternalButtonProps) {
                 className={styles.button}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
+                onClick={onClick}
             >
                 {children}
                 {showArrow && (

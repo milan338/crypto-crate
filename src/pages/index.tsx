@@ -32,6 +32,8 @@ import AboutScene from '@/components/scenes/index/AboutScene';
 
 import AboutSceneSection from '@/components/scenes/index/AboutSceneSection';
 
+import { useModal } from '@/hooks/context';
+
 const FOV = 45;
 const CAMERA_POS = new Vector3(0, 0, 0);
 
@@ -45,6 +47,21 @@ const CAMERA_POS = new Vector3(0, 0, 0);
 const Home: NextPage = () => {
     const [aboutRef, onAboutRefChange] = useCurrentRef<HTMLElement>();
     const homeBgRef = useRef<HTMLDivElement>(null);
+    const { dispatchModal } = useModal();
+    const onExternalButtonClick = () => {
+        dispatchModal({
+            visible: true,
+            content: {
+                title: "We're not ready yet",
+                body: (
+                    <>
+                        <p>Sorry, CryptoCreate isn&apos;t ready just yet.</p>
+                        <button onClick={() => dispatchModal({ visible: false })}>Go back</button>
+                    </>
+                ),
+            },
+        });
+    };
     return (
         <>
             <Head>
@@ -73,6 +90,7 @@ const Home: NextPage = () => {
                             <ExternalButton
                                 id="external-button"
                                 className={styles.button}
+                                onClick={onExternalButtonClick}
                                 showArrow
                             >
                                 Launch App
@@ -181,7 +199,7 @@ const Home: NextPage = () => {
                 />
                 {/* Outro footer scene */}
                 <div style={{ height: '30rem' }} />
-                <FooterScene />
+                <FooterScene onExternalButtonClick={onExternalButtonClick} />
             </main>
         </>
     );

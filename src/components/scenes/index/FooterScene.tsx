@@ -7,6 +7,11 @@ import ContextCanvas from '@/components/canvas/ContextCanvas';
 import ExternalButton from '@/components/nav/ExternalButton';
 import CrateScene from '../CrateScene';
 import Crate from '@/components/crate/Crate';
+import type { MouseEventHandler } from 'react';
+
+interface FooterSceneProps {
+    onExternalButtonClick: MouseEventHandler<HTMLButtonElement>;
+}
 
 const FOV = 45;
 const CAMERA_POS = new Vector3(0, 0, 0);
@@ -30,7 +35,8 @@ function translateY(h: number, wH: number, t: number, n: number) {
     );
 }
 
-export default function FooterScene() {
+export default function FooterScene(props: FooterSceneProps) {
+    const { onExternalButtonClick } = props;
     const wrapperRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const contentRef1 = useRef<HTMLHeadingElement>(null);
@@ -84,7 +90,11 @@ export default function FooterScene() {
                 <h1 ref={contentRef3}>PLATFORMS IS</h1>
                 <h1 ref={contentRef4}>CRYPTOCRATE.</h1>
                 <div ref={contentRef5} className={styles.btn}>
-                    <ExternalButton className={styles['external-button']} showArrow>
+                    <ExternalButton
+                        className={styles['external-button']}
+                        onClick={onExternalButtonClick}
+                        showArrow
+                    >
                         Launch App
                     </ExternalButton>
                 </div>
