@@ -45,7 +45,7 @@ export default function AboutSceneSection(props: AboutSceneSectionProps) {
                 <AboutSceneSectionPart heading={heading2}>{content2}</AboutSceneSectionPart>
                 <AboutSceneSectionPart heading={heading3}>{content3}</AboutSceneSectionPart>
             </div>
-            <DotsBackgroundSVG element={ref} radius={3.2} spacing={30} fadeConst={1.23} fadeN={9} />
+            <DotsBackgroundSVG element={ref} radius={3.2} spacing={47} fadeConst={1.23} fadeN={9} />
         </section>
     );
 }

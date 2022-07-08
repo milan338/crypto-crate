@@ -95,7 +95,7 @@ const Home: NextPage = () => {
                         <DotsBackgroundSVG
                             element={aboutRef}
                             radius={3.2}
-                            spacing={30}
+                            spacing={44}
                             fadeConst={1.23}
                             fadeN={4}
                         />

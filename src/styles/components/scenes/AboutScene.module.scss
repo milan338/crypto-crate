@@ -25,6 +25,7 @@ $bg-transition: background 0.5s ease;
     margin-top: -5vh;
     background: black;
     opacity: 0;
+    will-change: opacity;
 }
 
 .overlay {
