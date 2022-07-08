@@ -1,48 +1,26 @@
 import styles from '@/styles/components/pages/Index.module.scss';
 import Head from 'next/head';
-import type { NextPage } from 'next';
-
-import Starfield from '@/components/starfield/Starfield';
-
-import { Vector3 } from 'three';
-
-import Navbar from '@/components/nav/Navbar';
 import { Suspense, useRef } from 'react';
-
-import ExternalButton from '@/components/nav/ExternalButton';
-
-import TextCycle from '@/components/text/TextCycle';
-
-import DotsBackgroundSVG from '@/components/svg/background/DotsBackgroundSVG';
+import { Vector3 } from 'three';
 import { useCurrentRef } from '@/hooks/ref';
-
+import { useModal } from '@/hooks/context';
 import ContextCanvas from '@/components/canvas/ContextCanvas';
-
+import Starfield from '@/components/starfield/Starfield';
 import HomeScene from '@/components/scenes/index/HomeScene';
-
-import TextUnderlineSVG from '@/components/svg/text/TextUnderlineSVG';
-
-// TODO footer with credits for the google fonts and material icons etc...
-
-import FloatTextContentContainer from '@/components/container/FloatTextContentContainer';
-import LargeArrowSVG from '@/components/svg/arrow/LargeArrowSVG';
-
 import FooterScene from '@/components/scenes/index/FooterScene';
 import AboutScene from '@/components/scenes/index/AboutScene';
-
 import AboutSceneSection from '@/components/scenes/index/AboutSceneSection';
-
-import { useModal } from '@/hooks/context';
+import TextCycle from '@/components/text/TextCycle';
+import TextUnderlineSVG from '@/components/svg/text/TextUnderlineSVG';
+import Navbar from '@/components/nav/Navbar';
+import ExternalButton from '@/components/nav/ExternalButton';
+import DotsBackgroundSVG from '@/components/svg/background/DotsBackgroundSVG';
+import LargeArrowSVG from '@/components/svg/arrow/LargeArrowSVG';
+import FloatTextContentContainer from '@/components/container/FloatTextContentContainer';
+import type { NextPage } from 'next';
 
 const FOV = 45;
 const CAMERA_POS = new Vector3(0, 0, 0);
-
-// TODO move the main content up a little - be careful about adjusting the mobile version as well
-// TODO redo the middle section and remove the crate move scene
-// TODO fix crate not changing position when transition between mobile and desktop
-
-// TODO have the index title, the 'the more NFT platform' and the button in a separate div
-// TODO and have that div stay vertically centered and left aligned through all resizing
 
 const Home: NextPage = () => {
     const [aboutRef, onAboutRefChange] = useCurrentRef<HTMLElement>();
@@ -72,7 +50,6 @@ const Home: NextPage = () => {
             <Suspense fallback={null}>
                 <Navbar />
             </Suspense>
-            {/* TODO scroll down prompt arrow */}
             <main id="main-content">
                 {/* Landing page home section */}
                 <section id="home" className={styles.home}>
