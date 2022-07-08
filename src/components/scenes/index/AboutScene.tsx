@@ -5,7 +5,6 @@ import { useThree } from '@react-three/fiber';
 import { useCurrentRef } from '@/hooks/ref';
 import { useTransientScroll, useWindowSize } from '@/hooks/window';
 import { useIntersectionObserver } from '@/hooks/observer';
-import { setCssVar } from '@/util/style';
 import { getFastBoundingClientRect } from '@/util/window';
 import ContextCanvas from '@/components/canvas/ContextCanvas';
 import Crate from '@/components/crate/Crate';
@@ -14,8 +13,9 @@ import type { RefObject } from 'react';
 import type { Mesh } from 'three';
 import type { CrateControls } from '@/components/crate/Crate';
 
-// TODO fix sometimes when going from about scene back through crate anim
-// TODO the background starts white for some reason and is janky
+interface AboutSceneProps {
+    homeBgRef: RefObject<HTMLDivElement>;
+}
 
 interface AboutSceneHelperProps {
     containerRef: RefObject<HTMLDivElement>;
@@ -23,6 +23,8 @@ interface AboutSceneHelperProps {
     overlayRef: RefObject<HTMLDivElement>;
     titleRef: RefObject<HTMLHeadingElement>;
     contentRef: RefObject<HTMLDivElement>;
+    homeBgRef: RefObject<HTMLDivElement>;
+    bgRef: RefObject<HTMLDivElement>;
     windowW: number;
 }
 
@@ -47,14 +49,13 @@ let forceUpdateCount = 0;
 let navbarHeight: number;
 let canvasHeight: number;
 
-function setBgCol(opacity: number) {
-    const theme = document.documentElement.dataset.theme;
-    // if (theme !== 'dark') setCssVar('col-bg', `rgba(0, 0, 0, ${opacity})`);
-    // TODO don't change the variable and instead just have an overlay and change the opacity
+function setBgOpacity(opacity: number, bg: HTMLElement, homeBg: HTMLElement) {
+    bg.style.opacity = `${opacity}`;
+    homeBg.style.opacity = `${opacity}`;
 }
 
 function AboutSceneHelper(props: AboutSceneHelperProps) {
-    const { containerRef, wrapperRef, overlayRef, titleRef } = props;
+    const { containerRef, wrapperRef, overlayRef, titleRef, homeBgRef, bgRef } = props;
     const { invalidate } = useThree();
     const [sunRef, onSunRefChange] = useCurrentRef<Mesh>();
     const manualControls = useRef<CrateControls>(DEFAULT_CONTROLS);
@@ -86,16 +87,17 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
             crateControls.scale = Math.exp(0.8 * (scaleProgress - 1));
             sphereControls.animIncrement = Math.max(progress / 3.5 - 1, 0);
             // Update overlay
-            if (overlayRef.current && titleRef.current) {
+            if (overlayRef.current && titleRef.current && bgRef.current && homeBgRef.current) {
                 // Fade the background
                 const fadeProgress = 0.9 * Math.abs(1 - scaleProgress);
                 const bgProgress = Math.max(0, progress / 3 - 0.5) * 1.2;
                 overlayRef.current.style.opacity = `${fadeProgress}`;
-                if (bgProgress >= 0 && bgProgress <= 1) setBgCol(bgProgress);
+                if (bgProgress >= 0 && bgProgress <= 1)
+                    setBgOpacity(bgProgress, bgRef.current, homeBgRef.current);
                 // Update variables on page load
                 if (!hasLoaded) {
                     hasLoaded = true;
-                    setBgCol(bgProgress);
+                    setBgOpacity(bgProgress, bgRef.current, homeBgRef.current);
                 }
                 // Fade the title
                 const titleProgress =
@@ -124,15 +126,18 @@ function AboutSceneHelper(props: AboutSceneHelperProps) {
     );
 }
 
-export default function AboutScene() {
+export default function AboutScene(props: AboutSceneProps) {
+    const { homeBgRef } = props;
     const [windowW] = useWindowSize();
     const containerRef = useRef<HTMLDivElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
+    const bgRef = useRef<HTMLDivElement>(null);
     return (
         <div ref={containerRef} className={styles.container}>
+            <div ref={bgRef} className={styles.bg} />
             {/* Main zoom-in crate scene */}
             <div ref={wrapperRef} className={styles['canvas-wrapper']}>
                 <ContextCanvas frameloop="demand" camera={{ position: CAMERA_POS, fov: FOV }}>
@@ -142,6 +147,8 @@ export default function AboutScene() {
                         overlayRef={overlayRef}
                         titleRef={titleRef}
                         contentRef={contentRef}
+                        homeBgRef={homeBgRef}
+                        bgRef={bgRef}
                         windowW={windowW}
                     />
                 </ContextCanvas>

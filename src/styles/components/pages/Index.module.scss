@@ -8,6 +8,7 @@
     color: black;
     width: 100%;
     height: 100vh;
+    z-index: 10;
 
     h1,
     p {
@@ -128,15 +129,22 @@
         }
     }
 
+    .home-background {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: black;
+        opacity: 0;
+    }
+
     p {
         font-size: 1.5rem;
     }
 
     & > h1 {
-        z-index: 1;
+        z-index: 5;
         padding-top: 10vh;
         font-size: 6.25vw;
-        opacity: 0.15;
         position: relative;
 
         // Mobile view
