@@ -133,7 +133,8 @@ export default function Crate(props: JSX.IntrinsicElements['group'] & CrateProps
                 );
                 ref.current.position.lerp(position, LERP_TIME * 0.01);
                 // Crate idle rotation animation - only play when not animating explosion
-                ref.current.quaternion.slerp(rotation, LERP_TIME * 0.8);
+                if (!manualControls) ref.current.quaternion.slerp(rotation, LERP_TIME * 0.8);
+                else ref.current.quaternion.copy(rotation);
             }
         }
         // Run whenever crate opening
