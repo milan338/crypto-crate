@@ -3,14 +3,15 @@
 
 .modal-background {
     @include flex-center;
-    z-index: 100;
+    z-index: 1000;
     background: rgba(#04040f, 0.4);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
     transition: opacity $transition-duration $transition-function, visibility $transition-duration;
+    will-change: opacity, transform;
 }
 
 .hidden {

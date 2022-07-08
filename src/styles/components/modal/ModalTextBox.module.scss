@@ -6,25 +6,35 @@
     z-index: 101;
     position: relative;
     width: clamp(50%, 700px, 90%);
-    height: min(50%, 300px);
+    height: min(50%, 500px);
     margin: auto;
     padding: 0 2rem;
-    border-radius: 12px; // TODO themed border radius
-    background-color: white; // TODO themed color
+    border-radius: 12px;
+    background-color: var(--col-bg);
     font-weight: bold;
     flex-direction: column;
-    transition: transform $transition-duration $transition-function,
-        opacity $transition-duration $transition-function, visibility $transition-duration;
+    transition: transform $transition-duration $transition-function;
+    will-change: transform;
+    text-align: center;
 
     span {
         &[r-glow] {
             text-shadow: 0 0 3px;
         }
     }
+
+    h1 {
+        font-size: 3.5rem;
+        padding-bottom: 2rem;
+    }
+
+    p {
+        font-size: 1.8rem;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
 }
 
 .hidden {
     transform: scale(1.2);
-    opacity: 0;
-    display: none;
 }
