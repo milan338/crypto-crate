@@ -1,10 +1,12 @@
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTransientScroll, useWindowSize } from '@/hooks/window';
 import { DESKTOP_MIN_W } from '@/util/constants';
 import { isServer } from '@/hooks/ssr';
 import DesktopNavbar from './navbars/DesktopNavbar';
 import MobileNavbar from './navbars/MobileNavbar';
 import type { AnchorData } from './navbars/DesktopNavbar';
+
+// TODO clicking link required twice to go to the part when manually scrolled
 
 export default function Navbar() {
     const navListRef = useRef<HTMLUListElement>(null);
@@ -45,25 +47,28 @@ export default function Navbar() {
         setSections(mainSections);
     }, []);
     // Update current section based on scroll
-    useTransientScroll(() => {
-        let activeSection = 0;
-        if (window.scrollY > windowH - 100) {
-            for (const section of sections) {
-                if (window.scrollY > section.offsetTop - 100) activeSection++;
+    useTransientScroll(
+        async () => {
+            let activeSection = 0;
+            if (window.scrollY > windowH - 100) {
+                for (const section of sections) {
+                    if (window.scrollY > section.offsetTop - 100) activeSection++;
+                }
             }
-        }
-        if (activeSection !== currentSection) {
-            if (anchorData[activeSection])
-                history.pushState({}, '', anchorData[activeSection].href);
-            setCurrentSection(activeSection);
-        }
-        if (!small && window.scrollY) setSmall(true);
-        else if (small && !window.scrollY) setSmall(false);
-    }, [sections, currentSection, small]);
+            if (activeSection !== currentSection) {
+                if (anchorData[activeSection])
+                    history.pushState({}, '', anchorData[activeSection].href);
+                setCurrentSection(activeSection);
+            }
+            if (!small && window.scrollY) setSmall(true);
+            else if (small && !window.scrollY) setSmall(false);
+        },
+        { deps: [sections, currentSection, small], throttleMs: small ? 100 : 10 }
+    );
     // Handle trying to read non-existent anchor data when resizing the window
     const currentAnchorData = anchorData[currentSection] || { offsetLeft: 0, offsetWidth: 0 };
     return (
-        <Suspense fallback={null}>
+        <>
             {windowW >= DESKTOP_MIN_W + 50 ? (
                 <DesktopNavbar
                     ref={navListRef}
@@ -74,6 +79,6 @@ export default function Navbar() {
             ) : (
                 <MobileNavbar currentSection={currentSection} small={small} />
             )}
-        </Suspense>
+        </>
     );
 }

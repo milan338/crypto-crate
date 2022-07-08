@@ -6,8 +6,9 @@ $bg-transition: background 0.5s ease;
     position: relative;
     padding-top: 5vh;
     width: 100%;
-    height: 8500px;
+    height: 500vh;
     background: var(--col-bg);
+    will-change: transform;
 }
 
 .canvas-wrapper {
@@ -15,6 +16,7 @@ $bg-transition: background 0.5s ease;
     width: 100%;
     height: 100vh;
     top: 0;
+    will-change: transform;
 }
 
 .overlay {
@@ -28,15 +30,18 @@ $bg-transition: background 0.5s ease;
     margin-top: -95vh;
     z-index: 2;
     // Prevent weird opacity conflicts with heading
-    will-change: opacity;
+    will-change: opacity, transform;
     transition: $bg-transition;
 
     h1 {
         font-size: 7vw;
         position: fixed;
         top: 40vh;
-        z-index: 4;
-        display: none;
+        z-index: 2;
+        display: flex;
+        user-select: none;
+        opacity: 0;
+        will-change: opacity, transform;
     }
 
     // Mobile view
