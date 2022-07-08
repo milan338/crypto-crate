@@ -6,7 +6,7 @@ import DesktopNavbar from './navbars/DesktopNavbar';
 import MobileNavbar from './navbars/MobileNavbar';
 import type { AnchorData } from './navbars/DesktopNavbar';
 
-// TODO clicking link required twice to go to the part when manually scrolled
+// TODO clicking link required twice to go to the part when manually scrolled on some chrome versions
 
 export default function Navbar() {
     const navListRef = useRef<HTMLUListElement>(null);
@@ -66,7 +66,7 @@ export default function Navbar() {
         deps: [sections, currentSection, small],
         throttleMs: small ? 100 : 10,
     });
-    scrollCb(); // Update section on page load
+    if (!isServer()) scrollCb(); // Update section on page load
     // Handle trying to read non-existent anchor data when resizing the window
     const currentAnchorData = anchorData[currentSection] || { offsetLeft: 0, offsetWidth: 0 };
     return (

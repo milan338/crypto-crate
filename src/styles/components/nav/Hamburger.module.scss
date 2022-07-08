@@ -7,10 +7,10 @@
     transform: translateX(15px);
 
     svg {
-        transition: transform 0.2s ease; // TODO
+        transition: transform 0.2s ease;
 
         .line {
-            transition: stroke-dasharray 0.18s ease, stroke-dashoffset 0.18s ease; // TODO
+            transition: stroke-dasharray 0.18s ease, stroke-dashoffset 0.18s ease;
         }
 
         .top,

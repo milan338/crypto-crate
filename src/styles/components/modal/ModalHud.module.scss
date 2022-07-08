@@ -7,10 +7,10 @@
     position: absolute;
     top: 0%;
     width: clamp(15%, 500px, 85%);
-    height: min(15%, 90px); // TODO try out different values here
+    height: min(15%, 90px);
     margin: auto;
     padding: 0 2rem;
-    border-radius: 0 0 12px 12px; // TODO only bottom borders // TODO themed border radius
+    border-radius: 0 0 12px 12px; // TODO themed border radius
     background-color: white; // TODO themed color
     font-weight: bold;
     flex-direction: row;

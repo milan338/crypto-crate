@@ -44,7 +44,7 @@ $external-button-padding: 0.7em 1.6em;
     width: 100vw;
     overflow: hidden;
     height: $navbar-height-full;
-    background-color: transparent; // TODO
+    background-color: transparent;
     transition: height 0.2s ease, background-color 0.2s ease;
 
     &.small {
@@ -80,12 +80,12 @@ $external-button-padding: 0.7em 1.6em;
             position: relative;
             font-weight: 500;
             font-size: 1.2rem;
-            color: white; // TODO
+            color: white; // TODO theme
             text-decoration: none;
             transition: color 0.3s ease;
 
             &:hover {
-                color: grey; // TODO
+                color: grey; // TODO theme
             }
         }
     }
