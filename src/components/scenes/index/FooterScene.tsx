@@ -2,7 +2,7 @@ import styles from '@/styles/components/scenes/FooterScene.module.scss';
 import { useRef, useMemo, Suspense } from 'react';
 import { Vector3, Euler } from 'three';
 import { useTransientScroll, useWindowSize } from '@/hooks/window';
-import { DESKTOP_MIN_W } from '@/util/constants';
+import { getFastBoundingClientRect } from '@/util/window';
 import ContextCanvas from '@/components/canvas/ContextCanvas';
 import ExternalButton from '@/components/nav/ExternalButton';
 import CrateScene from '../CrateScene';
@@ -43,33 +43,39 @@ export default function FooterScene() {
         () => POSITION.clone().setX((wW / wH) * RESPONSIVE_X + (wW / BASE_W) * POSITION.x),
         [wW, wH]
     );
-    useTransientScroll(() => {
-        if (
-            wrapperRef.current === null ||
-            containerRef.current === null ||
-            contentRef1.current === null ||
-            contentRef2.current === null ||
-            contentRef3.current === null ||
-            contentRef4.current === null ||
-            contentRef5.current === null
-        )
-            return;
-        const boundingRect = wrapperRef.current.getBoundingClientRect();
-        const top = boundingRect.top;
-        const h = boundingRect.height / 2;
-        // Don't update if not in view
-        if (top - ANIM_START_OFFSET > h) {
-            containerRef.current.style.display = 'none';
-            return;
-        }
-        containerRef.current.style.display = 'block';
-        const progress = Math.max(0, h - Math.max(top, -h) + ANIM_START_OFFSET);
-        contentRef1.current.style.transform = `translateY(${translateY(h, wH, progress, 1)}px)`;
-        contentRef2.current.style.transform = `translateY(${translateY(h, wH, progress, 2)}px)`;
-        contentRef3.current.style.transform = `translateY(${translateY(h, wH, progress, 3)}px)`;
-        contentRef4.current.style.transform = `translateY(${translateY(h, wH, progress, 4)}px)`;
-        contentRef5.current.style.transform = `translateY(${translateY(h, wH, progress, 5)}px)`;
-    });
+    const scrollCb = async () => {
+        if (!wrapperRef.current) return;
+        // const boundingRect = wrapperRef.current.getBoundingClientRect();
+        getFastBoundingClientRect(wrapperRef.current, (boundingRect) => {
+            if (
+                containerRef.current === null ||
+                contentRef1.current === null ||
+                contentRef2.current === null ||
+                contentRef3.current === null ||
+                contentRef4.current === null ||
+                contentRef5.current === null
+            )
+                return;
+            const top = boundingRect.top;
+            const h = boundingRect.height / 2;
+            // Don't update if not in view
+            if (top - ANIM_START_OFFSET > h) {
+                if (containerRef.current.style.display === 'block') {
+                    containerRef.current.style.display = 'none';
+                    return;
+                }
+            } else if (containerRef.current.style.display === 'none') {
+                containerRef.current.style.display = 'block';
+            }
+            const progress = Math.max(0, h - Math.max(top, -h) + ANIM_START_OFFSET);
+            contentRef1.current.style.transform = `translateY(${translateY(h, wH, progress, 1)}px)`;
+            contentRef2.current.style.transform = `translateY(${translateY(h, wH, progress, 2)}px)`;
+            contentRef3.current.style.transform = `translateY(${translateY(h, wH, progress, 3)}px)`;
+            contentRef4.current.style.transform = `translateY(${translateY(h, wH, progress, 4)}px)`;
+            contentRef5.current.style.transform = `translateY(${translateY(h, wH, progress, 5)}px)`;
+        });
+    };
+    useTransientScroll(scrollCb, { throttleMs: 1 });
     return (
         <section ref={wrapperRef} id="footer-scene" className={styles.wrapper}>
             <div ref={containerRef} className={styles.container} style={{ display: 'none' }}>

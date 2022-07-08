@@ -8,7 +8,6 @@ $bg-transition: background 0.5s ease;
     width: 100%;
     height: 500vh;
     background: var(--col-bg);
-    will-change: transform;
 }
 
 .canvas-wrapper {
@@ -30,7 +29,7 @@ $bg-transition: background 0.5s ease;
     margin-top: -95vh;
     z-index: 2;
     // Prevent weird opacity conflicts with heading
-    will-change: opacity, transform;
+    will-change: opacity;
     transition: $bg-transition;
 
     h1 {
@@ -41,7 +40,7 @@ $bg-transition: background 0.5s ease;
         display: flex;
         user-select: none;
         opacity: 0;
-        will-change: opacity, transform;
+        will-change: opacity;
     }
 
     // Mobile view
