@@ -1,4 +1,4 @@
 defaults
-not dead
-last 2 versions
-> 0.2%
+not IE > 0
+not and_uc > 0
+not op_mini all

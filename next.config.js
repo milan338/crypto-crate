@@ -12,11 +12,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
 });
 
-// !
-// TODO migrate to r3f v8, react 18, and nextjs12
-// https://docs.pmnd.rs/react-three-fiber/tutorials/v8-migration-guide
-// !
-
 const SRC = path.join(__dirname, 'src');
 const STYLES = path.join(SRC, 'styles');
 const UTIL = path.join(SRC, 'util');
@@ -49,11 +44,11 @@ const ContentSecurityPolicy = `
     base-uri 'none';
     object-src 'none';
     style-src 'self' 'unsafe-inline';
-    img-src 'self' data:;
+    img-src 'self' data: blob:;
     worker-src 'self' blob:;
     script-src 'self' 'unsafe-eval';
     script-src-attr 'none';
-    connect-src 'self' https://www.gstatic.com/draco/versioned/decoders/1.4.3/;
+    connect-src 'self' data: https://www.gstatic.com/draco/versioned/decoders/1.4.3/;
     frame-ancestors 'self';
     form-action 'self';
 `;
@@ -129,9 +124,9 @@ module.exports = withBundleAnalyzer({
         if (!isServer) {
             if (!dev) {
                 config.cache = false;
-                const threeMinifier = new ThreeMinifierPlugin();
-                config.plugins.unshift(threeMinifier);
-                config.resolve.plugins.unshift(threeMinifier.resolver);
+                // const threeMinifier = new ThreeMinifierPlugin();
+                // config.plugins.unshift(threeMinifier);
+                // config.resolve.plugins.unshift(threeMinifier.resolver);
             }
             config.resolve.alias = {
                 ...config.resolve.alias,
