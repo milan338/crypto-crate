@@ -5,18 +5,19 @@ import { useIntersectionObserver } from '@/hooks/observer';
 import ExternalButton from '../ExternalButton';
 import NavbarLink from '../parts/NavbarLink';
 import NavbarTitle from '../parts/NavbarTitle';
-import type { RefObject } from 'react';
+import type { RefObject, MouseEventHandler } from 'react';
 
 export type AnchorData = { href: string; offsetWidth: number; offsetLeft: number };
 
 interface DesktopNavbarProps {
     navListRef: RefObject<HTMLUListElement>;
     currentAnchorData: AnchorData;
+    onExternalButtonClick: MouseEventHandler<HTMLButtonElement>;
     small: boolean;
 }
 
 const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, ref) => {
-    const { navListRef, currentAnchorData, small } = props;
+    const { navListRef, currentAnchorData, onExternalButtonClick, small } = props;
     const [btnVisible, setBtnVisible] = useState(false);
     useScrollBehavior('smooth');
     useIntersectionObserver(
@@ -49,6 +50,7 @@ const DesktopNavbar = forwardRef<HTMLUListElement, DesktopNavbarProps>((props, r
                 className={`${styles['external-button']} ${
                     btnVisible ? styles.visible : styles.hidden
                 }`}
+                onClick={onExternalButtonClick}
             >
                 Launch App
             </ExternalButton>

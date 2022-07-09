@@ -48,7 +48,7 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Suspense fallback={null}>
-                <Navbar />
+                <Navbar onExternalButtonClick={onExternalButtonClick} />
             </Suspense>
             <main id="main-content">
                 {/* Landing page home section */}

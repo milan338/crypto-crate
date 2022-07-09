@@ -4,11 +4,17 @@ import { DESKTOP_MIN_W } from '@/util/constants';
 import { isServer } from '@/hooks/ssr';
 import DesktopNavbar from './navbars/DesktopNavbar';
 import MobileNavbar from './navbars/MobileNavbar';
+import type { MouseEventHandler } from 'react';
 import type { AnchorData } from './navbars/DesktopNavbar';
 
 // TODO clicking link required twice to go to the part when manually scrolled on some chrome versions
 
-export default function Navbar() {
+interface NavbarProps {
+    onExternalButtonClick: MouseEventHandler<HTMLButtonElement>;
+}
+
+export default function Navbar(props: NavbarProps) {
+    const { onExternalButtonClick } = props;
     const navListRef = useRef<HTMLUListElement>(null);
     const windowSize = useWindowSize();
     const [currentSection, setCurrentSection] = useState(0);
@@ -76,6 +82,7 @@ export default function Navbar() {
                     ref={navListRef}
                     navListRef={navListRef}
                     currentAnchorData={currentAnchorData}
+                    onExternalButtonClick={onExternalButtonClick}
                     small={small}
                 />
             ) : (
